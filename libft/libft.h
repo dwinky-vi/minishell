@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/03/31 22:56:46 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/02 21:14:01 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void*));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void*));
 
-int				get_next_line(int fd, char **line);
 void			ft_itoa_base(unsigned int nb, int base);
 
 typedef struct s_args {
@@ -81,7 +80,6 @@ typedef struct s_args {
 	int		i;
 }				t_args;
 
-double			ft_atof(char *str);
 int				ft_array_len(char **array);
 int				ft_number_len(unsigned long long int nb);
 int				ft_strrncmp(const char *s1, const char *s2, size_t n);

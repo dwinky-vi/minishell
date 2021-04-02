@@ -29,7 +29,7 @@ make_lib:
 			@${MAKE} -C $(LIBFT_PATH)
 
 $(NAME): 	$(OBJS)
-			@$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) $(LIBFT_PATH)/libft.a -o $(NAME)
+			@$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) $(LIBFT_PATH)/libft.a -ltermcap -o $(NAME)
 			@printf "$(LIGHT_PURPLE)$(BOLD)$(NAME) $(NO_COLOR)–– $(LIGHT_PURPLE)$(BOLD)[Success compiling]        $(NO_COLOR)\n"
 
 $(OBJS_DIR)/%.o:	%.c $(HEADER) libft/libft.a

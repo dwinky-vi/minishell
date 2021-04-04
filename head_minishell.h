@@ -7,17 +7,12 @@
 # include <term.h>
 # include <unistd.h>
 
-typedef struct s_fd
-{
-	int		in;
-	int		out;
-}				t_fd;
-
-typedef struct	s_comand
+typedef struct	s_command
 {
 	char	*name;
 	char	**args;
-	t_fd	fd;
-}				t_comand;
+	char	**fd;
+	
+}				t_command;
 
 #endif

@@ -7,6 +7,7 @@
 # include <term.h>
 # include <unistd.h>
 
+
 typedef struct	s_command
 {
 	char	*name;

@@ -107,103 +107,115 @@ int main(int argc, char **argv, char **envp)
 	size_t			history_size;
 	size_t			k;
 	char			*line;
+	size_t			cursor_pos = 0;
 
 	head_envp = get_envp(envp);
-	while (*envp)
-	{
-		printf("%s\n", *envp);
-		envp++;
-	}
+
 	init_term(&term, get_term_name(head_envp));
 	history = (char **)ft_calloc(100, sizeof(char *));
 	line = (char *)ft_calloc(2000, 1);
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	k = 0;
-	// int fd = open("history_file", O_APPEND | O_CREAT);
+	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	while (strcmp(str, "\4"))
 	{
 		tputs(save_cursor, 1, ft_putchar);
-		write(1, "bash-3.2$ ", 10);
+		write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 		while (strcmp(str, "\n"))
 		{
 			r = read(0, str, 100);
 			str[r] = '\0';
 			if (!strcmp(str, "\4"))
 			{
-				write(1, "exit\n", 5);
-				// tputs(delete_line, 1, ft_putchar);
-				// while (*history)
-				// {
-				// 	ft_putendl_fd(*history, 1);
-				// 	history++;
-				// }
+				// write(1, "exit\n", 5);
+				tputs(delete_line, 1, ft_putchar);
+				while (*history)
+				{
+					ft_putendl_fd(*history, 1);
+					history++;
+				}
 				break ;
 			}
-			if (!strcmp(str, "\e[A")) // up
+			if (!strcmp(str, "\e[A")) // UP
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "bash-3.2$ ", 10);
+				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);			
 				if (k > 0)
 					k--;
-				// ft_putstr_fd("k = ", 1);
-				// ft_putnbr_fd(k, 1);
-				// ft_putstr_fd("size = ", 1);
-				// ft_putnbr_fd(history_size, 1);
-				// ft_putstr_fd("   ", 1);
 				if (history_size != 0)
+				{
 					write(1, history[k], ft_strlen(history[k]));
+					line = ft_strdup(history[k]);
+					cursor_pos = ft_strlen(history[k]);
+				}
 			}
-			else if (!strcmp(str, "\e[B")) // down
+			else if (!strcmp(str, "\e[B")) // DOWN
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "bash-3.2$ ", 10);
-				k++;
-				if (k >= history_size)
-					k = history_size - 1;
+				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+				if (k < history_size)
+					k++;
 				if (history_size == 0)
 					k = 0;
-				// ft_putstr_fd("k = ", 1);
-				// ft_putnbr_fd(k, 1);
-				// ft_putstr_fd("size = ", 1);
-				// ft_putnbr_fd(history_size, 1);
-				// ft_putstr_fd("   ", 1);
-				if (history_size != 0)
+				if (k == history_size)
+				{
+					tputs(delete_line, 1, ft_putchar);
+					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+					cursor_pos = 0;
+				}
+				else if (history_size != 0)
+				{
+					cursor_pos = ft_strlen(history[k]);
 					write(1, history[k], ft_strlen(history[k]));
-				if (k == history_size - 1)
-					write(1, " ", 1);
+					line = ft_strdup(history[k]);
+				}
 			}
 			else if (!strcmp(str, "\177")) // delete
 			{
+				if (cursor_pos > 0)
+				{
+					cursor_pos--;
+					// ??????????? //
 				tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
 				tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
+				line[cursor_pos] = '\0';
+				}
+			}
+			else if (!strcmp(str, "\t")) // TAB
+			{
 			}
 			else
 			{
 				write(1, str, r);
+				cursor_pos++;
 				line = ft_strjoin_mod(line, str);
 				if (!strcmp(str, "\n"))
 				{
-					write(1, "bash-3.2$ ", 10);
+					cursor_pos = 0;
+					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
+						k = history_size;
 					history[k] = ft_strdup(line);
-					ft_bzero(line, ft_strlen(line));
+					write(fd, history[k], ft_strlen(history[k]));
+					write(fd, "\n", 1);
+					ft_bzero(line, ft_strlen(line)); // ???????????????????
 					history_size++;
 					k = history_size;
-					// ft_putstr_fd("k = ", 1);
-					// ft_putnbr_fd(k, 1);
-					// ft_putstr_fd("size = ", 1);
-					// ft_putnbr_fd(history_size, 1);
-					// ft_putstr_fd("   ", 1);
 				}
 			}
 			str[0] = '\0';
 		}
+		ft_putstr_fd("bye", 1);
+		close(fd);
 	}
 	return (0);
 }
+// #define	EXIT_FAILURE	1
+// #define	EXIT_SUCCESS	0
 
-
-// сега появляется при выборе команды или нажатии на энтер. Потом когда долистываешь до неё, вылетает сега
+// дописать историю. Считывать файл с историей и добавлять в двумерный массив.
+// Пример: 1 2 3 4 5 + подняться вверх написать что-то, потом удалить и нажать вниз, потом enter
 
 	// term.c_cc[VMIN] = 1; // минимальное количество символов считается
 	// term.c_cc[VTIME] = 0; //сколько read будет ждать

@@ -97,6 +97,43 @@ int	init_term(struct termios *term, char *term_name)
 	return (0);
 }
 
+
+int	parser(char *line)
+{
+	t_command	command;
+	size_t		k;
+
+	if (line == NULL)
+		return (-1);
+	ft_putstr_fd("line ->", 1);
+	ft_putstr_fd(line, 1);
+	ft_putstr_fd("|\n", 1);
+	while (*line == ' ')
+		line++;
+	command.name = ft_substr(line, 0, ft_strchr(line, ' ') - line);
+	line =  ft_strchr(line, ' ');
+	ft_putstr_fd("name ->", 1);
+	ft_putstr_fd(command.name, 1);
+	ft_putstr_fd("|\n", 1);
+	k = 0;
+	command.args = (char **)ft_calloc(20, sizeof(char *)); // кол-во аргументов
+	while (*line)
+	{
+		while (*line == ' ')
+			line++;
+		command.args[k] = ft_substr(line, 0, ft_strchr(line, ' ') - line);
+		line =  ft_strchr(line, ' ');
+		// line++;
+		ft_putstr_fd("arg ->", 1);
+		ft_putstr_fd(command.args[k], 1);
+		ft_putstr_fd("|\t", 1);
+		k++;
+	}
+
+	// ВЫЗОВ ФУНКЦИИ КОТОРАЯ ОТВЕЧАЕТ ЗА ЛОГИКУ
+	return (0);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
@@ -192,6 +229,7 @@ int main(int argc, char **argv, char **envp)
 				line = ft_strjoin_mod(line, str);
 				if (!strcmp(str, "\n"))
 				{
+					parser(line);
 					cursor_pos = 0;
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -216,6 +254,8 @@ int main(int argc, char **argv, char **envp)
 
 // дописать историю. Считывать файл с историей и добавлять в двумерный массив.
 // Пример: 1 2 3 4 5 + подняться вверх написать что-то, потом удалить и нажать вниз, потом enter
+// ЕСТЬ ЛИКИ
+// пустые команды не должны сохраняться
 
 	// term.c_cc[VMIN] = 1; // минимальное количество символов считается
 	// term.c_cc[VTIME] = 0; //сколько read будет ждать

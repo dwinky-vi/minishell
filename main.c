@@ -154,9 +154,9 @@ int main(int argc, char **argv, char **envp)
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	k = 0;
-	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	while (strcmp(str, "\4"))
 	{
+	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 		tputs(save_cursor, 1, ft_putchar);
 		write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 		while (strcmp(str, "\n"))
@@ -229,7 +229,7 @@ int main(int argc, char **argv, char **envp)
 				line = ft_strjoin_mod(line, str);
 				if (!strcmp(str, "\n"))
 				{
-					parser(line);
+					// parser(line);
 					cursor_pos = 0;
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

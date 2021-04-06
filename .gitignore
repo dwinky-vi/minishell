@@ -3,3 +3,6 @@ libft/.obj/
 libft/libft.a
 a.out
 minishell
+.vscode/
+history_file
+.DS_STORE

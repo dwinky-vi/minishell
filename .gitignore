@@ -3,3 +3,4 @@ libft/.obj/
 libft/libft.a
 a.out
 minishell
+.vscode/

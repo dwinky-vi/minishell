@@ -1,7 +1,4 @@
 #include "head_minishell.h"
-# include <term.h>
-#include <string.h>
-#include <fcntl.h>
 
 char	*ft_strjoin_mod(char *s1, char *s2)
 {
@@ -37,12 +34,6 @@ int	ft_putchar(int ch)
 	write(1, &ch, 1);
 	return (0);
 }
-
-typedef struct s_envp
-{
-	char	*name;
-	char	*value;
-}				t_envp;
 
 t_envp	*parse_envp(char *str)
 {
@@ -98,7 +89,7 @@ int	init_term(struct termios *term, char *term_name)
 }
 
 
-int	parser(char *line)
+int	parser(char *line, t_list *head_envp, char **env)
 {
 	t_command	command;
 	size_t		k;
@@ -125,7 +116,7 @@ int	parser(char *line)
 		line += k;
 	}
 
-	// ВЫЗОВ ФУНКЦИИ КОТОРАЯ ОТВЕЧАЕТ ЗА ЛОГИКУ
+	processing(&command, head_envp, env);
 	return (0);
 }
 
@@ -149,9 +140,9 @@ int main(int argc, char **argv, char **envp)
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	k = 0;
+	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	while (strcmp(str, "\4"))
 	{
-	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 		tputs(save_cursor, 1, ft_putchar);
 		write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 		while (strcmp(str, "\n"))
@@ -160,19 +151,13 @@ int main(int argc, char **argv, char **envp)
 			str[r] = '\0';
 			if (!strcmp(str, "\4"))
 			{
-				// write(1, "exit\n", 5);
-				tputs(delete_line, 1, ft_putchar);
-				while (*history)
-				{
-					ft_putendl_fd(*history, 1);
-					history++;
-				}
+				write(1, "exit\n", 5);
 				break ;
 			}
 			if (!strcmp(str, "\e[A")) // UP
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);			
+				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 				if (k > 0)
 					k--;
 				if (history_size != 0)
@@ -224,7 +209,7 @@ int main(int argc, char **argv, char **envp)
 				line = ft_strjoin_mod(line, str);
 				if (!strcmp(str, "\n"))
 				{
-					// parser(line);
+					parser(line, head_envp, envp);
 					cursor_pos = 0;
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -239,9 +224,8 @@ int main(int argc, char **argv, char **envp)
 			}
 			str[0] = '\0';
 		}
-		ft_putstr_fd("bye", 1);
-		close(fd);
 	}
+	close(fd);
 	return (0);
 }
 // #define	EXIT_FAILURE	1

@@ -1,8 +1,8 @@
 
 
 SRCS	= \
-		main.c 
-	
+		main.c
+
 NAME		= minishell
 
 LIBFT_PATH		= ./libft
@@ -11,7 +11,7 @@ HEADER		= head_minishell.h
 
 CC		= gcc
 
-CFLAGS	= -g 
+CFLAGS	= -g
 
 # создаём скрытую директорию, в которой будут .o файлы
 OBJS_DIR =			.obj
@@ -80,7 +80,7 @@ LIGHT_PURPLE= \033[1;35m
 LIGHT_CYAN	= \033[1;36m
 WHITE 		= \033[1;37m
 
-.PHONY:	all clean fclean re 
+.PHONY:	all clean fclean re
 .PHONY: make_lib norm
 .PHONY: SRCS NAME LIBFT_PATH HEADER CC CFLAGS OBJS_DIR OBJS NORM
 .PHONY: UNDER_LINE BOLD NO_COLOR BLACK RED GREEN BROWN BLUE PURPLE CYAN LIGHT_GRAY DARK_GRAY LIGHT_RED LIGHT_GREEN YELLOW LIGTH_BLUE LIGHT_PURPLE LIGHT_CYAN WHITE

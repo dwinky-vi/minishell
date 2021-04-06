@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 20:46:05 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/06 21:39:56 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	processing(t_command *cmd, t_list *list_env, char **envp)
 	name_len = ft_strlen(cmd->name);
 	if (name_len)
 	{
-		if (!ft_strncmp(cmd->name, "echo", name_len))
+		if (!ft_strncmp(cmd->name, "echo", 5))
 			make_echo(cmd);
-		else if (!ft_strncmp(cmd->name, "pwd", name_len))
+		else if (!ft_strncmp(cmd->name, "pwd", 4))
 			make_pwd(cmd);
-		else if (!ft_strncmp(cmd->name, "cd", name_len))
+		else if (!ft_strncmp(cmd->name, "cd", 3))
 			make_cd(cmd);
 		else
 		{

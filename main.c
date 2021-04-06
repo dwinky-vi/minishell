@@ -1,5 +1,19 @@
 #include "head_minishell.h"
 
+void	ft_putline(char *s1, char *s2, char *s3)
+{
+	ft_putstr_fd(s1, 1);
+	ft_putstr_fd(s2, 1);
+	ft_putstr_fd(s3, 1);
+}
+
+void	ft_putline_nbr(char *s1, int nbr)
+{
+	ft_putstr_fd(s1, 1);
+	ft_putnbr_fd(nbr, 1);
+	ft_putstr_fd("\n", 1);
+}
+
 int	ft_putchar(int ch)
 {
 	write(1, &ch, 1);
@@ -107,12 +121,20 @@ int main(int argc, char **argv, char **envp)
 
 	head_env = get_envp(envp);
 	init_term(&term, get_term_name(head_env));
-	history = (char **)ft_calloc(100, sizeof(char *));
-	line = (char *)ft_calloc(2000, 1);
+	history = (char **)ft_calloc(200, sizeof(char *));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
-	k = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
+	k = 0;
+	while ((r = get_next_line(fd, &line)) >= 0)
+	{
+		if (*line != '\0')
+			history[k++] = line;
+		if (r == 0)
+			break ;
+	}
+	history_size = k;
+	line = (char *)ft_calloc(2000, 1);
 	while (strcmp(str, "\4"))
 	{
 		tputs(save_cursor, 1, ft_putchar);
@@ -180,7 +202,7 @@ int main(int argc, char **argv, char **envp)
 					line[cursor_pos] = '\0';
 				}
 			}
-			else if (!strcmp(str, "\t")) // TAB
+			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки –– [H **/ /** в конец строки ––[F **/
 			{
 			}
 			else

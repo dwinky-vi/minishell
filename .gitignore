@@ -5,3 +5,4 @@ a.out
 minishell
 .vscode/
 history_file
+.DS_STORE

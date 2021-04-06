@@ -10,7 +10,8 @@ SRCS	= \
 		ft_putendl_fd.c ft_putnbr_fd.c ft_itoa_base.c ft_number_len.c \
 		ft_array_len.c ft_strrncmp.c ft_isdigit_str.c \
 		ft_lstnew.c ft_lstsize.c ft_lstlast.c ft_lstadd_front.c ft_lstadd_back.c \
-		ft_lstiter.c ft_lstdelone.c ft_lstclear.c ft_lstmap.c
+		ft_lstiter.c ft_lstdelone.c ft_lstclear.c ft_lstmap.c \
+		ft_strjoin_free.c
 
 NAME	= libft.a
 

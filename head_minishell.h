@@ -28,10 +28,10 @@ typedef struct	s_command
 	int		fd[2];
 }				t_command;
 
-void			processing(t_command *cmd, t_list *env, char **envp);
+void			processing(t_command *cmd, t_list *list_env, char **envp);
 void			make_echo(t_command *cmd);
 void			make_pwd(t_command *cmd);
 void			make_cd(t_command *cmd);
-void			make_other(t_command *cmd, t_list *envp, char **env);
+void			make_other(t_command *cmd, t_list *list_env, char **envp);
 
 #endif

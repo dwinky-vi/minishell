@@ -13,7 +13,6 @@ typedef struct	s_command
 	char	*name;
 	char	**args;
 	char	**fd;
-	
 }				t_command;
 
 #endif

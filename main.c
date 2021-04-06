@@ -1,5 +1,5 @@
 #include "head_minishell.h"
-# include <term.h>
+#include <term.h>
 #include <string.h>
 #include <fcntl.h>
 
@@ -98,7 +98,7 @@ int	init_term(struct termios *term, char *term_name)
 }
 
 
-int	parser(char *line)
+int	parser(char *line, t_list *list_env, char **envp)
 {
 	t_command	command;
 	size_t		k;
@@ -125,14 +125,28 @@ int	parser(char *line)
 		line += k;
 	}
 
-	// ВЫЗОВ ФУНКЦИИ КОТОРАЯ ОТВЕЧАЕТ ЗА ЛОГИКУ
+	// processing(command, list_env, envp);
 	return (0);
+}
+
+void	ft_putline(char *s1, char *s2, char *s3)
+{
+	ft_putstr_fd(s1, 1);
+	ft_putstr_fd(s2, 1);
+	ft_putstr_fd(s3, 1);
+}
+
+void	ft_putline_nbr(char *s1, int nbr)
+{
+	ft_putstr_fd(s1, 1);
+	ft_putnbr_fd(nbr, 1);
+	ft_putstr_fd("\n", 1);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
-	t_list			*head_envp;
+	t_list			*head_env;
 	char			**history;
 	char			*str;
 	int				r;
@@ -141,17 +155,17 @@ int main(int argc, char **argv, char **envp)
 	char			*line;
 	size_t			cursor_pos = 0;
 
-	head_envp = get_envp(envp);
+	head_env = get_envp(envp);
 
-	init_term(&term, get_term_name(head_envp));
+	init_term(&term, get_term_name(head_env));
 	history = (char **)ft_calloc(100, sizeof(char *));
 	line = (char *)ft_calloc(2000, 1);
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	k = 0;
+	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	while (strcmp(str, "\4"))
 	{
-	int fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 		tputs(save_cursor, 1, ft_putchar);
 		write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 		while (strcmp(str, "\n"))
@@ -160,19 +174,19 @@ int main(int argc, char **argv, char **envp)
 			str[r] = '\0';
 			if (!strcmp(str, "\4"))
 			{
-				// write(1, "exit\n", 5);
-				tputs(delete_line, 1, ft_putchar);
-				while (*history)
-				{
-					ft_putendl_fd(*history, 1);
-					history++;
-				}
+				write(1, "exit\n", 5);
+				// tputs(delete_line, 1, ft_putchar);
+				// while (*history)
+				// {
+				// 	ft_putendl_fd(*history, 1);
+				// 	history++;
+				// }
 				break ;
 			}
 			if (!strcmp(str, "\e[A")) // UP
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);			
+				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 				if (k > 0)
 					k--;
 				if (history_size != 0)
@@ -195,6 +209,7 @@ int main(int argc, char **argv, char **envp)
 					tputs(delete_line, 1, ft_putchar);
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					cursor_pos = 0;
+					ft_bzero(line, ft_strlen(line));
 				}
 				else if (history_size != 0)
 				{
@@ -203,15 +218,46 @@ int main(int argc, char **argv, char **envp)
 					line = ft_strdup(history[k]);
 				}
 			}
+			else if (!strcmp(str, "\e[D")) // LEFT // Влево –– ^[[D
+			{
+				// if (cursor_pos > 0)
+				// {
+				// 	cursor_pos--;
+				// 	tputs(cursor_left, 1, ft_putchar);
+				// }
+				// ft_putstr_fd("cur_pos ->", 1);
+				// ft_putnbr_fd(cursor_pos, 1);
+				// ft_putstr_fd("\n", 1);
+			}
+			else if (!strcmp(str, "\e[C")) // RIGHT // вправо –– ^[[C
+			{
+				// if (0 <= cursor_pos && cursor_pos < ft_strlen(line))
+				// {
+				// 	cursor_pos++;
+				// 	tputs(cursor_right, 1, ft_putchar);
+				// }
+			}
+			else if (!strcmp(str, "\e[3~")) // del // (удалить справа) –– ^[[3~
+			{
+				// ft_putline_nbr("cur ->", cursor_pos, "\t");
+				// if (cursor_pos > 0)
+				// {
+				// 	if (line[cursor_pos] == '\0')
+				// 		cursor_pos--;
+				// 	tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
+				// 	line[cursor_pos] = '\0';
+				// 	// tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
+				// }
+				// ft_putline_nbr("cur ->", cursor_pos, "\t");
+			}
 			else if (!strcmp(str, "\177")) // delete
 			{
 				if (cursor_pos > 0)
 				{
 					cursor_pos--;
-					// ??????????? //
-				tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
-				tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
-				line[cursor_pos] = '\0';
+					tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
+					tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
+					line[cursor_pos] = '\0';
 				}
 			}
 			else if (!strcmp(str, "\t")) // TAB
@@ -224,33 +270,33 @@ int main(int argc, char **argv, char **envp)
 				line = ft_strjoin_mod(line, str);
 				if (!strcmp(str, "\n"))
 				{
-					// parser(line);
+					parser(line, head_env, envp);
 					cursor_pos = 0;
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
 						k = history_size;
-					history[k] = ft_strdup(line);
-					write(fd, history[k], ft_strlen(history[k]));
-					write(fd, "\n", 1);
-					ft_bzero(line, ft_strlen(line)); // ???????????????????
-					history_size++;
-					k = history_size;
+					if (strcmp(line, ""))
+					{
+						history[k] = ft_strdup(line);
+						write(fd, history[k], ft_strlen(history[k]));
+						write(fd, "\n", 1);
+						history_size++;
+						k = history_size;
+					}
+					ft_bzero(line, ft_strlen(line)); // чтобы после enter строка очищалась
 				}
 			}
 			str[0] = '\0';
 		}
-		ft_putstr_fd("bye", 1);
-		close(fd);
 	}
+	close(fd);
 	return (0);
 }
 // #define	EXIT_FAILURE	1
 // #define	EXIT_SUCCESS	0
 
 // дописать историю. Считывать файл с историей и добавлять в двумерный массив.
-// Пример: 1 2 3 4 5 + подняться вверх написать что-то, потом удалить и нажать вниз, потом enter
 // ЕСТЬ ЛИКИ
-// пустые команды не должны сохраняться
 
 	// term.c_cc[VMIN] = 1; // минимальное количество символов считается
 	// term.c_cc[VTIME] = 0; //сколько read будет ждать

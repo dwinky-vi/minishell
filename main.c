@@ -105,29 +105,24 @@ int	parser(char *line)
 
 	if (line == NULL)
 		return (-1);
-	ft_putstr_fd("line ->", 1);
-	ft_putstr_fd(line, 1);
-	ft_putstr_fd("|\n", 1);
 	while (*line == ' ')
 		line++;
-	command.name = ft_substr(line, 0, ft_strchr(line, ' ') - line);
-	line =  ft_strchr(line, ' ');
-	ft_putstr_fd("name ->", 1);
-	ft_putstr_fd(command.name, 1);
-	ft_putstr_fd("|\n", 1);
+	k = 0;
+	while (line[k] != ' ' && line[k])
+		k++;
+	command.name = ft_substr(line, 0, k);
+	line += k;
 	k = 0;
 	command.args = (char **)ft_calloc(20, sizeof(char *)); // кол-во аргументов
 	while (*line)
 	{
 		while (*line == ' ')
 			line++;
-		command.args[k] = ft_substr(line, 0, ft_strchr(line, ' ') - line);
-		line =  ft_strchr(line, ' ');
-		// line++;
-		ft_putstr_fd("arg ->", 1);
-		ft_putstr_fd(command.args[k], 1);
-		ft_putstr_fd("|\t", 1);
-		k++;
+		k = 0;
+		while (line[k] != ' ' && line[k])
+			k++;
+		command.args[k] = ft_substr(line, 0, k);
+		line += k;
 	}
 
 	// ВЫЗОВ ФУНКЦИИ КОТОРАЯ ОТВЕЧАЕТ ЗА ЛОГИКУ

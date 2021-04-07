@@ -20,6 +20,13 @@ int	ft_putchar(int ch)
 	return (0);
 }
 
+void	print_prompt(void)
+{
+	write(1, "\e[1;35m", 7);
+	write(1, "bash-3.2$ ", 10);
+	write(1, "\e[0m", 4);
+}
+
 t_envp	*parse_envp(char *str)
 {
 	t_envp	*env;
@@ -126,6 +133,7 @@ int main(int argc, char **argv, char **envp)
 	history_size = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	k = 0;
+	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	while ((r = get_next_line(fd, &line)) >= 0)
 	{
 		if (*line != '\0')
@@ -138,7 +146,7 @@ int main(int argc, char **argv, char **envp)
 	while (strcmp(str, "\4"))
 	{
 		tputs(save_cursor, 1, ft_putchar);
-		write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+		print_prompt();
 		while (strcmp(str, "\n"))
 		{
 			r = read(0, str, 100);
@@ -151,12 +159,13 @@ int main(int argc, char **argv, char **envp)
 			if (!strcmp(str, "\e[A")) // UP
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+				print_prompt();
 				if (k > 0)
 					k--;
 				if (history_size != 0)
 				{
 					write(1, history[k], ft_strlen(history[k]));
+					free(line);
 					line = ft_strdup(history[k]);
 					cursor_pos = ft_strlen(history[k]);
 				}
@@ -164,15 +173,13 @@ int main(int argc, char **argv, char **envp)
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
 				tputs(delete_line, 1, ft_putchar);
-				write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
+				print_prompt();
 				if (k < history_size)
 					k++;
 				if (history_size == 0)
 					k = 0;
 				if (k == history_size)
 				{
-					tputs(delete_line, 1, ft_putchar);
-					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					cursor_pos = 0;
 					ft_bzero(line, ft_strlen(line));
 				}
@@ -180,19 +187,30 @@ int main(int argc, char **argv, char **envp)
 				{
 					cursor_pos = ft_strlen(history[k]);
 					write(1, history[k], ft_strlen(history[k]));
+					free(line);
 					line = ft_strdup(history[k]);
 				}
 			}
 			else if (!strcmp(str, "\e[D")) // LEFT // Влево –– ^[[D
 			{
+				if (0 < cursor_pos)
+				{
+					tputs(cursor_left, 1, ft_putchar);
+					cursor_pos--;
+				}
 			}
 			else if (!strcmp(str, "\e[C")) // RIGHT // вправо –– ^[[C
 			{
+				if (0 <= cursor_pos && cursor_pos < ft_strlen(line))
+				{
+					tputs(cursor_right, 1, ft_putchar);
+					cursor_pos++;
+				}
 			}
 			else if (!strcmp(str, "\e[3~")) // del // (удалить справа) –– ^[[3~
 			{
 			}
-			else if (!strcmp(str, "\177")) // delete
+			else if (!strcmp(str, "\177")) // backspace
 			{
 				if (cursor_pos > 0)
 				{
@@ -200,19 +218,21 @@ int main(int argc, char **argv, char **envp)
 					tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
 					tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
 					line[cursor_pos] = '\0';
+					if (line[cursor_pos + 1] != '\0')
+						line = ft_strjoin(line, line + cursor_pos + 1);
 				}
 			}
-			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки –– [H **/ /** в конец строки ––[F **/
+			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки (cursor_home)–– [H **/ /** в конец строки ––[F **/
 			{
 			}
 			else
 			{
-				write(1, str, r);
 				if (!strcmp(str, "\n"))
 				{
+					write(1, str, r);
 					parser(line, head_env, envp);
+					print_prompt();
 					cursor_pos = 0;
-					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
 						k = history_size;
 					if (strcmp(line, ""))
@@ -225,13 +245,29 @@ int main(int argc, char **argv, char **envp)
 					}
 					ft_bzero(line, ft_strlen(line)); // чтобы после enter строка очищалась
 				}
+				else if (cursor_pos < ft_strlen(line))
+				{
+					tputs(save_cursor, 1, ft_putchar);
+					char *append;
+					append = ft_strdup(line + cursor_pos);
+					line[cursor_pos] = '\0';
+					line = ft_strjoin(line, str);
+					line = ft_strjoin(line, append);
+					tputs(delete_line, 1, ft_putchar);
+					print_prompt();
+					write(1, line, ft_strlen(line));
+					tputs(restore_cursor, 1, ft_putchar);
+					tputs(cursor_right, 1, ft_putchar);
+					cursor_pos++;
+				}
 				else
 				{
+					write(1, str, r);
 					cursor_pos++;
 					line = ft_strjoin_free(line, str, 1);
 				}
 			}
-			str[0] = '\0';
+			ft_bzero(str, ft_strlen(str));
 		}
 	}
 	close(fd);

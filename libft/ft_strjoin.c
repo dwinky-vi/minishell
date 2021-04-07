@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 14:25:28 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/03/31 21:54:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/08 01:58:07 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (*s2)
 		*s3++ = *s2++;
 	s1 -= s1_len;
-	free((char *)s1);
+	s2 -= s2_len;
 	return (s3 - s3_len);
 }

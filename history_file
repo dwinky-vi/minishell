@@ -1,65 +1,5 @@
-
 1
 2
-3
-33
-1
-2
-3
-1
-2
-3
-4
-5
-
-3443[D[Dolooo
-3443[D[Dolooo[D[D[D[D1111
-cd libft
-
-
-
-
-
-e
-
-
-
-e
-
-123
-
-456
-
-123
-
-123
-
-456
-
-11
-
-22
-
-33
-
-44
-
-12
-
-12
-
-321
-
-123
-
-123
-
-
-12 12 12 1 12 12   12 21 12 12
-
-1 2 3 4
-1 2 3 
-1 2 3
 3
 4
 5
@@ -67,124 +7,87 @@ e
 7
 8
 9
- 9
-cd libft
-pwd
-cd v
-cd ..
-pwd
-echo hello world
-echo -n hello world
-ls
-ls
-ls
-ls
-/bin/ls
-ls
-l
-ls
-ls
-/bin/ls
-ls
-/bin/ls
-l
-/bin/l
-ls
-ls
-ls
-ls
-ls
-ls
-ls
-ls
-ls
-ls
-ls
+0
 1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-ls
-/bin/ls
-l
-/bin/l
-ls
-ls
-exit
-ls
-/bin/ls
-ls
-ls
-/bin/ls
-/bin/l
-l
-ls
-l
-/bin/l
-echo hello world
-echo -n hello world
-1
-1
-clear
-clear
-ls
-clear
-make
-git status
-rm minishell
-ls
-cat main.c
-clear
-norminette *.c
-norminette *.c -main.c
-norm
-norminette other_func.c
-unset PATH
-LS
+2
+3
+4
+5
+6
+7
+8
+9
+0
 env
-unset PATH
+cd -
+cd libft
+env
+cd -
+env
+cd /bin/ls
+cd /bin
+env
+cd -
+env
+clear
+clear
 ls
-unset PATH
-export lol=666
+pwd
+env
+env
+clear
+cd -
+cd
+env
+cd
+env
+cd -
+cd
+env
+cd -
+env
+clear
+env
+env
+cd -
+cd
+env
+cd -
+env
+env
 ls
-cat l
-export
-$PWD
-git status
-ls
-export lol=olo
+pwd
+cd
+pwd
+cd -
+echo world hello
+norminette cd.c
+norminette other_funck.c
+norminette other_func.c
+clear
+env
+cd -
+cd
+env
+cd -
+env
 env
 env
 cd
-ls
 env
+env
+cd -
+env
+env
+clear
+clear
+env
+env
+env
+cd -
+cd
+env
+cd -
+env
+cd -
 env

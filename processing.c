@@ -6,20 +6,38 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 20:46:05 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/07 23:44:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	processing(t_command *cmd, t_list *list_env, char **envp)
+char	*get_env(t_list **list_env, char *key)
+{
+	int		key_len;
+	t_list	*tmp_list;
+
+	tmp_list = *list_env;
+	key_len = ft_strlen(key) + 1;
+	while (tmp_list)
+	{
+		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, key, key_len))
+			break ;
+		tmp_list = tmp_list->next;
+	}
+	if (!tmp_list)
+		return (0);
+	return (((t_envp *)tmp_list->content)->value);
+}
+
+void	processing(t_command *cmd, t_list **list_env, char **envp)
 {
 	pid_t		pid;
 	int			name_len;
 
 	cmd->fd[0] = 0;
 	cmd->fd[1] = 1;
-	name_len = ft_strlen(cmd->name);
+	name_len = ft_strlen(cmd->name) + 1;
 	if (name_len)
 	{
 		if (!ft_strncmp(cmd->name, "echo", name_len))
@@ -27,7 +45,9 @@ void	processing(t_command *cmd, t_list *list_env, char **envp)
 		else if (!ft_strncmp(cmd->name, "pwd", name_len))
 			make_pwd(cmd);
 		else if (!ft_strncmp(cmd->name, "cd", name_len))
-			make_cd(cmd);
+			make_cd(cmd, list_env);
+		else if (!ft_strncmp(cmd->name, "env", name_len))
+			make_env(cmd, list_env);
 		else
 		{
 			pid = fork();

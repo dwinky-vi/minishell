@@ -6,13 +6,13 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 20:48:03 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/08 01:03:05 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	making_other(t_command *cmd, char **path_arr, char **av_tmp, char **envp)
+void	making_other(t_command *cmd, char **path_arr, char **av_tmp, char **env)
 {
 	int			i;
 	struct stat	buf;
@@ -22,7 +22,7 @@ void	making_other(t_command *cmd, char **path_arr, char **av_tmp, char **envp)
 	while (cmd->args[++i])
 		av_tmp[i + 1] = cmd->args[i];
 	if (!lstat(cmd->name, &buf))
-		execve(cmd->name, av_tmp, envp);
+		execve(cmd->name, av_tmp, env);
 	i = -1;
 	while (path_arr[++i])
 	{
@@ -33,33 +33,23 @@ void	making_other(t_command *cmd, char **path_arr, char **av_tmp, char **envp)
 		if (!path)
 			exit(0);
 		if (!lstat(path, &buf))
-			execve(path, av_tmp, envp);
+			execve(path, av_tmp, env);
 		free(path);
 	}
 }
 
-void	make_other(t_command *cmd, t_list *list_env, char **envp)
+void	make_other(t_command *cmd, t_list **list_env, char **envp)
 {
 	char		**path_arr;
 	char		**av_tmp;
 	char		*paths;
 	int			i;
-	t_list		*head;
 
-	head = list_env;
 	av_tmp = ft_calloc(ft_array_len(cmd->args) + 2, sizeof(char *));
 	if (!av_tmp)
 		exit(0);
 	paths = "";
-	while (list_env)
-	{
-		if (!ft_strncmp(((t_envp *)list_env->content)->name, "PATH", ft_strlen(((t_envp *)list_env->content)->name)))
-		{
-			paths = ft_strdup(((t_envp *)list_env->content)->value);
-			break ;
-		}
-		list_env = list_env->next;
-	}
+	paths = get_env(list_env, "PATH");
 	path_arr = ft_split(paths, ':');
 	if (!path_arr)
 		exit(0);

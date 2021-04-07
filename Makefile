@@ -1,7 +1,7 @@
 
 
 SRCS	= \
-		main.c processing.c echo.c pwd.c cd.c other_func.c
+		main.c processing.c echo.c pwd.c cd.c env.c other_func.c
 
 NAME		= minishell
 

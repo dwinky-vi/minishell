@@ -59,7 +59,7 @@ int	init_term(struct termios *term, char *term_name)
 	return (0);
 }
 
-int	parser(char *line, t_list *list_env, char **envp)
+int	parser(char *line, t_list **list_env, char **envp)
 {
 	t_command	command;
 	size_t		k;
@@ -188,7 +188,7 @@ int main(int argc, char **argv, char **envp)
 				write(1, str, r);
 				if (!strcmp(str, "\n"))
 				{
-					parser(line, head_env, envp);
+					parser(line, &head_env, envp);
 					cursor_pos = 0;
 					write(1, "\033[1;35mbash-3.2$ \033[0m", 21);
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 18:53:38 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/06 21:33:54 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,6 @@ int				ft_strrncmp(const char *s1, const char *s2, size_t n);
 int				ft_isdigit_str(char *str);
 void			ft_free_array(char **arr);
 
+int				get_next_line(int fd, char **line);
+void			ft_clear_tail(char **s_tail);
 #endif

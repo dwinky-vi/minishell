@@ -76,18 +76,78 @@ env
 cd
 env
 env
+ls
+/bin/ls
+1
+1
+2
+3
+4
+envlol
+p
+p
+p
+p
+123
+1
+2
+3
+4
+clear
+env
+cd -
+cd
+env
+cd -
+cd
 cd -
 env
+clear
+soclear
+clear
+cd libft
+pwd
+env
+cd -
+pwd
+cd ..
+owd
+pwd
+cd last_minishell
+pwd
+env
+cd libft
+pwd
 env
 clear
+norminette *
+cd ..
+pwd
+norminette *
 clear
-env
-env
+clear
+clear
 env
 cd -
 cd
 env
 cd -
 env
+clear
+lolclear
+clear
+clear
+env
+cd -
+cd
+env
 cd -
 env
+clear
+clear
+cd -
+cd
+env
+cd -
+env
+clear

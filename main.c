@@ -135,7 +135,7 @@ int main(int argc, char **argv, char **envp)
 	size_t			history_size;
 	size_t			k;
 	char			*line;
-	size_t			cursor_pos = 0;
+	int				cursor_pos = 0;
 	int				fd;
 
 	head_env = get_envp(envp);
@@ -144,10 +144,18 @@ int main(int argc, char **argv, char **envp)
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
-	k = 0;
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
-			signal(SIGINT, &terminate); // Это ловит ctrl-C.  Код сигнала –– 2
-			signal(SIGQUIT, &terminate); // Это ловит ctrl-\. Код сигнала –– 3
+	k = 0;
+
+	signal(SIGINT, &terminate); // Это ловит ctrl-C.  Код сигнала –– 2
+	signal(SIGQUIT, &terminate); // Это ловит ctrl-\. Код сигнала –– 3
+
+	void (*funcptr)(int);                              // указатель на функцию
+
+	funcptr = signal(SIGTERM, terminate);              // обработка сигнала
+	if (funcptr == SIG_IGN)
+		signal(SIGTERM, SIG_IGN);  // в случае, если funcptr будет указывать на SIG_IGN, то сигнал SIGTERM будет игнорироваться
+
 	while ((r = get_next_line(fd, &line)) >= 0)
 	{
 		if (*line != '\0')
@@ -157,6 +165,7 @@ int main(int argc, char **argv, char **envp)
 	}
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
+	cursor_pos = 0;
 	while (strcmp(str, "\4"))
 	{
 		tputs(save_cursor, 1, ft_putchar);
@@ -167,11 +176,23 @@ int main(int argc, char **argv, char **envp)
 			str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
-				// удалить символ под курсором
-				write(1, "exit\n", 5);
-				break ;
+				if (line[0] == '\0')
+				{
+					write(1, "exit\n", 5);
+					break ;
+				}
+				else
+				{
+					if (cursor_pos >= 0)
+					{
+						tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
+						line[cursor_pos] = '\0';
+						if (line[cursor_pos + 1] != '\0')
+							line = ft_strjoin(line, line + cursor_pos + 1);
+					}
+				}
 			}
-			if (!strcmp(str, "\e[A")) // UP
+			else if (!strcmp(str, "\e[A")) // UP
 			{
 				tputs(delete_line, 1, ft_putchar);
 				print_prompt();
@@ -213,6 +234,9 @@ int main(int argc, char **argv, char **envp)
 					tputs(cursor_left, 1, ft_putchar);
 					cursor_pos--;
 				}
+				ft_putstr_fd("|<-|pos ->", fd2);
+				ft_putnbr_fd(cursor_pos, fd2);
+				ft_putstr_fd("\n", fd2);
 			}
 			else if (!strcmp(str, "\e[C")) // RIGHT // вправо –– ^[[C
 			{
@@ -221,6 +245,13 @@ int main(int argc, char **argv, char **envp)
 					tputs(cursor_right, 1, ft_putchar);
 					cursor_pos++;
 				}
+				ft_putstr_fd("|->|pos ->", fd2);
+				ft_putnbr_fd(cursor_pos, fd2);
+				ft_putstr_fd("\n", fd2);
+
+				ft_putstr_fd("|strlen|pos ->", fd2);
+				ft_putnbr_fd(ft_strlen(line), fd2);
+				ft_putstr_fd("\n", fd2);
 			}
 			else if (!strcmp(str, "\e[3~")) // del // (удалить справа) –– ^[[3~
 			{
@@ -237,7 +268,7 @@ int main(int argc, char **argv, char **envp)
 						line = ft_strjoin(line, line + cursor_pos + 1);
 				}
 			}
-			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки (cursor_home)–– [H **/ /** в конец строки ––[F **/
+			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки (cursor_home)–– \e[H **/ /** в конец строки ––\e[F **/
 			{
 			}
 			else
@@ -292,3 +323,7 @@ int main(int argc, char **argv, char **envp)
 	tcsetattr(0, TCSANOW, &term);
 	return (0);
 }
+
+// обрабатывать одинаково
+// -|echo ; ;
+// -|;

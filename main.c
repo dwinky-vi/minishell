@@ -1,4 +1,5 @@
 #include "head_minishell.h"
+#include <signal.h>
 
 void	ft_putline(char *s1, char *s2, char *s3)
 {
@@ -113,6 +114,17 @@ int	parser(char *line, t_list *list_env, char **envp)
 	return (0);
 }
 
+void	terminate(int param)
+{
+	signal (SIGINT, SIG_IGN);
+	if (param == 2)
+		ft_putstr_fd("___^C", 1);
+	else if (param == 3)
+		ft_putstr_fd("___^\\", 1);
+	else
+		ft_putstr_fd("error\n", 1);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
@@ -128,12 +140,14 @@ int main(int argc, char **argv, char **envp)
 
 	head_env = get_envp(envp);
 	init_term(&term, get_term_name(head_env));
-	history = (char **)ft_calloc(200, sizeof(char *));
+	history = (char **)ft_calloc(500, sizeof(char *));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	k = 0;
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
+			signal(SIGINT, &terminate); // Это ловит ctrl-C.  Код сигнала –– 2
+			signal(SIGQUIT, &terminate); // Это ловит ctrl-\. Код сигнала –– 3
 	while ((r = get_next_line(fd, &line)) >= 0)
 	{
 		if (*line != '\0')
@@ -151,8 +165,9 @@ int main(int argc, char **argv, char **envp)
 		{
 			r = read(0, str, 100);
 			str[r] = '\0';
-			if (!strcmp(str, "\4"))
+			if (!strcmp(str, "\4")) // ctrl-D
 			{
+				// удалить символ под курсором
 				write(1, "exit\n", 5);
 				break ;
 			}
@@ -271,5 +286,9 @@ int main(int argc, char **argv, char **envp)
 		}
 	}
 	close(fd);
+	// tcgetattr(0, &term);
+	term.c_lflag &= ~(ECHO);
+	term.c_lflag &= ~(ICANON);
+	tcsetattr(0, TCSANOW, &term);
 	return (0);
 }

@@ -2,7 +2,7 @@
 
 SRCS	= \
 		main.c \
-		processing.c echo.c pwd.c cd.c other_func.c \
+		processing.c echo.c pwd.c cd.c env.c other_func.c \
 		parser.c print_utils.c init_term.c get_env.c key_home_end.c key_backspace_delete.c get_previous_history.c
 
 NAME		= minishell

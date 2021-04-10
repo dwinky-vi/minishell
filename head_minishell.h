@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:46:37 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 19:55:18 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/10 20:14:15 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 # define TRUE 1
 # define FALSE 0
+# define BUFSIZE 1024
 
 typedef struct s_envp
 {
@@ -43,11 +44,13 @@ typedef struct s_command
 	int		fd[2];
 }				t_command;
 
-void			processing(t_command *cmd, t_list *list_env, char **envp);
+void			processing(t_command *cmd, t_list **list_env, char **envp);
+char			*get_env(t_list **list_env, char *key);
+int				make_cd(t_command *cmd, t_list **list_env);
 void			make_echo(t_command *cmd);
 void			make_pwd(t_command *cmd);
-void			make_cd(t_command *cmd);
-void			make_other(t_command *cmd, t_list *list_env, char **envp);
+void			make_env(t_command *cmd, t_list **list_env);
+void			make_other(t_command *cmd, t_list **list_env, char **envp);
 
 t_list	*get_env(char **envp);
 

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 16:59:57 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/10 20:20:40 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 		line += k;
 	}
 
-	processing(&command, list_env, envp);
+	processing(&command, &list_env, envp);
 	return (0);
 }

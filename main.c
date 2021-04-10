@@ -1,120 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
+/*   Updated: 2021/04/10 19:38:47 by dwinky           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head_minishell.h"
-#include <signal.h>
 
-void	ft_putline(char *s1, char *s2, char *s3)
-{
-	ft_putstr_fd(s1, 1);
-	ft_putstr_fd(s2, 1);
-	ft_putstr_fd(s3, 1);
-}
-
-void	ft_putline_nbr(char *s1, int nbr)
-{
-	ft_putstr_fd(s1, 1);
-	ft_putnbr_fd(nbr, 1);
-	ft_putstr_fd("\n", 1);
-}
-
-int	ft_putchar(int ch)
-{
-	write(1, &ch, 1);
-	return (0);
-}
-
-void	print_prompt(void)
-{
-	write(1, "\e[1;35m", 7);
-	write(1, "bash-3.2$ ", 10);
-	write(1, "\e[0m", 4);
-}
-
-t_envp	*parse_envp(char *str)
-{
-	t_envp	*env;
-	size_t	k;
-
-	k = 0;
-	env = (t_envp *)ft_calloc(1, sizeof(t_envp));
-	while (str[k] != '=')
-		k++;
-	str[k] = '\0';
-	env->name = ft_strdup(str);
-	str[k] = '=';
-	k++;
-	env->value = ft_strdup(str + k);
-	return (env);
-}
-
-t_list	*get_envp(char **envp)
-{
-	t_list	*lst;
-	t_envp	*cur_envp;
-
-	lst = NULL;
-	while (*envp)
-	{
-		cur_envp = parse_envp(*envp);
-		ft_lstadd_back(&lst, ft_lstnew(cur_envp));
-		envp++;
-	}
-	return (lst);
-}
-
-char	*get_term_name(t_list *lst)
-{
-	while (lst)
-	{
-		if (ft_strncmp(((t_envp *)lst->content)->name, "TERM", 5) == 0)
-			return (((t_envp *)lst->content)->value);
-		lst = lst->next;
-	}
-	return ("xterm-256color");
-}
-
-int	init_term(struct termios *term, char *term_name)
-{
-	tcgetattr(0, term);
-	term->c_lflag &= ~(ECHO); // отключаем этот флаг (бит) устанавливается на ноль. Отключаем, чтобы read показывал, что печатается
-	term->c_lflag &= ~(ICANON); //переводим терминал в НЕ каноническое. В каноническом виде read завершается по нажатию \n
-	tcsetattr(0, TCSANOW, term);
-	tgetent(0, term_name); // подгружаем базу данных нашего терминала
-	return (0);
-}
-
-int	parser(char *line, t_list *list_env, char **envp)
-{
-	t_command	command;
-	size_t		k;
-	size_t		count;
-
-	if (line == NULL)
-		return (-1);
-	while (*line == ' ')
-		line++;
-	k = 0;
-	while (line[k] != ' ' && line[k])
-		k++;
-	command.name = ft_substr(line, 0, k);
-	line += k;
-	k = 0;
-	command.args = (char **)ft_calloc(20, sizeof(char *)); // кол-во аргументов
-	count = 0;
-	while (*line)
-	{
-		while (*line == ' ')
-			line++;
-		k = 0;
-		while (line[k] != ' ' && line[k])
-			k++;
-		command.args[count++] = ft_substr(line, 0, k);
-		line += k;
-	}
-
-	processing(&command, list_env, envp);
-	return (0);
-}
-
-void	terminate(int param)
+void	func_for_signal(int param)
 {
 	signal (SIGINT, SIG_IGN);
 	if (param == 2)
@@ -138,37 +36,22 @@ int main(int argc, char **argv, char **envp)
 	int				cursor_pos = 0;
 	int				fd;
 
-	head_env = get_envp(envp);
+	head_env = get_env(envp);
 	init_term(&term, get_term_name(head_env));
-	history = (char **)ft_calloc(500, sizeof(char *));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	k = 0;
 
-	signal(SIGINT, &terminate); // Это ловит ctrl-C.  Код сигнала –– 2
-	signal(SIGQUIT, &terminate); // Это ловит ctrl-\. Код сигнала –– 3
-
-	void (*funcptr)(int);                              // указатель на функцию
-
-	funcptr = signal(SIGTERM, terminate);              // обработка сигнала
-	if (funcptr == SIG_IGN)
-		signal(SIGTERM, SIG_IGN);  // в случае, если funcptr будет указывать на SIG_IGN, то сигнал SIGTERM будет игнорироваться
-
-	while ((r = get_next_line(fd, &line)) >= 0)
-	{
-		if (*line != '\0')
-			history[k++] = line;
-		if (r == 0)
-			break ;
-	}
+	// signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
+	// signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+	history = get_previous_history(fd, &k);
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
 	cursor_pos = 0;
 	while (strcmp(str, "\4"))
 	{
-		tputs(save_cursor, 1, ft_putchar);
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
@@ -178,19 +61,11 @@ int main(int argc, char **argv, char **envp)
 			{
 				if (line[0] == '\0')
 				{
-					write(1, "exit\n", 5);
+					ft_putstr_fd("exit\n", 1);
 					break ;
 				}
 				else
-				{
-					if (cursor_pos >= 0)
-					{
-						tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
-						line[cursor_pos] = '\0';
-						if (line[cursor_pos + 1] != '\0')
-							line = ft_strjoin(line, line + cursor_pos + 1);
-					}
-				}
+					pressed_key_delete(&cursor_pos, &line);
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
@@ -200,7 +75,7 @@ int main(int argc, char **argv, char **envp)
 					k--;
 				if (history_size != 0)
 				{
-					write(1, history[k], ft_strlen(history[k]));
+					ft_putstr_fd(history[k], 1);
 					free(line);
 					line = ft_strdup(history[k]);
 					cursor_pos = ft_strlen(history[k]);
@@ -222,54 +97,45 @@ int main(int argc, char **argv, char **envp)
 				else if (history_size != 0)
 				{
 					cursor_pos = ft_strlen(history[k]);
-					write(1, history[k], ft_strlen(history[k]));
+					ft_putstr_fd(history[k], 1);
 					free(line);
 					line = ft_strdup(history[k]);
 				}
 			}
-			else if (!strcmp(str, "\e[D")) // LEFT // Влево –– ^[[D
+			else if (!strcmp(str, "\e[D")) // LEFT
 			{
 				if (0 < cursor_pos)
 				{
 					tputs(cursor_left, 1, ft_putchar);
 					cursor_pos--;
 				}
-				ft_putstr_fd("|<-|pos ->", fd2);
-				ft_putnbr_fd(cursor_pos, fd2);
-				ft_putstr_fd("\n", fd2);
 			}
-			else if (!strcmp(str, "\e[C")) // RIGHT // вправо –– ^[[C
+			else if (!strcmp(str, "\e[C")) // RIGHT
 			{
 				if (0 <= cursor_pos && cursor_pos < ft_strlen(line))
 				{
 					tputs(cursor_right, 1, ft_putchar);
 					cursor_pos++;
 				}
-				ft_putstr_fd("|->|pos ->", fd2);
-				ft_putnbr_fd(cursor_pos, fd2);
-				ft_putstr_fd("\n", fd2);
-
-				ft_putstr_fd("|strlen|pos ->", fd2);
-				ft_putnbr_fd(ft_strlen(line), fd2);
-				ft_putstr_fd("\n", fd2);
 			}
-			else if (!strcmp(str, "\e[3~")) // del // (удалить справа) –– ^[[3~
+			else if (!strcmp(str, "\e[3~")) // delete (удалить под курсором)
 			{
+				pressed_key_delete(&cursor_pos, &line);
 			}
 			else if (!strcmp(str, "\177")) // backspace
 			{
-				if (cursor_pos > 0)
-				{
-					cursor_pos--;
-					tputs(cursor_left, 1, ft_putchar); //перемещаемся влево на один символ
-					tputs(delete_character, 1, ft_putchar); // удаляем символ на который указывает курсор
-					line[cursor_pos] = '\0';
-					if (line[cursor_pos + 1] != '\0')
-						line = ft_strjoin(line, line + cursor_pos + 1);
-				}
+				pressed_key_backspace(&cursor_pos, &line);
 			}
-			else if (!strcmp(str, "\t") || !strcmp(str, "\e[H")  || !strcmp(str, "\e[F")) // TAB /** в начало строки (cursor_home)–– \e[H **/ /** в конец строки ––\e[F **/
+			else if (!strcmp(str, "\t")) // TAB
 			{
+			}
+			else if (!strcmp(str, "\e[H")) /** курсор в начало строки **/
+			{
+				pressed_key_home(&cursor_pos, &line);
+			}
+			else if (!strcmp(str, "\e[F"))  /** курсор в конец строки **/
+			{
+				pressed_key_end(&cursor_pos, &line);
 			}
 			else
 			{
@@ -317,13 +183,13 @@ int main(int argc, char **argv, char **envp)
 		}
 	}
 	close(fd);
-	// tcgetattr(0, &term);
-	term.c_lflag &= ~(ECHO);
-	term.c_lflag &= ~(ICANON);
-	tcsetattr(0, TCSANOW, &term);
+	return_term(&term);
 	return (0);
 }
 
 // обрабатывать одинаково
 // -|echo ; ;
 // -|;
+
+// если есть ошибка синтаксиса, то ничего не отсылается в логику
+// echo ||  ;

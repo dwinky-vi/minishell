@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   head_parser.h                                      :+:      :+:    :+:   */
+/*   syntactic_parsing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 16:59:59 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 22:07:30 by dwinky           ###   ########.fr       */
+/*   Created: 2021/04/10 21:45:04 by dwinky            #+#    #+#             */
+/*   Updated: 2021/04/10 22:10:57 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEAD_PARSER_H
-# define HEAD_PARSER_H
+#include "head_minishell.h"
 
-# include "libft/libft.h"
+int	print_error(char *error)
+{
+	ft_putstr_fd(error, 1);
+	return (1);
+}
 
-int		parser(char *line, t_list *list_env, char **envp);
+int	syntactic_parsing(char *line)
+{
+	int k;
 
-void	ft_putline(char *s1, char *s2, char *s3);
+	k = 0;
+	while (line[k])
+	{
+		while (line[k] == ' ')
+			k++;
+		if (ft_strncmp(line + k, ";;", 2) == 0)
+			return (print_error("bash: syntax error near unexpected token `;;'\n"));
 
-void	ft_putline_nbr(char *s1, int nbr);
-
-int		syntactic_parsing(char *line);
-
-#endif
+		k++;
+	}
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/10 20:32:54 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/10 22:07:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,9 @@ void	pressed_key_end(int *cursor_pos, char **line);
 
 
 char	**get_previous_history(int fd, size_t *k);
+
+int		ft_putchar(int ch);
+
+void	print_prompt(void);
+
 #endif

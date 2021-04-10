@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/07 23:44:11 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/10 19:56:27 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ typedef struct s_command
 
 void			processing(t_command *cmd, t_list **list_env, char **envp);
 char			*get_env(t_list **list_env, char *key);
-int				make_cd(t_command *cmd, t_list **list_env);
+void			make_cd(t_command *cmd, t_list **list_env);
 void			make_echo(t_command *cmd);
 void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list **list_env);
 void			make_other(t_command *cmd, t_list **list_env, char **envp);
+void			make_unset(t_command *cmd, t_list **list_env);
+void 			mem_err();
 
 #endif

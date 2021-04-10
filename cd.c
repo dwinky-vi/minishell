@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/08 01:50:24 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/08 18:58:35 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	change_dir(t_command *cmd, t_list **list_env)
 	}
 }
 
-int	make_cd(t_command *cmd, t_list **list_env)
+void	make_cd(t_command *cmd, t_list **list_env)
 {
 	if (!cmd->args[0])
 	{
@@ -75,7 +75,7 @@ int	make_cd(t_command *cmd, t_list **list_env)
 		if (!cmd->args[0])
 		{
 			printf("bash: %s: %s\n", cmd->name, "HOME not set");
-			return (1);
+			return ;
 		}
 	}
 	else if (cmd->args[0][0] == '-')
@@ -84,11 +84,11 @@ int	make_cd(t_command *cmd, t_list **list_env)
 		if (!cmd->args[0])
 		{
 			printf("bash: %s: %s\n", cmd->name, "OLDPWD not set");
-			return (1);
+			return ;
 		}
 		else
 			ft_putendl_fd(cmd->args[0], 1);
 	}
 	change_dir(cmd, list_env);
-	return (1);
+	return ;
 }

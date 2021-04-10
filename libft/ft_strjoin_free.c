@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 14:25:28 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 14:33:26 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/10 00:48:48 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*ft_strjoin_free(char const *s1, char const *s2, int flag)
 		*s3++ = *s2++;
 	s1 -= s1_len;
 	s2 -= s2_len;
-	free_str(s1, s2, flag);
+	if (flag)
+		free_str(s1, s2, flag);
 	return (s3 - s3_len);
 }

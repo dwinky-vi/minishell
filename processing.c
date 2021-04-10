@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   processing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/08 02:34:41 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/10 20:31:48 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-char	*get_env(t_list **list_env, char *key)
+void mem_err()
+{
+	ft_putendl_fd("Memory error!" , 1);
+	exit(0);
+}
+
+char	*get_env_value(t_list **list_env, char *key)
 {
 	int		key_len;
 	t_list	*tmp_list;
@@ -26,7 +32,7 @@ char	*get_env(t_list **list_env, char *key)
 		tmp_list = tmp_list->next;
 	}
 	if (!tmp_list)
-		return (0);
+		return (NULL);
 	return (((t_envp *)tmp_list->content)->value);
 }
 
@@ -48,6 +54,8 @@ void	processing(t_command *cmd, t_list **list_env, char **envp)
 			make_cd(cmd, list_env);
 		else if (!ft_strncmp(cmd->name, "env", name_len))
 			make_env(cmd, list_env);
+		else if (!ft_strncmp(cmd->name, "unset", name_len))
+			make_unset(cmd, list_env);
 		else
 		{
 			pid = fork();

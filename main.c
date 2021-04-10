@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 20:19:20 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/10 20:35:35 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(line, &head_env, envp);
+					parser(line, head_env, envp);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

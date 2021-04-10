@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 16:46:37 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 20:14:15 by dwinky           ###   ########.fr       */
+/*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
+/*   Updated: 2021/04/10 20:32:54 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ typedef struct s_command
 }				t_command;
 
 void			processing(t_command *cmd, t_list **list_env, char **envp);
-char			*get_env(t_list **list_env, char *key);
-int				make_cd(t_command *cmd, t_list **list_env);
+char			*get_env_value(t_list **list_env, char *key);
+void			make_cd(t_command *cmd, t_list **list_env);
 void			make_echo(t_command *cmd);
 void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list **list_env);
 void			make_other(t_command *cmd, t_list **list_env, char **envp);
+void			make_unset(t_command *cmd, t_list **list_env);
+void 			mem_err();
 
 t_list	*get_env(char **envp);
 

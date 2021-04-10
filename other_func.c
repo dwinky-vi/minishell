@@ -3,61 +3,103 @@
 /*                                                        :::      ::::::::   */
 /*   other_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/08 01:03:05 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/10 20:32:18 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	making_other(t_command *cmd, char **path_arr, char **av_tmp, char **env)
+int	check_absolute_path(t_command *cmd, char **argv, char **env)
 {
-	int			i;
 	struct stat	buf;
-	char		*path;
 
+	if (!lstat(cmd->name, &buf))
+	{
+		if (execve(cmd->name, argv, env) == -1)
+			return (0);
+	}
+	else
+		return (0);
+	return (1);
+}
+
+char	**init_new_argv(t_command *cmd)
+{
+	char	**argv;
+	int		i;
+
+	argv = ft_calloc(ft_array_len(cmd->args) + 2, sizeof(char *));
+	if (!argv)
+		mem_err();
+	argv[0] = cmd->name;
 	i = -1;
 	while (cmd->args[++i])
-		av_tmp[i + 1] = cmd->args[i];
-	if (!lstat(cmd->name, &buf))
-		execve(cmd->name, av_tmp, env);
+		argv[i + 1] = cmd->args[i];
+	return (argv);
+}
+
+char	*find_path(t_command *cmd, t_list **list_env, char *paths)
+{
+	char		**path_arr;
+	char		*path;
+	struct stat	buf;
+	int			i;
+
+	path_arr = ft_split(paths, ':');
+	if (!path_arr)
+		return (NULL);
 	i = -1;
 	while (path_arr[++i])
 	{
 		path_arr[i] = ft_strjoin_free(path_arr[i], "/", 1);
 		if (!path_arr[i])
-			exit(0);
+			mem_err();
 		path = ft_strjoin_free(path_arr[i], cmd->name, 1);
 		if (!path)
-			exit(0);
+			mem_err();
 		if (!lstat(path, &buf))
-			execve(path, av_tmp, env);
-		free(path);
+			return (path);
 	}
+	return (NULL);
+}
+
+void	making_other(t_command *cmd, char *path, char **argv, char **env)
+{
+	if (execve(path, argv, env) == -1)
+		printf("bash: %s: %s\n", cmd->name, strerror(errno));
 }
 
 void	make_other(t_command *cmd, t_list **list_env, char **envp)
 {
-	char		**path_arr;
-	char		**av_tmp;
+	char		**argv;
 	char		*paths;
-	int			i;
+	char		*path;
 
-	av_tmp = ft_calloc(ft_array_len(cmd->args) + 2, sizeof(char *));
-	if (!av_tmp)
-		exit(0);
-	paths = "";
-	paths = get_env(list_env, "PATH");
-	path_arr = ft_split(paths, ':');
-	if (!path_arr)
-		exit(0);
-	av_tmp[0] = cmd->name;
-	making_other(cmd, path_arr, av_tmp, envp);
-	if (cmd->name[0] != '/' && paths[0] == '/')
-		printf("bash: %s: %s\n", cmd->name, "command not found");
+	argv = init_new_argv(cmd);
+	if (cmd->name[0] == '/' || cmd->name[0] == '.')
+	{
+		if (!ft_strncmp(cmd->name, "/", 2))
+			printf("bash: %s: %s\n", cmd->name, strerror(EISDIR));
+		else
+			if (!check_absolute_path(cmd, argv, envp) && errno != ENOEXEC)
+				printf("bash: %s: %s\n", cmd->name, strerror(errno));
+	}
 	else
-		printf("bash: %s: %s\n", cmd->name, strerror(errno));
+	{
+		paths = get_env_value(list_env, "PATH");
+		path = find_path(cmd, list_env, paths);
+		if (!path)
+		{
+			if (!paths)
+				printf("bash: %s: %s\n", cmd->name, strerror(ENOENT));
+			else
+				printf("bash: %s: %s\n", cmd->name, "command not found");
+		}
+		else
+			making_other(cmd, path, argv, envp);
+	}
 	exit(0);
 }

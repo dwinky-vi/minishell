@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/10 20:33:22 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/12 17:44:50 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	change_dir(t_command *cmd, t_list **list_env)
 	t_list	*tmp_list;
 
 	getcwd(buf, BUFSIZE);
-	if (chdir(cmd->args[0]) == -1)
-		printf("bash: %s: %s: %s\n", cmd->name, cmd->args[0], strerror(errno));
+	if (chdir(cmd->args[1]) == -1)
+		printf("bash: %s: %s: %s\n", cmd->args[0], cmd->args[1], strerror(errno));
 	else
 	{
 		check_oldpwd(list_env, buf);
@@ -69,25 +69,25 @@ void	change_dir(t_command *cmd, t_list **list_env)
 
 void	make_cd(t_command *cmd, t_list **list_env)
 {
-	if (!cmd->args[0])
+	if (!cmd->args[1])
 	{
-		cmd->args[0] = get_env_value(list_env, "HOME");
-		if (!cmd->args[0])
+		cmd->args[1] = get_env_value(list_env, "HOME");
+		if (!cmd->args[1])
 		{
-			printf("bash: %s: %s\n", cmd->name, "HOME not set");
+			printf("bash: %s: %s\n", cmd->args[0], "HOME not set");
 			return ;
 		}
 	}
-	else if (cmd->args[0][0] == '-')
+	else if (cmd->args[1][0] == '-')
 	{
-		cmd->args[0] = get_env_value(list_env, "OLDPWD");
-		if (!cmd->args[0])
+		cmd->args[1] = get_env_value(list_env, "OLDPWD");
+		if (!cmd->args[1])
 		{
-			printf("bash: %s: %s\n", cmd->name, "OLDPWD not set");
+			printf("bash: %s: %s\n", cmd->args[0], "OLDPWD not set");
 			return ;
 		}
 		else
-			ft_putendl_fd(cmd->args[0], 1);
+			ft_putendl_fd(cmd->args[1], 1);
 	}
 	change_dir(cmd, list_env);
 	return ;

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 14:59:23 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/03/31 21:56:46 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/11 00:28:59 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		if (s11[i] == s22[i])
 			i++;
 		else if (s11[i] > s22[i])
-			return (1);
+			return (s11[i] - s22[i]);
 		else if (s11[i] < s22[i])
-			return (-1);
+			return (s11[i] - s22[i]);
 	}
 	return (0);
 }

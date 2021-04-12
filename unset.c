@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 19:15:40 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/10 17:56:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/12 17:45:59 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void	make_unset(t_command *cmd, t_list **list_env)
 	tmp_env = *list_env;
 	while (tmp_env->next)
 	{
-		if (!ft_strncmp(((t_envp *)tmp_env->next->content)->name, \
-													cmd->args[0], \
-										ft_strlen(cmd->name) + 1))
+		if (!ft_strncmp(((t_envp *)tmp_env->next->content)->name, cmd->args[1], ft_strlen(cmd->args[0]) + 1))
+		{
 			delet_list(&tmp_env);
+			break ;
+		}
 		tmp_env = tmp_env->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 21:59:22 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/12 22:41:53 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	parser(char *line, t_list *list_env, char **envp)
 
 	if (line == NULL)
 		return (-1);
+	line = ft_strtrim(line, " "); // !!!!!!!!!
 	if (syntactic_parsing(line) == 1)
 		return (1);
 	k = 0;

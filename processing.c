@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/10 20:31:48 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/12 22:52:43 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,21 @@ void	processing(t_command *cmd, t_list **list_env, char **envp)
 
 	cmd->fd[0] = 0;
 	cmd->fd[1] = 1;
-	name_len = ft_strlen(cmd->name) + 1;
-	if (name_len - 1)
+	if (cmd->args[0])
 	{
-		if (!ft_strncmp(cmd->name, "echo", name_len))
+		name_len = ft_strlen(cmd->args[0]) + 1;
+		if (!ft_strncmp(cmd->args[0], "echo", name_len))
 			make_echo(cmd);
-		else if (!ft_strncmp(cmd->name, "pwd", name_len))
+		else if (!ft_strncmp(cmd->args[0], "pwd", name_len))
 			make_pwd(cmd);
-		else if (!ft_strncmp(cmd->name, "cd", name_len))
+		else if (!ft_strncmp(cmd->args[0], "cd", name_len))
 			make_cd(cmd, list_env);
-		else if (!ft_strncmp(cmd->name, "env", name_len))
+		else if (!ft_strncmp(cmd->args[0], "env", name_len))
 			make_env(cmd, list_env);
-		else if (!ft_strncmp(cmd->name, "unset", name_len))
+		else if (!ft_strncmp(cmd->args[0], "unset", name_len))
 			make_unset(cmd, list_env);
+		else if (!ft_strncmp(cmd->args[0], "export", name_len))
+			make_export(cmd, list_env);
 		else
 		{
 			pid = fork();

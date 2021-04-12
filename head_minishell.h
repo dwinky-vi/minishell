@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/10 20:32:54 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/12 22:53:23 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_envp
 
 typedef struct s_command
 {
-	char	*name;
 	char	**args;
 	int		fd[2];
 }				t_command;
@@ -52,6 +51,7 @@ void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list **list_env);
 void			make_other(t_command *cmd, t_list **list_env, char **envp);
 void			make_unset(t_command *cmd, t_list **list_env);
+void			make_export(t_command *cmd, t_list **list_env);
 void 			mem_err();
 
 t_list	*get_env(char **envp);

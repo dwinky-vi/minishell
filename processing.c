@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/12 22:52:43 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/13 05:03:24 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ void	processing(t_command *cmd, t_list **list_env, char **envp)
 		{
 			pid = fork();
 			if (pid == 0)
+			{
+				if (ft_strnstr(cmd->args[0], "minishell", BUFSIZE))
+					cmd->args[1] = ft_strdup("child");
 				make_other(cmd, list_env, envp);
+			}
 			else
 				wait(0);
 		}

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/12 17:53:06 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/13 04:22:50 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	check_absolute_path(t_command *cmd, char **env)
 
 	if (!lstat(cmd->args[0], &buf))
 	{
+		if (S_ISDIR(buf.st_mode))
+		{
+			printf("bash1: %s: %s\n", cmd->args[0], strerror(EISDIR));
+			return (1);
+		}
 		if (execve(cmd->args[0], cmd->args, env) == -1)
 			return (0);
 	}
@@ -25,21 +30,6 @@ int	check_absolute_path(t_command *cmd, char **env)
 		return (0);
 	return (1);
 }
-
-// char	**init_new_argv(t_command *cmd)
-// {
-// 	char	**argv;
-// 	int		i;
-
-// 	argv = ft_calloc(ft_array_len(cmd->args) + 2, sizeof(char *));
-// 	if (!argv)
-// 		mem_err();
-// 	argv[0] = cmd->args[0];
-// 	i = -1;
-// 	while (cmd->args[++i])
-// 		argv[i + 1] = cmd->args[i];
-// 	return (argv);
-// }
 
 char	*find_path(t_command *cmd, t_list **list_env, char *paths)
 {
@@ -69,23 +59,18 @@ char	*find_path(t_command *cmd, t_list **list_env, char *paths)
 void	making_other(t_command *cmd, char *path, char **env)
 {
 	if (execve(path, cmd->args, env) == -1)
-		printf("bash: %s: %s\n", cmd->args[0], strerror(errno));
+		printf("bash2: %s: %s\n", cmd->args[0], strerror(errno));
 }
 
 void	make_other(t_command *cmd, t_list **list_env, char **envp)
 {
-	// char		**argv;
 	char		*paths;
 	char		*path;
 
-	// argv = init_new_argv(cmd);
 	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
 	{
-		if (!ft_strncmp(cmd->args[0], "/", 2))
-			printf("bash: %s: %s\n", cmd->args[0], strerror(EISDIR));
-		else
-			if (!check_absolute_path(cmd, envp) && errno != ENOEXEC)
-				printf("bash: %s: %s\n", cmd->args[0], strerror(errno));
+		if (!check_absolute_path(cmd, envp) && errno != ENOEXEC)
+			printf("bash4: %s: %s\n", cmd->args[0], strerror(errno));
 	}
 	else
 	{
@@ -94,9 +79,9 @@ void	make_other(t_command *cmd, t_list **list_env, char **envp)
 		if (!path)
 		{
 			if (!paths)
-				printf("bash: %s: %s\n", cmd->args[0], strerror(ENOENT));
+				printf("bash5: %s: %s\n", cmd->args[0], strerror(ENOENT));
 			else
-				printf("bash: %s: %s\n", cmd->args[0], "command not found");
+				printf("bash6: %s: %s\n", cmd->args[0], "command not found");
 		}
 		else
 			making_other(cmd, path, envp);

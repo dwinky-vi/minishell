@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/12 22:51:17 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/13 05:35:01 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 
 	if (line == NULL)
 		return (-1);
-	// while (*line == ' ')                                                         //
-	// 	line++;                                                         //
-	// k = 0;                                                         //
-	// while (line[k] != ' ' && line[k])                                                         //
-	// 	k++;                                                         //
-	// command.name = ft_substr(line, 0, k);                                                         //
-	// line += k;                                                         //
-	// k = 0;                                                         //
 	command.args = (char **)ft_calloc(20, sizeof(char *)); // кол-во аргументов
 	count = 0;
 	while (*line)
@@ -40,7 +32,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 		command.args[count++] = ft_substr(line, 0, k);
 		line += k;
 	}
-
 	processing(&command, &list_env, envp);
 	return (0);
 }

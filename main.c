@@ -6,15 +6,38 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/12 22:49:28 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/13 05:29:32 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
+void	start_shlvl(t_list **list_env, char **env)
+{
+	t_list *tmp_list;
+	char	*lvl;
+	int		i;
+
+	lvl = ft_itoa(ft_atoi(get_env_value(list_env, "SHLVL")) + 1);
+	tmp_list = *list_env;
+	i = 0;
+	while (tmp_list)
+	{
+		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, "SHLVL", 6))
+		{
+			((t_envp *)tmp_list->content)->value = lvl;
+			env[i] = ft_strjoin_free("SHLVL", "=", 0);
+			env[i] = ft_strjoin_free(env[i], lvl, 1);
+		}
+		tmp_list = tmp_list->next;
+		i++;
+	}
+}
+
 void	func_for_signal(int param)
 {
 	signal (SIGINT, SIG_IGN);
+	signal (SIGTERM, SIG_IGN);    // игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
 	if (param == 2)
 		ft_putstr_fd("___^C", 1);
 	else if (param == 3)
@@ -37,6 +60,7 @@ int main(int argc, char **argv, char **envp)
 	int				fd;
 
 	head_env = get_env(envp);
+	start_shlvl(&head_env, envp);				//!!!
 	init_term(&term, get_term_name(head_env));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
@@ -183,7 +207,8 @@ int main(int argc, char **argv, char **envp)
 		}
 	}
 	close(fd);
-	return_term(&term);
+	if (argc == 1)				// !!!
+		return_term(&term);
 	return (0);
 }
 

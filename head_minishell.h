@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/12 22:58:46 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/13 21:03:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@
 # include <stdio.h> // printf
 # include <errno.h> // strerror, errno
 # include <term.h> // termcap function
-# include <unistd.h> // write, read, fork, execve, getcwd, chdir, dup, dup2, pipe
-# include <stdlib.h> // malloc, free
+# include <unistd.h> // write, read, fork, execve, getcwd, chdir, dup, dup2, pipe, pid_t
+# include <stdlib.h> // malloc, free, exit
 # include <string.h> // !!!!!!! strcmp !!!!!!!!!!
 # include <signal.h> // signal, kill
 # include <sys/stat.h> // stat, lstat, fstat
 # include <sys/types.h> // fork, wait
 # include <fcntl.h> // open
+#include <sys/wait.h> // waitpid
 
 # include "head_parser.h"
 

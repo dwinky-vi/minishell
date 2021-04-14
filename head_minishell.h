@@ -73,7 +73,7 @@ void	pressed_key_home(int *cursor_pos, char **line);
 void	pressed_key_end(int *cursor_pos, char **line);
 
 
-char	**get_previous_history(int fd, size_t *k);
+int		get_previous_history(char ***history, int fd, size_t *k);
 
 int		ft_putchar(int ch);
 

@@ -26,6 +26,7 @@ void	print_command(t_command command)
 		k++;
 	}
 }
+
 int	parser(char *line, t_list *list_env, char **envp)
 {
 	t_command	command;
@@ -35,10 +36,10 @@ int	parser(char *line, t_list *list_env, char **envp)
 
 	if (line == NULL)
 		return (-1);
-	line = ft_strtrim(line, " "); // !!!!!!!!!
+	// line = ft_strtrim(line, " "); // есть лик из-за этого
 	// if (syntactic_parsing(line) == 1)
 	// 	return (1);
-	k = 0;
+	// k = 0;
 	// while (*line == ' ')                                                         //
 	// 	line++;                                                         //
 	// k = 0;                                                         //

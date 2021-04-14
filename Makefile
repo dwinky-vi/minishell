@@ -7,7 +7,7 @@ SRCS	= \
 
 NAME		= minishell
 
-LIBFT_PATH		= ./libft
+LIBFT_PATH	= ./libft
 
 HEADER		= head_minishell.h
 
@@ -16,14 +16,14 @@ CC		= gcc
 CFLAGS	= -g
 
 # создаём скрытую директорию, в которой будут .o файлы
-OBJS_DIR =			.obj
+OBJS_DIR =	.obj
 
 # VPATH = *перечесление папок*
 
 # прописываем (добавляем) путь для каждого .o файла
-OBJS	= 			$(addprefix $(OBJS_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
+OBJS	= 	$(addprefix $(OBJS_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 
-NORM 	=			norminette
+NORM 	=	norminette
 
 all:		make_lib $(NAME)
 

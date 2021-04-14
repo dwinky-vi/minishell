@@ -12,23 +12,28 @@
 
 #include "head_minishell.h"
 
-char	**get_previous_history(int fd, size_t *k)
+// возвращается индекс, начиная с которого идёт новая история
+int		get_previous_history(char ***history, int fd, size_t *k)
 {
 	int		r;
-	char	**history;
+	int		kk;
+	char	**history_buf;
 	char	*line;
 
+	history_buf = *history;
 	if (fd == -1)
 		exit(1); // FIX IT
-	history = (char **)ft_calloc(500, sizeof(char *));
-	if (history == NULL)
+	history_buf = (char **)ft_calloc(500, sizeof(char *));
+	if (history_buf == NULL)
 		exit(1); // FIX IT
 	while ((r = get_next_line(fd, &line)) >= 0)
 	{
 		if (*line != '\0')
-			history[(*k)++] = line;
+			history_buf[(*k)++] = line;
 		if (r == 0)
 			break ;
 	}
-	return (history);
+	*history = history_buf;
+	kk = *k;
+	return (kk);
 }

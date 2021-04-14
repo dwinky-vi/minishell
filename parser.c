@@ -36,8 +36,8 @@ int	parser(char *line, t_list *list_env, char **envp)
 	if (line == NULL)
 		return (-1);
 	line = ft_strtrim(line, " "); // !!!!!!!!!
-	if (syntactic_parsing(line) == 1)
-		return (1);
+	// if (syntactic_parsing(line) == 1)
+	// 	return (1);
 	k = 0;
 	// while (*line == ' ')                                                         //
 	// 	line++;                                                         //
@@ -48,17 +48,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 	// line += k;                                                         //
 	// k = 0;                                                         //
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
-	// count = 0;
-	// while (*line)
-	// {
-	// 	while (*line == ' ')
-	// 		line++;
-	// 	k = 0;
-	// 	while (line[k] != ' ' && line[k])
-	// 		k++;
-	// 	command.args[count++] = ft_substr(line, 0, k);
-	// 	line += k;
-	// }
 	k = 0;
 	while (line[k])
 	{
@@ -76,23 +65,16 @@ int	parser(char *line, t_list *list_env, char **envp)
 				break ;
 			k++;
 		}
-		k++;
-		print_command(command);
-		// processing(&command, &list_env, envp);
-		k = 0;
-		while (command.args[k])
+		processing(&command, &list_env, envp);
+		int z = 0;
+		while (command.args[z])
         {
-            ft_bzero(command.args + k, sizeof(char **));
-		    k++;
+			free(command.args[z]);
+			command.args[z] = 0;
+		    z++;
         }
-//		command.args[0] = 0;
-//		command.args[1] = 0;
-//		command.args[2] = 0;
-//		command.args[3] = 0;
-//		command.args[4] = 0;
-//		command.args[5] = 0;
+		if (line[k] == ';')
+			k++;
 	}
-	k = 0;
-
 	return (0);
 }

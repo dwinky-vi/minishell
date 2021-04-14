@@ -30,5 +30,6 @@ char	**get_previous_history(int fd, size_t *k)
 		if (r == 0)
 			break ;
 	}
+	free(line);
 	return (history);
 }

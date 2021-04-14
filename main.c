@@ -36,7 +36,7 @@ int main(int argc, char **argv, char **envp)
 	int				cursor_pos = 0;
 	int				fd;
 
-	head_env = get_env(envp);
+    head_env = get_env(envp);
 	init_term(&term, get_term_name(head_env));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;

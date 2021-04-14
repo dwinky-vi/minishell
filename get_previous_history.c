@@ -6,30 +6,32 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/10 19:34:49 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/14 22:53:22 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-char	**get_previous_history(int fd, size_t *k)
+// возвращается индекс, начиная с которого идёт новая история
+int		get_previous_history(char ***history, int fd, size_t *k)
 {
-	int		r;
-	char	**history;
-	char	*line;
+    int r;
+    char **history_buf;
+    char *line;
 
-	if (fd == -1)
-		exit(1); // FIX IT
-	history = (char **)ft_calloc(500, sizeof(char *));
-	if (history == NULL)
-		exit(1); // FIX IT
-	while ((r = get_next_line(fd, &line)) >= 0)
-	{
-		if (*line != '\0')
-			history[(*k)++] = line;
-		if (r == 0)
-			break ;
-	}
-	free(line);
-	return (history);
+    history_buf = *history;
+    if (fd == -1)
+        exit(1); // FIX IT
+    history_buf = (char **) ft_calloc(500, sizeof(char *));
+    if (history_buf == NULL)
+        exit(1); // FIX IT
+    while ((r = get_next_line(fd, &line)) >= 0) {
+        if (*line != '\0')
+            history_buf[(*k)++] = line;
+        if (r == 0)
+            break;
+    }
+    free(line);
+    *history = history_buf;
+    return (*k);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/12 22:49:28 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/14 22:53:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ int main(int argc, char **argv, char **envp)
 	init_term(&term, get_term_name(head_env));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
-	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
+	// printf("%p\n%p\n", str, &str);
+	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	k = 0;
 
 	// signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
 	// signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
-	history = get_previous_history(fd, &k);
+	int start_k = get_previous_history(&history, fd, &k); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
 	cursor_pos = 0;
@@ -142,7 +143,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(line, head_env, envp);
+					// parser(line, head_env, envp);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -163,8 +164,8 @@ int main(int argc, char **argv, char **envp)
 					char *append;
 					append = ft_strdup(line + cursor_pos);
 					line[cursor_pos] = '\0';
-					line = ft_strjoin(line, str);
-					line = ft_strjoin(line, append);
+					line = ft_strjoin_free(line, str, 1);
+					line = ft_strjoin_free(line, append, 3);
 					tputs(delete_line, 1, ft_putchar);
 					print_prompt();
 					write(1, line, ft_strlen(line));

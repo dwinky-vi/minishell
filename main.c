@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 14:53:10 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 20:43:37 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,21 @@ void	func_for_signal(int param)
 
 int main(int argc, char **argv, char **envp)
 {
-	struct termios	term;
-	t_list			*head_env;
-	char			**history;
-	char			*str;
-	int				r;
-	size_t			history_size;
-	size_t			k;
-	char			*line;
-	int				cursor_pos = 0;
-	int				fd;
+	// struct termios	term;
+	// t_list			*head_env;
+	t_vars	vars;
+	char	**history;
+	char	*str;
+	int		r;
+	size_t	history_size;
+	size_t	k;
+	char	*line;
+	int		cursor_pos = 0;
+	int		fd;
 
-    head_env = get_env(envp);
-	init_term(&term, get_term_name(head_env));
+	vars.envp = envp;
+    vars.list_env = get_env(envp);
+	init_term(&vars.term, get_term_name(vars.list_env));
 	str = (char *)ft_calloc(2000, 1);
 	// history_size = 0;
 	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
@@ -153,7 +155,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(line, head_env, envp);
+					parser(line, &vars);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -191,7 +193,7 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	return_term(&term);
+	return_term(&vars.term);
 	write_bash_history(history, start_k, fd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/13 21:03:44 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 20:44:31 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <fcntl.h> // open
 #include <sys/wait.h> // waitpid
 
-# include "head_parser.h"
+// # include "head_parser.h"
 
 # define TRUE 1
 # define FALSE 0
@@ -44,7 +44,15 @@ typedef struct s_command
 	int		fd[2];
 }				t_command;
 
-void			processing(t_command *cmd, t_list **list_env, char **envp);
+typedef struct s_vars
+{
+	char			**envp;
+	t_list			*list_env;
+	struct termios	term;
+	int				miniflag;
+}				t_vars;
+
+void			processing(t_command *cmd, t_vars *vars);
 char			*get_env_value(t_list **list_env, char *key);
 void			make_cd(t_command *cmd, t_list **list_env);
 void			make_echo(t_command *cmd);
@@ -63,6 +71,12 @@ int		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 
+int		get_previous_history(char ***history, int fd, size_t *k);
+
+int		ft_putchar(int ch);
+
+void	print_prompt(void);
+
 		/** keys **/
 void	pressed_key_backspace(int *cursor_pos, char **line);
 
@@ -72,11 +86,14 @@ void	pressed_key_home(int *cursor_pos, char **line);
 
 void	pressed_key_end(int *cursor_pos, char **line);
 
+		/** parser **/
 
-int		get_previous_history(char ***history, int fd, size_t *k);
+int		parser(char *line, t_vars *vars);
 
-int		ft_putchar(int ch);
+void	ft_putline(char *s1, char *s2, char *s3);
 
-void	print_prompt(void);
+void	ft_putline_nbr(char *s1, int nbr);
+
+int		syntactic_parsing(char *line);
 
 #endif

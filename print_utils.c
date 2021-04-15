@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:07:29 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 14:49:22 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 15:45:00 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ int	ft_putchar(int ch)
 void	print_prompt(void)
 {
 	write(1, "\e[1;33m", 7); // the color
-	write(1, "bash-3.2$ ", 10);
+	write(1, "minishell-> ", 12);
 	write(1, "\e[0m", 4);
 }

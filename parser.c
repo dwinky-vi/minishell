@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 15:00:18 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 20:41:46 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_command(t_command command)
 	}
 }
 
-int	parser(char *line, t_list *list_env, char **envp)
+int	parser(char *line, t_vars *vars)
 {
 	t_command	command;
 	size_t		k;
@@ -50,14 +50,32 @@ int	parser(char *line, t_list *list_env, char **envp)
 				k++;
 			char *start;
 			start = line + k;
-			while (line[k] != ' ' && line[k] != '\0'  && line[k] != ';')
+			if (line[k] == '\'')
+			{
 				k++;
-			command.args[argc++] = ft_substr(start, 0, line + k - start);
+				char *quote_line; // кавычка
+				quote_line = "";
+				while (line[k] != '\'')
+				{
+					char buf[2];
+					buf[0] = line[k];
+					buf[1] = 0;
+					quote_line = ft_strjoin(quote_line, buf);
+					k++;
+				}
+				command.args[argc++] = ft_strdup(quote_line);
+			}
+			else
+			{
+				while (line[k] != ' ' && line[k] != '\0'  && line[k] != ';')
+					k++;
+				command.args[argc++] = ft_substr(start, 0, line + k - start);
+			}
 			if (line[k] == ';' || line[k] == '\0')
 				break ;
 			k++;
 		}
-		processing(&command, &list_env, envp);
+		processing(&command, vars);
 		int z = 0;
 		while (command.args[z])
         {

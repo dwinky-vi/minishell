@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/13 19:13:55 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 15:00:18 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 	// line = ft_strtrim(line, " "); // есть лик из-за этого
 	// if (syntactic_parsing(line) == 1)
 	// 	return (1);
-	// k = 0;
-	// while (*line == ' ')                                                         //
-	// 	line++;                                                         //
-	// k = 0;                                                         //
-	// while (line[k] != ' ' && line[k])                                                         //
-	// 	k++;                                                         //
-	// command.name = ft_substr(line, 0, k);                                                         //
-	// line += k;                                                         //
-	// k = 0;                                                         //
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -77,5 +68,6 @@ int	parser(char *line, t_list *list_env, char **envp)
 		if (line[k] == ';')
 			k++;
 	}
+	free(command.args);
 	return (0);
 }

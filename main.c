@@ -6,11 +6,22 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/14 22:53:44 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/15 14:53:10 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
+
+void	write_bash_history(char **history, int k, int fd)
+{
+	while (history[k])
+	{
+		ft_putstr_fd(history[k], fd);
+		ft_putchar_fd('\n', fd);
+		k++;
+	}
+	close(fd);
+}
 
 void	func_for_signal(int param)
 {
@@ -39,8 +50,7 @@ int main(int argc, char **argv, char **envp)
     head_env = get_env(envp);
 	init_term(&term, get_term_name(head_env));
 	str = (char *)ft_calloc(2000, 1);
-	history_size = 0;
-	// printf("%p\n%p\n", str, &str);
+	// history_size = 0;
 	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	k = 0;
@@ -143,7 +153,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					// parser(line, head_env, envp);
+					parser(line, head_env, envp);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -151,8 +161,6 @@ int main(int argc, char **argv, char **envp)
 					if (strcmp(line, ""))
 					{
 						history[k] = ft_strdup(line);
-						write(fd, history[k], ft_strlen(history[k]));
-						write(fd, "\n", 1);
 						history_size++;
 						k = history_size;
 					}
@@ -183,8 +191,8 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	close(fd);
 	return_term(&term);
+	write_bash_history(history, start_k, fd);
 	return (0);
 }
 

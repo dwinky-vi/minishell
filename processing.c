@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/14 20:03:45 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 21:12:38 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void mem_err()
 	exit(0);
 }
 
-char	**change_env(t_list **list_env, char *key)
+char	**change_env(t_list *list_env, char *key)
 {
 	t_list	*tmp_list;
 
-	tmp_list = *list_env;
+	tmp_list = list_env;
 	while(tmp_list)
 	{
 		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, key, BUFSIZE))
@@ -32,12 +32,12 @@ char	**change_env(t_list **list_env, char *key)
 	return (NULL);
 }
 
-char	*get_env_value(t_list **list_env, char *key)
+char	*get_env_value(t_list *list_env, char *key)
 {
 	int		key_len;
 	t_list	*tmp_list;
 
-	tmp_list = *list_env;
+	tmp_list = list_env;
 	key_len = ft_strlen(key) + 1;
 	while (tmp_list)
 	{
@@ -50,7 +50,7 @@ char	*get_env_value(t_list **list_env, char *key)
 	return (((t_envp *)tmp_list->content)->value);
 }
 
-void	processing(t_command *cmd, t_list **list_env, char **envp)
+void	processing(t_command *cmd, t_vars *vars)
 {
 	pid_t		pid;
 	int			name_len;
@@ -65,15 +65,15 @@ void	processing(t_command *cmd, t_list **list_env, char **envp)
 		else if (!ft_strncmp(cmd->args[0], "pwd", name_len))
 			make_pwd(cmd);
 		else if (!ft_strncmp(cmd->args[0], "cd", name_len))
-			make_cd(cmd, list_env);
+			make_cd(cmd, vars->list_env);
 		else if (!ft_strncmp(cmd->args[0], "env", name_len))
-			make_env(cmd, list_env);
+			make_env(cmd, vars->list_env);
 		else if (!ft_strncmp(cmd->args[0], "unset", name_len))
-			make_unset(cmd, list_env);
+			make_unset(cmd, vars->list_env);
 		else if (!ft_strncmp(cmd->args[0], "export", name_len))
-			make_export(cmd, list_env);
+			make_export(cmd, vars->list_env);
 		else if (!ft_strncmp(cmd->args[0], "exit", name_len))
-			make_exit(cmd, list_env);
+			make_exit(cmd, vars);
 		else
 		{
 			pid = fork();
@@ -81,7 +81,7 @@ void	processing(t_command *cmd, t_list **list_env, char **envp)
 			{
 				if (ft_strnstr(cmd->args[0], "minishell", BUFSIZE))
 					cmd->args[1] = ft_strdup("child");
-				make_other(cmd, list_env, envp);
+				make_other(cmd, vars->list_env, vars->envp);
 			}
 			else
 				wait(0);

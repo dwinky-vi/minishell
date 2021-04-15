@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/13 23:37:34 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 21:19:10 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_absolute_path(t_command *cmd, char **env)
 	return (1);
 }
 
-char	*find_path(t_command *cmd, t_list **list_env, char *paths)
+char	*find_path(t_command *cmd, char *paths)
 {
 	char		**path_arr;
 	char		*path;
@@ -62,7 +62,7 @@ void	making_other(t_command *cmd, char *path, char **env)
 		printf("bash2: %s: %s\n", cmd->args[0], strerror(errno));
 }
 
-void	make_other(t_command *cmd, t_list **list_env, char **envp)
+void	make_other(t_command *cmd, t_list *list_env, char **envp)
 {
 	char		*paths;
 	char		*path;
@@ -75,7 +75,7 @@ void	make_other(t_command *cmd, t_list **list_env, char **envp)
 	else
 	{
 		paths = get_env_value(list_env, "PATH");
-		path = find_path(cmd, list_env, paths);
+		path = find_path(cmd, paths);
 		if (!path)
 		{
 			if (!paths)

@@ -6,11 +6,22 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 20:40:00 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 21:50:50 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
+
+void	write_bash_history(char **history, int k, int fd)
+{
+	while (history[k])
+	{
+		ft_putstr_fd(history[k], fd);
+		ft_putchar_fd('\n', fd);
+		k++;
+	}
+	close(fd);
+}
 
 void	func_for_signal(int param)
 {
@@ -26,33 +37,35 @@ void	func_for_signal(int param)
 
 int main(int argc, char **argv, char **envp)
 {
-	// struct termios	term;										//!!!!
-	t_list			*head_env;
-	char			**history;
-	char			*str;
-	int				r;
-	size_t			history_size;
-	size_t			k;
-	char			*line;
-	int				cursor_pos = 0;
-	int				fd;
+	// struct termios	term;
+	// t_list			*head_env;
+	t_vars	vars;
+	char	**history;
+	char	*str;
+	int		r;
+	size_t	history_size;
+	size_t	k;
+	char	*line;
+	int		cursor_pos = 0;
+	int		fd;
 
-	t_command		cmd;											//!!!
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
-		cmd.miniflag = 1;											//!!!
+		vars.miniflag = 1;											//!!!
 
-	head_env = get_env(envp);
-	start_shlvl(&head_env, envp);									//!!!
-	init_term(&cmd.term, get_term_name(head_env));
+
+	vars.envp = envp;
+    vars.list_env = get_env(envp);
+	init_term(&vars.term, get_term_name(vars.list_env));
+	start_shlvl(&vars);
 	str = (char *)ft_calloc(2000, 1);
-	history_size = 0;
-	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
+	// history_size = 0;
+	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	k = 0;
 
 	// signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
 	// signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
-	history = get_previous_history(fd, &k);
+	int start_k = get_previous_history(&history, fd, &k); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
 	cursor_pos = 0;
@@ -148,7 +161,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(&cmd, line, head_env, envp);
+					parser(line, &vars);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -156,8 +169,6 @@ int main(int argc, char **argv, char **envp)
 					if (strcmp(line, ""))
 					{
 						history[k] = ft_strdup(line);
-						write(fd, history[k], ft_strlen(history[k]));
-						write(fd, "\n", 1);
 						history_size++;
 						k = history_size;
 					}
@@ -169,8 +180,8 @@ int main(int argc, char **argv, char **envp)
 					char *append;
 					append = ft_strdup(line + cursor_pos);
 					line[cursor_pos] = '\0';
-					line = ft_strjoin(line, str);
-					line = ft_strjoin(line, append);
+					line = ft_strjoin_free(line, str, 1);
+					line = ft_strjoin_free(line, append, 3);
 					tputs(delete_line, 1, ft_putchar);
 					print_prompt();
 					write(1, line, ft_strlen(line));
@@ -188,9 +199,9 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	close(fd);
-	if (cmd.miniflag != 1)										//!!!!
-		return_term(&cmd.term);
+	if (vars.miniflag != 1)										//!!!!
+		return_term(&vars.term);
+	write_bash_history(history, start_k, fd);
 	return (0);
 }
 

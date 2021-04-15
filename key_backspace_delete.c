@@ -21,7 +21,7 @@ void	pressed_key_backspace(int *cursor_pos, char **line)
 		tputs(delete_character, 1, ft_putchar);
 		(*line)[*cursor_pos] = '\0';
 		if ((*line)[*cursor_pos + 1] != '\0')
-			*line = ft_strjoin(*line, *line + *cursor_pos + 1);
+			*line = ft_strjoin_free(*line, *line + *cursor_pos + 1, 1);
 	}
 }
 
@@ -32,6 +32,6 @@ void	pressed_key_delete(int *cursor_pos, char **line)
 		tputs(delete_character, 1, ft_putchar);
 		(*line)[*cursor_pos] = '\0';
 		if ((*line)[*cursor_pos + 1] != '\0')
-			(*line) = ft_strjoin((*line), (*line) + *cursor_pos + 1);
+			(*line) = ft_strjoin_free((*line), (*line) + *cursor_pos + 1, 1);
 	}
 }

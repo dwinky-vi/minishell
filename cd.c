@@ -6,13 +6,13 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 16:53:39 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 21:17:01 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	check_oldpwd(t_list **list_env, char *buf)
+void	check_oldpwd(t_list *list_env, char *buf)
 {
 	t_envp	*new_list;
 	t_list	*tmp_list;
@@ -24,12 +24,12 @@ void	check_oldpwd(t_list **list_env, char *buf)
 		new_list = (t_envp *)ft_calloc(1, sizeof(t_envp));
 		new_list->name = "OLDPWD";
 		new_list->value = get_env_value(list_env, "PWD");
-		ft_lstadd_back(list_env, ft_lstnew(new_list));
+		ft_lstadd_back(&list_env, ft_lstnew(new_list));
 	}
 	else
 	{
 		free(pwd);
-		tmp_list = *list_env;
+		tmp_list = list_env;
 		while (tmp_list)
 		{
 			if (!ft_strncmp(((t_envp *)tmp_list->content)->name, "OLDPWD", 7))
@@ -39,7 +39,7 @@ void	check_oldpwd(t_list **list_env, char *buf)
 	}
 }
 
-void	change_dir(t_command *cmd, t_list **list_env)
+void	change_dir(t_command *cmd, t_list *list_env)
 {
 	char	*pwd;
 	char	buf[BUFSIZE];
@@ -58,7 +58,7 @@ void	change_dir(t_command *cmd, t_list **list_env)
 		{
 			free(pwd);
 			getcwd(buf, BUFSIZE);
-			tmp_list = *list_env;
+			tmp_list = list_env;
 			while (tmp_list)
 			{
 				if (!ft_strncmp(((t_envp *)tmp_list->content)->name, "PWD", 4))
@@ -69,7 +69,7 @@ void	change_dir(t_command *cmd, t_list **list_env)
 	}
 }
 
-void	make_cd(t_command *cmd, t_list **list_env)
+void	make_cd(t_command *cmd, t_list *list_env)
 {
 	if (!cmd->args[1])
 	{

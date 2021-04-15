@@ -6,13 +6,13 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 16:46:58 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 21:21:49 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	add_env(char *str, t_list **list_env)
+void	add_env(char *str, t_list *list_env)
 {
 	t_envp	*new_env;
 	int		i;
@@ -26,7 +26,7 @@ void	add_env(char *str, t_list **list_env)
 	}
 	new_env->name = ft_substr(str, 0, i);
 	new_env->value = ft_substr(str, ++i, BUFSIZE);
-	ft_lstadd_back(list_env, ft_lstnew(new_env));
+	ft_lstadd_back(&list_env, ft_lstnew(new_env));
 }
 
 int	equal_sign(char *str)
@@ -53,7 +53,7 @@ char	*make_env_arr(t_list *list_env)
 	return (env);
 }
 
-char	**sort_env(t_list **list_env)
+char	**sort_env(t_list *list_env)
 {
 	char	**env;
 	int		i;
@@ -61,7 +61,7 @@ char	**sort_env(t_list **list_env)
 	char	*tmp_env;
 	t_list	*tmp_list;
 
-	tmp_list = *list_env;
+	tmp_list = list_env;
 	env = (char **)ft_calloc(ft_lstsize(tmp_list) + 1, sizeof(char *));
 	i = 0;
 	while (tmp_list)
@@ -85,7 +85,7 @@ char	**sort_env(t_list **list_env)
 	return (env);
 }
 
-void	making_export(t_list **list_env)
+void	making_export(t_list *list_env)
 {
 	char	**env;
 	int		i;
@@ -119,7 +119,7 @@ void	check_args(t_command *cmd, t_list **list_env)
 	}
 }
 
-void	make_export(t_command *cmd, t_list **list_env)
+void	make_export(t_command *cmd, t_list *list_env)
 {
 	t_list	*tmp_env;
 	char	*key;

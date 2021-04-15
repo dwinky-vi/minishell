@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/12 17:44:50 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 16:53:39 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	check_oldpwd(t_list **list_env, char *buf)
 	}
 	else
 	{
+		free(pwd);
 		tmp_list = *list_env;
 		while (tmp_list)
 		{
@@ -55,6 +56,7 @@ void	change_dir(t_command *cmd, t_list **list_env)
 			ft_putendl_fd("!!! no PWD in env !!!", 1);
 		else
 		{
+			free(pwd);
 			getcwd(buf, BUFSIZE);
 			tmp_list = *list_env;
 			while (tmp_list)
@@ -87,7 +89,10 @@ void	make_cd(t_command *cmd, t_list **list_env)
 			return ;
 		}
 		else
+		{
 			ft_putendl_fd(cmd->args[1], 1);
+			free(cmd->args[1]);
+		}
 	}
 	change_dir(cmd, list_env);
 	return ;

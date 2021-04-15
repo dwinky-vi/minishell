@@ -6,38 +6,16 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/13 05:29:32 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 20:40:00 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	start_shlvl(t_list **list_env, char **env)
-{
-	t_list *tmp_list;
-	char	*lvl;
-	int		i;
-
-	lvl = ft_itoa(ft_atoi(get_env_value(list_env, "SHLVL")) + 1);
-	tmp_list = *list_env;
-	i = 0;
-	while (tmp_list)
-	{
-		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, "SHLVL", 6))
-		{
-			((t_envp *)tmp_list->content)->value = lvl;
-			env[i] = ft_strjoin_free("SHLVL", "=", 0);
-			env[i] = ft_strjoin_free(env[i], lvl, 1);
-		}
-		tmp_list = tmp_list->next;
-		i++;
-	}
-}
-
 void	func_for_signal(int param)
 {
 	signal (SIGINT, SIG_IGN);
-	signal (SIGTERM, SIG_IGN);    // игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
+	signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
 	if (param == 2)
 		ft_putstr_fd("___^C", 1);
 	else if (param == 3)
@@ -48,7 +26,7 @@ void	func_for_signal(int param)
 
 int main(int argc, char **argv, char **envp)
 {
-	struct termios	term;
+	// struct termios	term;										//!!!!
 	t_list			*head_env;
 	char			**history;
 	char			*str;
@@ -59,9 +37,13 @@ int main(int argc, char **argv, char **envp)
 	int				cursor_pos = 0;
 	int				fd;
 
+	t_command		cmd;											//!!!
+	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
+		cmd.miniflag = 1;											//!!!
+
 	head_env = get_env(envp);
-	start_shlvl(&head_env, envp);				//!!!
-	init_term(&term, get_term_name(head_env));
+	start_shlvl(&head_env, envp);									//!!!
+	init_term(&cmd.term, get_term_name(head_env));
 	str = (char *)ft_calloc(2000, 1);
 	history_size = 0;
 	fd = open("history_file", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
@@ -166,7 +148,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(line, head_env, envp);
+					parser(&cmd, line, head_env, envp);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -207,8 +189,8 @@ int main(int argc, char **argv, char **envp)
 		}
 	}
 	close(fd);
-	if (argc == 1)				// !!!
-		return_term(&term);
+	if (cmd.miniflag != 1)										//!!!!
+		return_term(&cmd.term);
 	return (0);
 }
 

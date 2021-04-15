@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/13 05:18:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/15 16:40:25 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,14 @@ typedef struct s_envp
 	char	*value;
 }				t_envp;
 
-typedef struct s_command
-{
-	char	**args;
-	int		fd[2];
-}				t_command;
+// typedef struct s_command
+// {
+// 	struct termios	term;
+// 	char	**args;
+// 	int		fd[2];
+// }				t_command;
 
+void	start_shlvl(t_list **list_env, char **env);
 void			processing(t_command *cmd, t_list **list_env, char **envp);
 char			*get_env_value(t_list **list_env, char *key);
 void			make_cd(t_command *cmd, t_list **list_env);
@@ -52,7 +54,9 @@ void			make_env(t_command *cmd, t_list **list_env);
 void			make_other(t_command *cmd, t_list **list_env, char **envp);
 void			make_unset(t_command *cmd, t_list **list_env);
 void			make_export(t_command *cmd, t_list **list_env);
+void			make_exit(t_command *cmd, t_list **list_env);
 void 			mem_err();
+char	**change_env(t_list **list_env, char *key);
 
 t_list	*get_env(char **envp);
 
@@ -73,4 +77,5 @@ void	pressed_key_end(int *cursor_pos, char **line);
 
 
 char	**get_previous_history(int fd, size_t *k);
+
 #endif

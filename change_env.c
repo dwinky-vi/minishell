@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_array_len.c                                     :+:      :+:    :+:   */
+/*   change_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/28 17:55:54 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/13 23:59:57 by aquinoa          ###   ########.fr       */
+/*   Created: 2021/04/13 23:39:29 by aquinoa           #+#    #+#             */
+/*   Updated: 2021/04/13 23:43:41 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "head_minishell.h"
 
-int	ft_array_len(char **array)
+char	**change_env(t_list **list_env, char *key)
 {
-	int		len;
+	t_list	*tmp_list;
 
-	if (!*array)
-		return (0);
-	len = 0;
-	while (array[len])
+	tmp_list = *list_env;
+	while(tmp_list)
 	{
-		len++;
+		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, key, BUFSIZE))
+			return (&((t_envp *)tmp_list->content)->value);
+		tmp_list = tmp_list->next;
 	}
-	return (len);
+	return (NULL);
 }

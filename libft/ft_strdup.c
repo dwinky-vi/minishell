@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 09:57:40 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/03/31 21:54:05 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/16 02:25:44 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strdup(const char *s1)
 	char	*s1_dup;
 	size_t	s1_len;
 
+	if (!s1)
+		return (NULL);
 	s1_len = ft_strlen(s1);
 	s1_dup = ft_calloc(s1_len + 1, sizeof(char));
 	if (!s1_dup)

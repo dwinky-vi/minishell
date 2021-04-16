@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/16 13:09:32 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/16 21:41:23 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,19 @@
 Поскольку внутри одиночных кавычек даже экранирующий (\) символ воспринимается как обычный символ, попытка вывести одиночную кавычку внутри строки, ограниченной одинарными кавычками,
 **/
 #include "head_minishell.h"
+
+void	free_command(t_command *cmd)
+{
+	int k;
+
+	k = 0;
+	while (cmd->args[k])
+	{
+		free(cmd->args[k]);
+		cmd->args[k] = 0;
+		k++;
+    }
+}
 
 void	print_command(t_command command)
 {
@@ -33,6 +46,25 @@ void	print_command(t_command command)
 	}
 }
 
+char	*parse_if_quote_one(char *line, size_t *k)
+{
+	char *quote_line; // кавычка
+
+	quote_line = "";
+	(*k)++;
+	while (line[*k] != '\'')
+	{
+		if (line[*k] == '\0')
+			return (NULL);
+		char buf[2];
+		buf[0] = line[*k];
+		buf[1] = 0;
+		quote_line = ft_strjoin(quote_line, buf);
+		(*k)++;
+	}
+	return (quote_line);
+}
+
 int	parser(char *line, t_vars *vars)
 {
 	t_command	command;
@@ -42,7 +74,6 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	// line = ft_strtrim(line, " "); // есть лик из-за этого
 	// if (syntactic_parsing(line) == 1)
 	// 	return (1);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
@@ -54,91 +85,93 @@ int	parser(char *line, t_vars *vars)
 		{
 			while (line[k] == ' ')
 				k++;
-			char *start;
-			start = line + k;
 			if (line[k] == '\'')
+			{
+				char *quote_str = parse_if_quote_one(line, &k);
+				if (quote_str == NULL)
+					return (-1);
+				// ft_putline("command.args[argc] >", command.args[argc], "|\n");
+				if (command.args[argc] == NULL)
+					command.args[argc] = ft_strdup(quote_str);
+				else
+					command.args[argc] = ft_strjoin(command.args[argc], ft_strdup(quote_str));
+				// ft_putline_nbr("argc >", argc);
+				// ft_putline("command.args[argc] >", command.args[argc], "|\n");
+				k++;
+				if (line[k] == ' ' || line[k] == ';' || line[k] == '\0'  || line[k] == '\\')
+					argc++;
+			}
+			else if (line[k] == '\"')
 			{
 				k++;
 				char *quote_line; // кавычка
 				quote_line = "";
-				while (line[k] != '\'')
+				while (line[k] != '\"')
 				{
 					char buf[2];
 					buf[0] = line[k];
 					buf[1] = 0;
-					quote_line = ft_strjoin(quote_line, buf);
-					k++;
+					command.args[argc] = "";
+					if (line[k] == '$') // идёт до след $
+					{
+						while (line[k] == '$')
+							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
+					}
+					else if (line[k] == '\\')
+					{
+						k++;
+						buf[0] = line[k];
+						quote_line = ft_strjoin(quote_line, buf);
+						k++;
+					}
+					else
+					{
+						quote_line = ft_strjoin(quote_line, buf);
+						k++;
+					}
 				}
-				command.args[argc++] = ft_strdup(quote_line);
+				argc++;
 			}
-			// else if (line[k] == '\"')
-			// {
-			// 	k++;
-			// 	char *quote_line; // кавычка
-			// 	quote_line = "";
-			// 	while (line[k] != '\"')
-			// 	{
-			// 		char buf[2];
-			// 		buf[0] = line[k];
-			// 		buf[1] = 0;
-			// 		if (line[k] == '$') // идёт до след $
-			// 		{
-			// 			k++;
-			// 			int k2 = k;
-			// 			char *buf2;
-			// 			while (line[k2] != ' ' && line[k2] != '$')
-			// 			{
-			// 				k2++;
-			// 			}
-			// 			buf2 = (char *)ft_calloc(k2 - k, 1);
-			// 		}
-			// 		else if (line[k] == '\\')
-			// 		{
-			// 			k++;
-			// 		}
-			// 		quote_line = ft_strjoin(quote_line, buf);
-			// 		k++;
-			// 	}
-			// 	command.args[argc++] = ft_strdup(quote_line);
-			// }
 			else if (line[k] == '$')
 			{
-				k++;
-				int kk = k;
-				while (line[kk] != ' ' && line[kk] != '$' && line[kk] != '\'' && line[kk] != '\"' && line[kk] != '\\')
-				{
-					kk++;
-				}
-				char *key = ft_substr(line, k, kk - k);
-				ft_putline("key >", key, "|");
+				command.args[argc] = "";
+				while (line[k] == '$')
+					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
+				argc++;
 			}
 			else
 			{
-				while (line[k] != ' ' && line[k] != '\0'  && line[k] != ';')
+				char *start;
+				start = line + k;
+				while (line[k] != ' '  && line[k] != ';' && line[k] != '$' && line[k] != '\0')
 					k++;
-				command.args[argc++] = ft_substr(start, 0, line + k - start);
+				if (command.args[argc] == NULL)
+					command.args[argc] = ft_substr(start, 0, line + k - start);
+				else
+					command.args[argc] = ft_strjoin(command.args[argc], ft_substr(start, 0, line + k - start));
+				argc++;
+				while (line[k] == '$')
+					command.args[argc - 1] = ft_strjoin_free(command.args[argc - 1], parse_if_dollar(line, &k, &vars->list_env), 1);
 			}
 			if (line[k] == ';' || line[k] == '\0')
 				break ;
-			k++;
 		}
-		processing(&command, vars);
-		int z = 0;
-		while (command.args[z])
-        {
-			free(command.args[z]);
-			command.args[z] = 0;
-		    z++;
-        }
+		if (command.args[0][0] != '\0')
+			processing(&command, vars);
+		free_command(&command);
 		if (line[k] == ';')
 			k++;
 	}
 	free(command.args);
+	free(line);
 	return (0);
 }
+	/** Душим, мальчики: **/
 
 // echo!2
 // echo "123"'456' это один символ
+// echo 'qwe'123
+
 // Символ "!", помещенный в двойные кавычки, порождает сообщение об ошибке, если команда вводится с командной строки.
 // Вероятно это связано с тем, что этот символ интерпретируется как попытка обращения к истории команд.
 // Однако внутри сценариев такой прием проблем не вызывает.

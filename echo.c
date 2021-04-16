@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 04:44:20 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/12 17:41:55 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/16 18:02:02 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	make_echo(t_command *cmd)
 
 	flag = 0;
 	args_count = ft_array_len(cmd->args);
-	if (args_count == 1)
+	if (args_count == 1 || cmd->args[1][0] == '\0')
 	{
 		write(cmd->fd[1], "\n", 1);
 		return ;

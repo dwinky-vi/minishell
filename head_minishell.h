@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 20:44:31 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/16 19:55:00 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_envp
 
 typedef struct s_command
 {
+	struct termios	term;
 	char	**args;
 	int		fd[2];
 }				t_command;
@@ -52,16 +53,19 @@ typedef struct s_vars
 	int				miniflag;
 }				t_vars;
 
+void			start_shlvl(t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
-char			*get_env_value(t_list **list_env, char *key);
-void			make_cd(t_command *cmd, t_list **list_env);
+char			*get_env_value(t_list *list_env, char *key);
+void			make_cd(t_command *cmd, t_list *list_env);
 void			make_echo(t_command *cmd);
 void			make_pwd(t_command *cmd);
-void			make_env(t_command *cmd, t_list **list_env);
-void			make_other(t_command *cmd, t_list **list_env, char **envp);
-void			make_unset(t_command *cmd, t_list **list_env);
-void			make_export(t_command *cmd, t_list **list_env);
+void			make_env(t_command *cmd, t_list *list_env);
+void			make_other(t_command *cmd, t_list *list_env, char **envp);
+void			make_unset(t_command *cmd, t_list *list_env);
+void			make_export(t_command *cmd, t_list *list_env);
+void			make_exit(t_command *cmd, t_vars *vars);
 void 			mem_err();
+char			**change_env(t_list *list_env, char *key);
 
 t_list	*get_env(char **envp);
 
@@ -95,5 +99,9 @@ void	ft_putline(char *s1, char *s2, char *s3);
 void	ft_putline_nbr(char *s1, int nbr);
 
 int		syntactic_parsing(char *line);
+
+char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
+
+char	*get_value_in_lst_for_parser(t_list *list_env, char *key); // !!!!!!!!!!!!!!!!!!одинаковые функции оставить. Соеденить и оставить одну
 
 #endif

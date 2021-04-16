@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 20:43:37 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/16 18:04:07 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	write_bash_history(char **history, int k, int fd)
 void	func_for_signal(int param)
 {
 	signal (SIGINT, SIG_IGN);
+	signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
 	if (param == 2)
 		ft_putstr_fd("___^C", 1);
 	else if (param == 3)
@@ -48,9 +49,14 @@ int main(int argc, char **argv, char **envp)
 	int		cursor_pos = 0;
 	int		fd;
 
+	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
+		vars.miniflag = 1;											//!!!
+
+
 	vars.envp = envp;
     vars.list_env = get_env(envp);
 	init_term(&vars.term, get_term_name(vars.list_env));
+	start_shlvl(&vars);
 	str = (char *)ft_calloc(2000, 1);
 	// history_size = 0;
 	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
@@ -155,7 +161,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(line, &vars);
+					parser(ft_strdup(line), &vars);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -193,7 +199,8 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	return_term(&vars.term);
+	if (vars.miniflag != 1)										//!!!!
+		return_term(&vars.term);
 	write_bash_history(history, start_k, fd);
 	return (0);
 }
@@ -204,3 +211,6 @@ int main(int argc, char **argv, char **envp)
 
 // если есть ошибка синтаксиса, то ничего не отсылается в логику
 // echo ||  ;
+
+// export lol=123 olo=$lol
+// echo $olo

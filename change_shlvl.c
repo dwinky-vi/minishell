@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   change_shlvl.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/07 21:10:51 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 21:17:22 by aquinoa          ###   ########.fr       */
+/*   Created: 2021/04/15 15:56:13 by aquinoa           #+#    #+#             */
+/*   Updated: 2021/04/16 03:23:21 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	make_env(t_command *cmd, t_list *list_env)
+void	start_shlvl(t_vars *vars)
 {
-	char	*str;
-	t_list	*tmp_list;
+	t_list *tmp_list;
+	char	*lvl;
+	char	*tmp_lvl;
+	int		i;
 
-	tmp_list = list_env;
+	tmp_lvl = get_env_value(vars->list_env, "SHLVL");
+	lvl = ft_itoa(ft_atoi(tmp_lvl) + 1);
+	free(tmp_lvl);
+	tmp_list = vars->list_env;
+	i = 0;
 	while (tmp_list)
 	{
-		str = ft_strjoin(((t_envp *)tmp_list->content)->name, "=");
-		str = ft_strjoin_free(str, ((t_envp *)tmp_list->content)->value, 1);
-		ft_putendl_fd(str, 1);
-		free(str);
+		if (!ft_strncmp(((t_envp *)tmp_list->content)->name, "SHLVL", 6))
+		{
+			((t_envp *)tmp_list->content)->value = lvl;
+			vars->envp[i] = ft_strjoin_free("SHLVL", "=", 0);
+			vars->envp[i] = ft_strjoin_free(vars->envp[i], lvl, 1);
+		}
 		tmp_list = tmp_list->next;
+		i++;
 	}
 }

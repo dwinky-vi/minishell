@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/15 15:56:13 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 21:49:47 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/16 03:23:21 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	start_shlvl(t_vars *vars)
 		{
 			((t_envp *)tmp_list->content)->value = lvl;
 			vars->envp[i] = ft_strjoin_free("SHLVL", "=", 0);
-			vars->envp[i] = ft_strjoin_free(vars->envp[i], lvl, 3);
+			vars->envp[i] = ft_strjoin_free(vars->envp[i], lvl, 1);
 		}
 		tmp_list = tmp_list->next;
 		i++;

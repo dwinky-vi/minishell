@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 21:21:49 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/16 03:21:59 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,25 +99,25 @@ void	making_export(t_list *list_env)
 	ft_free_array(env);
 }
 
-void	check_args(t_command *cmd, t_list **list_env)
-{
-	int		i;
-	int		j;
+// void	check_args(t_command *cmd, t_list **list_env)
+// {
+// 	int		i;
+// 	int		j;
 
-	i = -1;
-	while (cmd->args[++i])
-	{
-		j = -1;
-		while (cmd->args[i][++j])
-		{
-			if (cmd->args[i][j] == '=')
-			{
-				if (cmd->args[i][j - 1] == ' ' || cmd->args[i][j + 1] == ' ')
-					printf("bash: %s: %s: not a valid identifier\n", cmd->args[0], cmd->args[1]);
-			}
-		}
-	}
-}
+// 	i = -1;
+// 	while (cmd->args[++i])
+// 	{
+// 		j = -1;
+// 		while (cmd->args[i][++j])
+// 		{
+// 			if (cmd->args[i][j] == '=')
+// 			{
+// 				if (cmd->args[i][j - 1] == ' ' || cmd->args[i][j + 1] == ' ')
+// 					printf("bash: %s: %s: not a valid identifier\n", cmd->args[0], cmd->args[1]);
+// 			}
+// 		}
+// 	}
+// }
 
 void	make_export(t_command *cmd, t_list *list_env)
 {
@@ -141,11 +141,16 @@ void	make_export(t_command *cmd, t_list *list_env)
 				return ;
 			key = ft_substr(cmd->args[i], 0, equal);
 			value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
-			env_value = change_env(list_env, key);
-			if (!env_value)
+			if (!get_env_value(list_env, key))
 				add_env(cmd->args[i], list_env);
 			else
-				env_value[0] = value;
+			{
+				env_value = change_env(list_env, key);
+				free(*env_value);
+				*env_value = ft_strdup(value);
+			}
+			free(key);
+			free(value);
 		}
 	}
 }

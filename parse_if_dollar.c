@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/16 19:46:32 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/17 21:48:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,12 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	(*k)++;
 	list_env = *head_lst;
 	size = 0;
-	if (line[*k] == '$')
+	if (ft_isdigit(line[*k]))
+	{
+		*k += 1;
+		return (ft_strdup(""));
+	}
+	else if (line[*k] == '$')
 	{
 		*k += 1;
 		return (ft_strdup(""));
@@ -44,7 +49,8 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	{
 		return (ft_strdup("$"));
 	}
-	while (line[*k + size] != ' ' && line[*k + size] != '$' && line[*k + size] != '\'' && line[*k + size] != '\"' && line[*k + size] != '\\'  && line[*k + size] != '\0'  && line[*k + size] != ';')
+	// while (line[*k + size] != ' ' && line[*k + size] != '$' && line[*k + size] != '\'' && line[*k + size] != '\"' && line[*k + size] != '\\' && line[*k + size] != '%' && line[*k + size] != ';' && line[*k + size] != '\0')
+	while (ft_isalnum(line[*k + size]) && line[*k + size] != '\0')
 		size++;
 	key = ft_substr(line + *k, 0, size);
 	value = get_value_in_lst_for_parser(list_env, key);

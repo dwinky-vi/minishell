@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/16 21:41:23 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/17 22:49:56 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,6 @@ void	print_command(t_command command)
 	}
 }
 
-char	*parse_if_quote_one(char *line, size_t *k)
-{
-	char *quote_line; // кавычка
-
-	quote_line = "";
-	(*k)++;
-	while (line[*k] != '\'')
-	{
-		if (line[*k] == '\0')
-			return (NULL);
-		char buf[2];
-		buf[0] = line[*k];
-		buf[1] = 0;
-		quote_line = ft_strjoin(quote_line, buf);
-		(*k)++;
-	}
-	return (quote_line);
-}
-
 int	parser(char *line, t_vars *vars)
 {
 	t_command	command;
@@ -74,87 +55,88 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	// if (syntactic_parsing(line) == 1)
-	// 	return (1);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
 	{
+		while (line[k] == ' ')
+			k++;
 		argc = 0;
 		while (line[k])
 		{
-			while (line[k] == ' ')
-				k++;
 			if (line[k] == '\'')
 			{
 				char *quote_str = parse_if_quote_one(line, &k);
 				if (quote_str == NULL)
 					return (-1);
-				// ft_putline("command.args[argc] >", command.args[argc], "|\n");
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup(quote_str);
 				else
-					command.args[argc] = ft_strjoin(command.args[argc], ft_strdup(quote_str));
-				// ft_putline_nbr("argc >", argc);
-				// ft_putline("command.args[argc] >", command.args[argc], "|\n");
+					command.args[argc] = ft_strjoin_free(command.args[argc], ft_strdup(quote_str), 3);
+				free(quote_str);
 				k++;
-				if (line[k] == ' ' || line[k] == ';' || line[k] == '\0'  || line[k] == '\\')
-					argc++;
 			}
 			else if (line[k] == '\"')
 			{
-				k++;
-				char *quote_line; // кавычка
-				quote_line = "";
-				while (line[k] != '\"')
-				{
-					char buf[2];
-					buf[0] = line[k];
-					buf[1] = 0;
-					command.args[argc] = "";
-					if (line[k] == '$') // идёт до след $
-					{
-						while (line[k] == '$')
-							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
-					}
-					else if (line[k] == '\\')
-					{
-						k++;
-						buf[0] = line[k];
-						quote_line = ft_strjoin(quote_line, buf);
-						k++;
-					}
-					else
-					{
-						quote_line = ft_strjoin(quote_line, buf);
-						k++;
-					}
-				}
-				argc++;
+				// k++;
+				// char *quote_line; // кавычка
+				// quote_line = "";
+				// while (line[k] != '\"')
+				// {
+				// 	char buf[2];
+				// 	buf[0] = line[k];
+				// 	buf[1] = 0;
+				// 	command.args[argc] = "";
+				// 	if (line[k] == '$') // идёт до след $
+				// 	{
+				// 		while (line[k] == '$')
+				// 			command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
+				// 	}
+				// 	else if (line[k] == '\\')
+				// 	{
+				// 		k++;
+				// 		buf[0] = line[k];
+				// 		quote_line = ft_strjoin(quote_line, buf);
+				// 		k++;
+				// 	}
+				// 	else
+				// 	{
+				// 		quote_line = ft_strjoin(quote_line, buf);
+				// 		k++;
+				// 	}
+				// }
 			}
 			else if (line[k] == '$')
 			{
-				command.args[argc] = "";
+				if (command.args[argc] == NULL)
+					command.args[argc] = ft_strdup("");
+				if (ft_isdigit(line[k + 1]))
+				{
+					k += 2;
+					continue ;
+				}
 				while (line[k] == '$')
-					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
-				argc++;
+					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
+				if (command.args[argc][0] == '\0')
+					command.args[argc] = NULL; // and free()!!!!!!!!!!!
 			}
-			else
+			else // это обычный аргумент, без каких-то спец символов
 			{
 				char *start;
 				start = line + k;
-				while (line[k] != ' '  && line[k] != ';' && line[k] != '$' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '$' && line[k] != '\0')
 					k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_substr(start, 0, line + k - start);
 				else
-					command.args[argc] = ft_strjoin(command.args[argc], ft_substr(start, 0, line + k - start));
-				argc++;
-				while (line[k] == '$')
-					command.args[argc - 1] = ft_strjoin_free(command.args[argc - 1], parse_if_dollar(line, &k, &vars->list_env), 1);
+					command.args[argc] = ft_strjoin_free(command.args[argc], ft_substr(start, 0, line + k - start), 3);
 			}
 			if (line[k] == ';' || line[k] == '\0')
 				break ;
+			if (line[k] == ' ')
+				argc++;
+			while (line[k] == ' ')
+				k++;
 		}
 		if (command.args[0][0] != '\0')
 			processing(&command, vars);

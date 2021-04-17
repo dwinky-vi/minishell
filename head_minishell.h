@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/16 19:55:00 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/17 22:43:28 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ void	ft_putline_nbr(char *s1, int nbr);
 int		syntactic_parsing(char *line);
 
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
+
+char	*parse_if_quote_one(char *line, size_t *k);
 
 char	*get_value_in_lst_for_parser(t_list *list_env, char *key); // !!!!!!!!!!!!!!!!!!одинаковые функции оставить. Соеденить и оставить одну
 

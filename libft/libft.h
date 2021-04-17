@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 21:33:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/17 22:51:07 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ char			*ft_strdup(const char *s1);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strjoin_free(char const *s1, char const *s2, int flag);
+char			*ft_strjoin_char(char const *s1, char const ch);
 char			*ft_strtrim(char const *s1, char const *set);
 char			**ft_split(char const *s, char c);
 char			*ft_itoa(int n);
@@ -73,14 +74,6 @@ t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void*));
 
 void			ft_itoa_base(unsigned int nb, int base);
 
-typedef struct s_args {
-	double	nb;
-	int		flag;
-	long	whole_frac;
-	double	frac;
-	int		i;
-}				t_args;
-
 int				ft_array_len(char **array);
 int				ft_number_len(unsigned long long int nb);
 int				ft_strrncmp(const char *s1, const char *s2, size_t n);
@@ -89,4 +82,6 @@ void			ft_free_array(char **arr);
 
 int				get_next_line(int fd, char **line);
 void			ft_clear_tail(char **s_tail);
+
+char			*char_convert_to_str(char ch);
 #endif

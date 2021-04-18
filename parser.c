@@ -82,33 +82,34 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '\"')
 			{
-				// k++;
-				// char *quote_line; // кавычка
-				// quote_line = "";
-				// while (line[k] != '\"')
-				// {
-				// 	char buf[2];
-				// 	buf[0] = line[k];
-				// 	buf[1] = 0;
-				// 	command.args[argc] = "";
-				// 	if (line[k] == '$') // идёт до след $
-				// 	{
-				// 		while (line[k] == '$')
-				// 			command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
-				// 	}
-				// 	else if (line[k] == '\\')
-				// 	{
-				// 		k++;
-				// 		buf[0] = line[k];
-				// 		quote_line = ft_strjoin(quote_line, buf);
-				// 		k++;
-				// 	}
-				// 	else
-				// 	{
-				// 		quote_line = ft_strjoin(quote_line, buf);
-				// 		k++;
-				// 	}
-				// }
+				k++;
+				char *quote_line; // кавычка
+				quote_line = ft_strdup("");
+				// ft_putline("1line >", line + k, "<\n");
+				if (command.args[argc] == NULL)
+					command.args[argc] = ft_strdup("");
+				while (line[k] != '\"')
+				{
+					if (line[k] == '$') // идёт до след $
+					{
+						while (line[k] == '$')
+							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
+					}
+					else if (line[k] == '\\')
+					{
+						k++;
+						quote_line = ft_strjoin_free(quote_line, char_convert_to_str(line[k]), 3);
+						k++;
+					}
+					else
+					{
+						quote_line = ft_strjoin_free(quote_line, char_convert_to_str(line[k]), 3);
+						k++;
+					}
+				}
+				k++;
+				// ft_putline("2line >", line + k, "<\n");
+				command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 1);
 			}
 			else if (line[k] == '$')
 			{

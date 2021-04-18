@@ -88,8 +88,14 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
-				tputs(delete_line, 1, ft_putchar);
-				print_prompt();
+				while (cursor_pos > 0)
+				{
+					tputs(cursor_left, 1, ft_putchar);
+					tputs(delete_character, 1, ft_putchar);
+					cursor_pos--;
+				}
+				// tputs(delete_line, 1, ft_putchar);
+				// print_prompt();
 				if (k > 0)
 					k--;
 				if (history_size != 0)
@@ -102,8 +108,14 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
-				tputs(delete_line, 1, ft_putchar);
-				print_prompt();
+				while (cursor_pos > 0)
+				{
+					tputs(cursor_left, 1, ft_putchar);
+					tputs(delete_character, 1, ft_putchar);
+					cursor_pos--;
+				}
+				// tputs(delete_line, 1, ft_putchar);
+				// print_prompt();
 				if (k < history_size)
 					k++;
 				if (history_size == 0)
@@ -161,7 +173,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(ft_strdup(line), &vars);
+					parser(ft_strtrim(line, " "), &vars);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

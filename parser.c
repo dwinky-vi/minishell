@@ -55,6 +55,8 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
+	if (line[0] == '\0') // если приходит строка из проболов. Хотя в processing'e всё нормально работает в этом случае
+		return (0);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -62,6 +64,8 @@ int	parser(char *line, t_vars *vars)
 		while (line[k] == ' ')
 			k++;
 		argc = 0;
+		if (line[k] == '\0')
+			ft_putline("line >", line + k, "<\n");
 		while (line[k])
 		{
 			if (line[k] == '\'')
@@ -138,8 +142,7 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		if (command.args[0][0] != '\0')
-			processing(&command, vars);
+		processing(&command, vars);
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

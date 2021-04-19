@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 21:28:48 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/19 22:44:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		// processing(&command, vars);
+		processing(&command, vars);
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

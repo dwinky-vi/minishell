@@ -6,22 +6,11 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/16 18:04:07 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/19 22:41:53 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
-
-void	write_bash_history(char **history, int k, int fd)
-{
-	while (history[k])
-	{
-		ft_putstr_fd(history[k], fd);
-		ft_putchar_fd('\n', fd);
-		k++;
-	}
-	close(fd);
-}
 
 void	func_for_signal(int param)
 {
@@ -35,10 +24,29 @@ void	func_for_signal(int param)
 		ft_putstr_fd("error\n", 1);
 }
 
+void	clear_terminal_before_promt(int cursor_pos, char *previous_history)
+{
+	int len;
+
+	if (previous_history == NULL)
+		len = 0;
+	else
+		len = ft_strlen(previous_history);
+	while (cursor_pos < len)
+	{
+		tputs(cursor_right, 1, ft_putchar);
+		cursor_pos++;
+	}
+	while (cursor_pos > 0)
+	{
+		tputs(cursor_left, 1, ft_putchar);
+		tputs(delete_character, 1, ft_putchar);
+		cursor_pos--;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
-	// struct termios	term;
-	// t_list			*head_env;
 	t_vars	vars;
 	char	**history;
 	char	*str;
@@ -46,11 +54,12 @@ int main(int argc, char **argv, char **envp)
 	size_t	history_size;
 	size_t	k;
 	char	*line;
-	int		cursor_pos = 0;
-	int		fd;
+	int		cursor_pos;
+	int		fd2;
 
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
 		vars.miniflag = 1;											//!!!
+
 
 
 	vars.envp = envp;
@@ -58,17 +67,18 @@ int main(int argc, char **argv, char **envp)
 	init_term(&vars.term, get_term_name(vars.list_env));
 	start_shlvl(&vars);
 	str = (char *)ft_calloc(2000, 1);
-	// history_size = 0;
-	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
-	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
+	fd2 = open("testing", O_CREAT | O_RDWR | O_APPEND, 0600);
 	k = 0;
 
 	// signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
 	// signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
-	int start_k = get_previous_history(&history, fd, &k); // leaks!!!!!!!!!!!!
+	int start_k = get_history(&history, &k, &vars); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
 	cursor_pos = 0;
+	char *old_history_line;
+
+	old_history_line = NULL;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
@@ -84,20 +94,16 @@ int main(int argc, char **argv, char **envp)
 					break ;
 				}
 				else
-					pressed_key_delete(&cursor_pos, &line);
+					pressed_key_delete(&cursor_pos, &line, &history[k]);
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
-				while (cursor_pos > 0)
-				{
-					tputs(cursor_left, 1, ft_putchar);
-					tputs(delete_character, 1, ft_putchar);
-					cursor_pos--;
-				}
-				// tputs(delete_line, 1, ft_putchar);
-				// print_prompt();
+				clear_terminal_before_promt(cursor_pos, history[k]);
+				cursor_pos = 0;
 				if (k > 0)
 					k--;
+				free(old_history_line); // очищаем лики
+				old_history_line = ft_strdup(history[k]);
 				if (history_size != 0)
 				{
 					ft_putstr_fd(history[k], 1);
@@ -108,27 +114,22 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
-				while (cursor_pos > 0)
-				{
-					tputs(cursor_left, 1, ft_putchar);
-					tputs(delete_character, 1, ft_putchar);
-					cursor_pos--;
-				}
-				// tputs(delete_line, 1, ft_putchar);
-				// print_prompt();
+				clear_terminal_before_promt(cursor_pos, history[k]);
 				if (k < history_size)
 					k++;
 				if (history_size == 0)
 					k = 0;
-				if (k == history_size)
+				free(old_history_line); // очищаем лики
+				old_history_line = ft_strdup(history[k]);
+				if (history[k] == NULL)
 				{
 					cursor_pos = 0;
 					ft_bzero(line, ft_strlen(line));
 				}
 				else if (history_size != 0)
 				{
-					cursor_pos = ft_strlen(history[k]);
 					ft_putstr_fd(history[k], 1);
+					cursor_pos = ft_strlen(history[k]);
 					free(line);
 					line = ft_strdup(history[k]);
 				}
@@ -151,11 +152,13 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[3~")) // delete (удалить под курсором)
 			{
-				pressed_key_delete(&cursor_pos, &line);
+				old_history_line = ft_strdup(history[k]);
+				pressed_key_delete(&cursor_pos, &line, &history[k]);
 			}
 			else if (!strcmp(str, "\177")) // backspace
 			{
-				pressed_key_backspace(&cursor_pos, &line);
+				old_history_line = ft_strdup(history[k]);
+				pressed_key_backspace(&cursor_pos, &line, &history[k]);
 			}
 			else if (!strcmp(str, "\t")) // TAB
 			{
@@ -177,9 +180,16 @@ int main(int argc, char **argv, char **envp)
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
+					{
+						free(history[k]); // очищаем лики
+						history[k] = ft_strdup(old_history_line); // Что с ликами??? ПРОВЕРИТЬ СУКА
 						k = history_size;
+						free(old_history_line);
+						old_history_line = NULL;
+					}
 					if (strcmp(line, ""))
 					{
+						free(history[k]); // очищаем лики
 						history[k] = ft_strdup(line);
 						history_size++;
 						k = history_size;
@@ -206,14 +216,19 @@ int main(int argc, char **argv, char **envp)
 					write(1, str, r);
 					cursor_pos++;
 					line = ft_strjoin_free(line, str, 1);
+					history[k] = ft_strdup(line);
 				}
 			}
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
+	k = 0;
+	// while (history[k])
+	// 	ft_putendl_fd(history[k++], 1);
+	// ft_putendl_fd("*****************************", fd2);
 	if (vars.miniflag != 1)										//!!!!
 		return_term(&vars.term);
-	write_bash_history(history, start_k, fd);
+	set_history(history, start_k, &vars);
 	return (0);
 }
 

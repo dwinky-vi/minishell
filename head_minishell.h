@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/17 22:43:28 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/19 21:03:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/stat.h> // stat, lstat, fstat
 # include <sys/types.h> // fork, wait
 # include <fcntl.h> // open
-#include <sys/wait.h> // waitpid
+# include <sys/wait.h> // waitpid
 
 // # include "head_parser.h"
 
@@ -51,6 +51,7 @@ typedef struct s_vars
 	t_list			*list_env;
 	struct termios	term;
 	int				miniflag;
+	char			*history_path;
 }				t_vars;
 
 void			start_shlvl(t_vars *vars);
@@ -75,16 +76,18 @@ int		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 
-int		get_previous_history(char ***history, int fd, size_t *k);
+int		get_history(char ***history, size_t *k, t_vars *vars);
+
+void	set_history(char **history, int k, t_vars *vars);
 
 int		ft_putchar(int ch);
 
 void	print_prompt(void);
 
 		/** keys **/
-void	pressed_key_backspace(int *cursor_pos, char **line);
+void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);
 
-void	pressed_key_delete(int *cursor_pos, char **line);
+void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
 
 void	pressed_key_home(int *cursor_pos, char **line);
 
@@ -104,6 +107,6 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
 
 char	*parse_if_quote_one(char *line, size_t *k);
 
-char	*get_value_in_lst_for_parser(t_list *list_env, char *key); // !!!!!!!!!!!!!!!!!!одинаковые функции оставить. Соеденить и оставить одну
+char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
 
 #endif

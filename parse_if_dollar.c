@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/17 21:48:44 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/19 17:32:51 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	else if (line[*k] == '$')
 	{
 		*k += 1;
+		return (ft_strdup(""));
+	}
+	else if (line[*k] == '?')
+	{
+		*k += 1;
+		// vars.code
 		return (ft_strdup(""));
 	}
 	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';'  || line[*k] == '\\')

@@ -6,6 +6,7 @@ minishell
 .vscode/
 history_file
 .bash_history
+.minishell_history
 testing
 .DS_STORE
 testing

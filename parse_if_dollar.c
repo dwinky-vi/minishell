@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 17:32:51 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/20 19:18:16 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key)
 		}
 		list_env = list_env->next;
 	}
-	return ("");
+	return (ft_strdup(""));
 }
 
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
@@ -51,7 +51,7 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 		// vars.code
 		return (ft_strdup(""));
 	}
-	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';'  || line[*k] == '\\')
+	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';' || line[*k] == '\'' || line[*k] == '\"' || line[*k] == '\\')
 	{
 		return (ft_strdup("$"));
 	}

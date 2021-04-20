@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 22:41:53 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/20 18:15:17 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int main(int argc, char **argv, char **envp)
 
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
 		vars.miniflag = 1;											//!!!
-
 
 
 	vars.envp = envp;
@@ -152,11 +151,13 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[3~")) // delete (удалить под курсором)
 			{
+				free(old_history_line);
 				old_history_line = ft_strdup(history[k]);
 				pressed_key_delete(&cursor_pos, &line, &history[k]);
 			}
 			else if (!strcmp(str, "\177")) // backspace
 			{
+				free(old_history_line);
 				old_history_line = ft_strdup(history[k]);
 				pressed_key_backspace(&cursor_pos, &line, &history[k]);
 			}
@@ -216,6 +217,7 @@ int main(int argc, char **argv, char **envp)
 					write(1, str, r);
 					cursor_pos++;
 					line = ft_strjoin_free(line, str, 1);
+					free(history[k]);
 					history[k] = ft_strdup(line);
 				}
 			}

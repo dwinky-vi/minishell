@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 22:44:12 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/20 19:24:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	if (line[0] == '\0') // если приходит строка из проболов. Хотя в processing'e всё нормально работает в этом случае
-		return (0);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -64,8 +62,6 @@ int	parser(char *line, t_vars *vars)
 		while (line[k] == ' ')
 			k++;
 		argc = 0;
-		if (line[k] == '\0')
-			ft_putline("line >", line + k, "<\n");
 		while (line[k])
 		{
 			if (line[k] == '\'')
@@ -85,7 +81,6 @@ int	parser(char *line, t_vars *vars)
 				k++;
 				char *quote_line; // кавычка
 				quote_line = ft_strdup("");
-				// ft_putline("1line >", line + k, "<\n");
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
 				while (line[k] != '\"')
@@ -95,7 +90,7 @@ int	parser(char *line, t_vars *vars)
 						while (line[k] == '$')
 							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
 					}
-					else if (line[k] == '\\')
+					else if (line[k] == '\\' && (line[k + 1] == '$' || line[k + 1] == '\\' || line[k + 1] == '\"'))
 					{
 						k++;
 						quote_line = ft_strjoin_free(quote_line, char_convert_to_str(line[k]), 3);
@@ -108,8 +103,15 @@ int	parser(char *line, t_vars *vars)
 					}
 				}
 				k++;
-				// ft_putline("2line >", line + k, "<\n");
 				command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 1);
+			}
+			else if (line[k] == '\\')
+			{
+				k++;
+				if (command.args[argc] == NULL)
+					command.args[argc] = ft_strdup("");
+				command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
+				k++;
 			}
 			else if (line[k] == '$')
 			{
@@ -125,11 +127,16 @@ int	parser(char *line, t_vars *vars)
 				if (command.args[argc][0] == '\0')
 					command.args[argc] = NULL; // and free()!!!!!!!!!!!
 			}
+			else if (line[k] == '#') // комментарий, это опционально
+			{
+				line[k] = '\0';
+				break ;
+			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
 				char *start;
 				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '$' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '\0')
 					k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_substr(start, 0, line + k - start);
@@ -143,6 +150,7 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
+		// если в истории изменить в середине строки добавить что-то, то неправильно показывается. Скорее всего надо сохранять old_line_history
 		processing(&command, vars);
 		free_command(&command);
 		if (line[k] == ';')
@@ -157,6 +165,9 @@ int	parser(char *line, t_vars *vars)
 // echo!2
 // echo "123"'456' это один символ
 // echo 'qwe'123
+//  echo "This $"
+// export $qwe=123; echo "This \$qwe"\=$qwe\ \!
+// export qwe=$; echo "This \$qwe"$qwePATH
 
 // Символ "!", помещенный в двойные кавычки, порождает сообщение об ошибке, если команда вводится с командной строки.
 // Вероятно это связано с тем, что этот символ интерпретируется как попытка обращения к истории команд.
@@ -165,14 +176,21 @@ int	parser(char *line, t_vars *vars)
 /** ' одиночная кавычка
  * экранирование не работает, переменные окружения тоже.
  * любой символ интерпретируется как обычный символ
+ * Одинарные кавычки не могут находиться в одинарных кавычках.
 **/
 
 /** " двойная кавычка
- * экранирование работает
- * переменные окружения работают
- * 
+ * только $ и \
+ *
+Обратная косая черта должна сохранять свое особое значение как escape-символ (см. Escape-символ ( обратная косая черта ) ) только тогда, когда за ней следует один из следующих символов, если они считаются специальными:
+$ `" \ <новая строка>
 **/
 
 /** $ переменные окружения
  * парсятся до спец символа ($ \ " ' )
 **/
+
+// Обратная косая черта, которая не заключена в кавычки, должна сохранять буквальное значение следующего символа, за исключением <новой строки>.
+// Если за обратной косой чертой следует <новая строка>, оболочка интерпретирует это как продолжение строки.
+// Обратная косая черта и <новая строка> должны быть удалены перед разделением ввода на токены.
+// Поскольку экранированная <новая строка> полностью удаляется из ввода и не заменяется пробелами, она не может служить разделителем токенов.

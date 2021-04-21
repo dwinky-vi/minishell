@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/16 03:22:24 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/19 22:18:36 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ void	change_dir(t_command *cmd, t_list *list_env)
 {
 	char	**pwd;
 	char	buf[BUFSIZE];
-	t_list	*tmp_list;
-	char	*tmp_pwd;
 
 	getcwd(buf, BUFSIZE);
 	if (chdir(cmd->args[1]) == -1)
-		printf("bash: %s: %s: %s\n", cmd->args[0], cmd->args[1], strerror(errno));
+	{
+		ft_putstr_fd("minishell: ", 1);
+		printf("%s: %s: %s\n", cmd->args[0], cmd->args[1], strerror(errno));
+		g_code = 1;
+	}
 	else
 	{
 		check_oldpwd(list_env, buf);
-		if (!get_env_value(list_env, "PWD"))
-			ft_putendl_fd("!!! no PWD in env !!!", 1);
-		else
+		if (get_env_value(list_env, "PWD"))
 		{
 			getcwd(buf, BUFSIZE);
 			pwd = change_env(list_env, "PWD");
@@ -60,29 +60,28 @@ void	change_dir(t_command *cmd, t_list *list_env)
 
 void	make_cd(t_command *cmd, t_list *list_env)
 {
-	if (!cmd->args[1])
+	if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2)) // ~ !!!
 	{
 		cmd->args[1] = ft_strdup(get_env_value(list_env, "HOME"));
 		if (!cmd->args[1])
 		{
-			printf("bash: %s: %s\n", cmd->args[0], "HOME not set");
+			printf("minishell: %s: %s\n", cmd->args[0], "HOME not set");
+			g_code = 1;
 			return ;
 		}
 	}
 	else if (cmd->args[1][0] == '-')
 	{
-		char *tmp_arg = cmd->args[1];
+		free(cmd->args[1]);
 		cmd->args[1] = ft_strdup(get_env_value(list_env, "OLDPWD"));
-		free(tmp_arg);
 		if (!cmd->args[1])
 		{
-			printf("bash: %s: %s\n", cmd->args[0], "OLDPWD not set");
+			printf("minishell: %s: %s\n", cmd->args[0], "OLDPWD not set");
+			g_code = 1;
 			return ;
 		}
 		else
-		{
 			ft_putendl_fd(cmd->args[1], 1);
-		}
 	}
 	change_dir(cmd, list_env);
 	return ;

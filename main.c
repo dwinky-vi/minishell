@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 21:50:50 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 19:26:32 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,9 @@ void	write_bash_history(char **history, int k, int fd)
 
 void	func_for_signal(int param)
 {
+	signal (SIGQUIT, SIG_IGN);
 	signal (SIGINT, SIG_IGN);
-	signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
-	if (param == 2)
-		ft_putstr_fd("___^C", 1);
-	else if (param == 3)
-		ft_putstr_fd("___^\\", 1);
-	else
-		ft_putstr_fd("error\n", 1);
+	// signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
 }
 
 int main(int argc, char **argv, char **envp)
@@ -51,20 +46,19 @@ int main(int argc, char **argv, char **envp)
 
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
 		vars.miniflag = 1;											//!!!
+	vars.envp = envp_copy(envp);									//!!!
 
-
-	vars.envp = envp;
-    vars.list_env = get_env(envp);
+    vars.list_env = get_env(vars.envp);
 	init_term(&vars.term, get_term_name(vars.list_env));
-	start_shlvl(&vars);
+	init_env(&vars);												//!!!
 	str = (char *)ft_calloc(2000, 1);
 	// history_size = 0;
 	fd = open(".bash_history", O_CREAT | O_RDWR | O_APPEND, 0600); //права доступа выдаются, как в bash
 	int fd2 = open("testing", O_CREAT | O_RDWR, 0777);
 	k = 0;
 
-	// signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
-	// signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+	signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
+	signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
 	int start_k = get_previous_history(&history, fd, &k); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(2000, 1);
@@ -202,7 +196,7 @@ int main(int argc, char **argv, char **envp)
 	if (vars.miniflag != 1)										//!!!!
 		return_term(&vars.term);
 	write_bash_history(history, start_k, fd);
-	return (0);
+	return (1);
 }
 
 // обрабатывать одинаково

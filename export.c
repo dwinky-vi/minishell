@@ -6,13 +6,13 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/16 03:21:59 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/20 23:21:40 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	add_env(char *str, t_list *list_env)
+void	add_list_env(char *str, t_list *list_env)
 {
 	t_envp	*new_env;
 	int		i;
@@ -39,7 +39,7 @@ int	equal_sign(char *str)
 		if (str[i] == '=')
 			return (i);
 	}
-	return 0;
+	return (0);
 }
 
 char	*make_env_arr(t_list *list_env)
@@ -119,33 +119,33 @@ void	making_export(t_list *list_env)
 // 	}
 // }
 
-void	make_export(t_command *cmd, t_list *list_env)
+void	make_export(t_command *cmd, t_vars *vars)
 {
-	t_list	*tmp_env;
 	char	*key;
 	char	*value;
 	int		equal;
 	int		i;
-
 	char	**env_value;
 
 	if (!cmd->args[1])
-		making_export(list_env);
+		making_export(vars->list_env);
 	else
 	{
 		i = 0;
 		while (cmd->args[++i])
 		{
-			equal = equal_sign(cmd->args[i]);
-			if (!equal)								//!!!!
+			if (!ft_isalpha(cmd->args[i][0]))
+				env_err(cmd, i);
+			equal = equal_sign(cmd->args[i]); //	+=	!!!!
+			if (!equal) //								!!!!
 				return ;
 			key = ft_substr(cmd->args[i], 0, equal);
 			value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
-			if (!get_env_value(list_env, key))
-				add_env(cmd->args[i], list_env);
+			if (!get_env_value(vars->list_env, key))
+				add_list_env(cmd->args[i], vars->list_env);
 			else
 			{
-				env_value = change_env(list_env, key);
+				env_value = change_env(vars->list_env, key);
 				free(*env_value);
 				*env_value = ft_strdup(value);
 			}
@@ -153,4 +153,5 @@ void	make_export(t_command *cmd, t_list *list_env)
 			free(value);
 		}
 	}
+	new_envp(vars);
 }

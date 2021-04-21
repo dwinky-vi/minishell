@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/16 02:47:31 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/20 23:13:33 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define FALSE 0
 # define BUFSIZE 1024
 
+int			g_code;
+
 typedef struct s_envp
 {
 	char	*name;
@@ -51,21 +53,31 @@ typedef struct s_vars
 	t_list			*list_env;
 	struct termios	term;
 	int				miniflag;
+	int				f_pipe;
+	int				f_redir;
+	char			*command;
 }				t_vars;
 
-void			start_shlvl(t_vars *vars);
+void			init_env(t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
 char			*get_env_value(t_list *list_env, char *key);
 void			make_cd(t_command *cmd, t_list *list_env);
-void			make_echo(t_command *cmd);
+void			make_echo(t_command *cmd, t_vars *vars);
 void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list *list_env);
 void			make_other(t_command *cmd, t_list *list_env, char **envp);
-void			make_unset(t_command *cmd, t_list *list_env);
-void			make_export(t_command *cmd, t_list *list_env);
+void			make_unset(t_command *cmd, t_vars *vars);
+void			make_export(t_command *cmd, t_vars *vars);
 void			make_exit(t_command *cmd, t_vars *vars);
 void 			mem_err();
 char			**change_env(t_list *list_env, char *key);
+void	add_list_env(char *str, t_list *list_env);
+void	add_envp(t_vars *vars, char *str);
+char	**envp_copy(char **envp);
+void	new_envp(t_vars *vars);
+void	delet_list(t_list **list_env);
+void	env_err(t_command *cmd, int i);
+void	make_pipe(t_command *cmd, t_vars *vars);
 
 t_list	*get_env(char **envp);
 

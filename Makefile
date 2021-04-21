@@ -1,7 +1,8 @@
 
 SRCS	= \
 		main.c \
-		processing.c echo.c pwd.c cd.c env.c other_func.c unset.c export.c exit.c change_shlvl.c \
+		processing.c echo.c pwd.c cd.c env.c other_func.c unset.c export.c exit.c init_env.c \
+		env_utils.c make_pipe.c \
 		parser.c print_utils.c init_term.c get_env.c key_home_end.c key_backspace_delete.c get_previous_history.c \
 		syntactic_parsing.c
 

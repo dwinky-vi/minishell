@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 19:15:40 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/15 21:48:01 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/20 02:59:35 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	delet_list(t_list **list_env)
 	previous->next = following;
 }
 
-void	make_unset(t_command *cmd, t_list *list_env)
+void	make_unset(t_command *cmd, t_vars *vars)
 {
 	t_list	*tmp_env;
 	int		i;
@@ -40,20 +40,22 @@ void	make_unset(t_command *cmd, t_list *list_env)
 	i = 0;
 	while (cmd->args[++i])
 	{
-		tmp_env = list_env;
-		if (!ft_strncmp(((t_envp *)tmp_env->content)->name, cmd->args[i], BUFSIZE))
+		if (!ft_isalpha(cmd->args[i][0]) && ft_strncmp(cmd->args[i], "_", 2)) // _  !!!
+			env_err(cmd, i);
+		tmp_env = vars->list_env;
+		if (!ft_strncmp(((t_envp *)tmp_env->content)->name, cmd->args[i], 99))
 		{
-			tmp_env = (list_env)->next;
-			free(((t_envp *)(list_env)->content)->name);
-			free(((t_envp *)(list_env)->content)->value);
-			free((t_envp *)(list_env)->content);
-			*list_env = *tmp_env;
+			tmp_env = (vars->list_env)->next;
+			free(((t_envp *)(vars->list_env)->content)->name);
+			free(((t_envp *)(vars->list_env)->content)->value);
+			free((t_envp *)(vars->list_env)->content);
+			*vars->list_env = *tmp_env;
 			free(tmp_env);
 			continue ;
 		}
 		while (tmp_env->next)
 		{
-			if (!ft_strncmp(((t_envp *)tmp_env->next->content)->name, cmd->args[i], BUFSIZE))
+			if (!ft_strncmp(((t_envp *)tmp_env->next->content)->name, cmd->args[i], 99))
 			{
 				delet_list(&tmp_env);
 				break ;
@@ -61,4 +63,5 @@ void	make_unset(t_command *cmd, t_list *list_env)
 			tmp_env = tmp_env->next;
 		}
 	}
+	new_envp(vars);
 }

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 21:30:07 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 19:20:01 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,16 @@ int	parser(char *line, t_vars *vars)
 				break ;
 			k++;
 		}
-		processing(&command, vars);
+		signal (SIGQUIT, SIG_DFL);
+		signal (SIGINT, SIG_DFL);
+		if (vars->f_pipe == TRUE) //			!!!
+			make_pipe(&command, vars); //		!!!
+		else //									!!!
+			processing(&command, vars); //		!!!
+		signal (SIGQUIT, SIG_IGN);
+		signal (SIGINT, SIG_IGN);
+		dup2(STDIN_FILENO, 0); //  				!!!
+		dup2(STDOUT_FILENO, 1); // 				!!!
 		int z = 0;
 		while (command.args[z])
         {

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/06 21:33:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/17 22:28:25 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,6 @@ void			ft_lstiter(t_list *lst, void (*f)(void*));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void*));
 
 void			ft_itoa_base(unsigned int nb, int base);
-
-typedef struct s_args {
-	double	nb;
-	int		flag;
-	long	whole_frac;
-	double	frac;
-	int		i;
-}				t_args;
 
 int				ft_array_len(char **array);
 int				ft_number_len(unsigned long long int nb);

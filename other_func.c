@@ -6,29 +6,44 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/16 02:01:45 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/20 17:00:25 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-int	check_absolute_path(t_command *cmd, char **env)
+void	dot_err(void)
+{
+	ft_putendl_fd("minishell: .: filename argument required", 1);
+	ft_putendl_fd(".: usage: . filename [arguments]", 1);
+	exit(2);
+}
+
+void	check_absolute_path(t_command *cmd, char **env)
 {
 	struct stat	buf;
 
+	if (ft_array_len(cmd->args) == 1 && !ft_strncmp(cmd->args[0], ".", 2))
+		dot_err();
 	if (!lstat(cmd->args[0], &buf))
 	{
 		if (S_ISDIR(buf.st_mode))
 		{
-			printf("bash1: %s: %s\n", cmd->args[0], strerror(EISDIR));
-			return (1);
+			printf("minishell: %s: %s\n", cmd->args[0], strerror(EISDIR));
+			exit (126);
 		}
-		if (execve(cmd->args[0], cmd->args, env) == -1)
-			return (0);
+		if (execve(cmd->args[0], cmd->args, env) == -1 && errno != ENOEXEC)
+		{
+			printf("minishell: %s: %s\n", cmd->args[0], strerror(errno));
+			exit(126);
+		}
 	}
 	else
-		return (0);
-	return (1);
+	{
+		printf("minishell: %s: %s\n", cmd->args[0], strerror(errno));
+		exit(127);
+	}
+	exit(0);
 }
 
 char	*find_path(t_command *cmd, char *paths)
@@ -56,22 +71,13 @@ char	*find_path(t_command *cmd, char *paths)
 	return (NULL);
 }
 
-void	making_other(t_command *cmd, char *path, char **env)
-{
-	if (execve(path, cmd->args, env) == -1)
-		printf("bash2: %s: %s\n", cmd->args[0], strerror(errno));
-}
-
 void	make_other(t_command *cmd, t_list *list_env, char **envp)
 {
 	char		*paths;
 	char		*path;
 
 	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-	{
-		if (!check_absolute_path(cmd, envp) && errno != ENOEXEC)
-			printf("bash4: %s: %s\n", cmd->args[0], strerror(errno));
-	}
+		check_absolute_path(cmd, envp);
 	else
 	{
 		paths = get_env_value(list_env, "PATH");
@@ -79,12 +85,15 @@ void	make_other(t_command *cmd, t_list *list_env, char **envp)
 		if (!path)
 		{
 			if (!paths)
-				printf("bash5: %s: %s\n", cmd->args[0], strerror(ENOENT));
+				printf("minishell: %s: %s\n", cmd->args[0], strerror(ENOENT));
 			else
-				printf("bash6: %s: %s\n", cmd->args[0], "command not found");
+				printf("minishell: %s: %s\n", cmd->args[0], "command not found");
 		}
-		else
-			making_other(cmd, path, envp);
+		else if (execve(path, cmd->args, envp) == -1)
+		{
+			printf("minishell: %s: %s\n", path, strerror(errno));
+			exit(126);
+		}
 	}
-	exit(0);
+	exit(127);
 }

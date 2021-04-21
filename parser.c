@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:38:58 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 20:18:14 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ int	parser(char *line, t_vars *vars)
 		}
 		signal (SIGQUIT, SIG_DFL);
 		signal (SIGINT, SIG_DFL);
-		if (vars->f_pipe == TRUE) //			!!!
-			make_pipe(&command, vars); //		!!!
-		else //									!!!
+		// if (vars->f_pipe == TRUE) //			!!!
+			// make_pipe(&command, vars); //		!!!
+		// else //									!!!
 			processing(&command, vars); //		!!!
 		signal (SIGQUIT, SIG_IGN);
 		signal (SIGINT, SIG_IGN);

@@ -1,5 +1,5 @@
 ❌❓✅
-❌|> WITH echo $PWD; echo $OLDPWD; cd .; pwd; echo $PWD; echo $OLDPWD\n
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd .; pwd; echo $PWD; echo $OLDPWD\n
 |  STATUS: expected 0 actual -11
 |---------------------------------------EXPECTED--------------------------------
 /Users/dwinky/.cache/minishell_test/sandbox$
@@ -87,7 +87,7 @@ $
 |---------------------------------------ACTUAL----------------------------------
 ================================================================================
 
-❌|> WITH echo $PWD; echo $OLDPWD; cd ''; pwd; echo $PWD; echo $OLDPWD\n
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd ''; pwd; echo $PWD; echo $OLDPWD\n
 |  STATUS: expected 0 actual -11
 |---------------------------------------EXPECTED--------------------------------
 /Users/dwinky/.cache/minishell_test/sandbox$
@@ -98,7 +98,7 @@ $
 |---------------------------------------ACTUAL----------------------------------
 ================================================================================
 
-❌|> WITH echo $PWD; echo $OLDPWD; cd '' ''; pwd; echo $PWD; echo $OLDPWD\n
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd '' ''; pwd; echo $PWD; echo $OLDPWD\n
 |  STATUS: expected 0 actual -11
 |---------------------------------------EXPECTED--------------------------------
 /Users/dwinky/.cache/minishell_test/sandbox$
@@ -109,7 +109,7 @@ $
 |---------------------------------------ACTUAL----------------------------------
 ================================================================================
 
-❌|> WITH echo $PWD; echo $OLDPWD; cd '' '' ''; pwd; echo $PWD; echo $OLDPWD\n
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd '' '' ''; pwd; echo $PWD; echo $OLDPWD\n
 |  STATUS: expected 0 actual -11
 |---------------------------------------EXPECTED--------------------------------
 /Users/dwinky/.cache/minishell_test/sandbox$

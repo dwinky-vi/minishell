@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:37:36 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 19:49:30 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,6 @@ int main(int argc, char **argv, char **envp)
 		while (strcmp(str, "\n"))
 		{
 			r = read(0, str, 100);
-			ft_putstr_fd("|>", fd2);
-			ft_putstr_fd(str, fd2);
-			ft_putstr_fd("<|\n", fd2);
 			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{

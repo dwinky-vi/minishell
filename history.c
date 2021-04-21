@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 21:14:13 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/21 20:35:08 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	get_history(char ***history, size_t *k, t_vars *vars)
 	if (home_dir == NULL)
 		vars->history_path = ft_strdup(".minishell_history");
 	else
-		vars->history_path = ft_strjoin_free(home_dir, "/.minishell_history", 1);
+		vars->history_path = ft_strjoin(home_dir, "/.minishell_history");
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
 	history_buf = *history;
 	if (fd == -1)

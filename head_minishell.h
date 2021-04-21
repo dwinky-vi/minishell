@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/20 23:13:33 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 19:39:24 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/stat.h> // stat, lstat, fstat
 # include <sys/types.h> // fork, wait
 # include <fcntl.h> // open
-#include <sys/wait.h> // waitpid
+# include <sys/wait.h> // waitpid
 
 // # include "head_parser.h"
 
@@ -56,6 +56,7 @@ typedef struct s_vars
 	int				f_pipe;
 	int				f_redir;
 	char			*command;
+	char			*history_path;
 }				t_vars;
 
 void			init_env(t_vars *vars);
@@ -87,16 +88,20 @@ int		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 
-int		get_previous_history(char ***history, int fd, size_t *k);
+int		get_history(char ***history, size_t *k, t_vars *vars);
+
+void	set_history(char **history, int k, t_vars *vars);
 
 int		ft_putchar(int ch);
 
 void	print_prompt(void);
 
-		/** keys **/
-void	pressed_key_backspace(int *cursor_pos, char **line);
+int		is_hotkey(char *str);
 
-void	pressed_key_delete(int *cursor_pos, char **line);
+		/** keys **/
+void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);
+
+void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
 
 void	pressed_key_home(int *cursor_pos, char **line);
 
@@ -112,4 +117,13 @@ void	ft_putline_nbr(char *s1, int nbr);
 
 int		syntactic_parsing(char *line);
 
+char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
+
+char	*parse_if_quote_one(char *line, size_t *k);
+
+char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
+
+		/** lexer **/
+
+int		lexer(char *line);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/17 22:28:25 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/21 19:41:11 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ char			*ft_strdup(const char *s1);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strjoin_free(char const *s1, char const *s2, int flag);
+char			*ft_strjoin_char(char const *s1, char const ch);
 char			*ft_strtrim(char const *s1, char const *set);
 char			**ft_split(char const *s, char c);
 char			*ft_itoa(int n);
@@ -81,4 +82,6 @@ void			ft_free_array(char **arr);
 
 int				get_next_line(int fd, char **line);
 void			ft_clear_tail(char **s_tail);
+
+char			*char_convert_to_str(char ch);
 #endif

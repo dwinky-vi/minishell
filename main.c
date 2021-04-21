@@ -161,7 +161,10 @@ int main(int argc, char **argv, char **envp)
 				old_history_line = ft_strdup(history[k]);
 				pressed_key_backspace(&cursor_pos, &line, &history[k]);
 			}
-			else if (!strcmp(str, "\t")) // TAB
+			else if (!strcmp(str, "\t") || !strcmp(str, "[1;3A") || !strcmp(str, "[1;3B") ||
+					!strcmp(str, ";6A") || !strcmp(str, ";6B") || !strcmp(str, ";6C") || !strcmp(str, ";6B") ||
+					!strcmp(str, ";4A") || !strcmp(str, ";4B") || !strcmp(str, ";4C") || !strcmp(str, ";4D") ||
+					!strcmp(str, ";8A") || !strcmp(str, ";8B") || !strcmp(str, ";8C") || !strcmp(str, ";8D")) // TAB и всякие спец символы
 			{
 			}
 			else if (!strcmp(str, "\e[H")) /** курсор в начало строки **/
@@ -205,6 +208,8 @@ int main(int argc, char **argv, char **envp)
 					line[cursor_pos] = '\0';
 					line = ft_strjoin_free(line, str, 1);
 					line = ft_strjoin_free(line, append, 3);
+					free(history[k]);
+					history[k] = ft_strdup(line);
 					tputs(delete_line, 1, ft_putchar);
 					print_prompt();
 					write(1, line, ft_strlen(line));

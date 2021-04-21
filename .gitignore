@@ -4,7 +4,6 @@ libft/libft.a
 a.out
 minishell
 .vscode/
-history_file
 .bash_history
 .minishell_history
 testing

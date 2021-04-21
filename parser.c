@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 14:44:27 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/21 19:15:05 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	// if (lexer(line))
-	// 	return (1);
+	if (lexer(line))
+		return (1);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -152,7 +152,8 @@ int	parser(char *line, t_vars *vars)
 // echo!2
 // echo "123"'456' это один символ
 // echo 'qwe'123
-//  echo "This $"
+// echo "This $"
+// echo " ' " " ' "
 // export $qwe=123; echo "This \$qwe"\=$qwe\ \!
 // export qwe=$; echo "This \$qwe"$qwePATH
 

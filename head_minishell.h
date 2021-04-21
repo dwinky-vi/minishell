@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/21 14:08:23 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/21 18:41:38 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	set_history(char **history, int k, t_vars *vars);
 int		ft_putchar(int ch);
 
 void	print_prompt(void);
+
+int		is_hotkey(char *str);
 
 		/** keys **/
 void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);

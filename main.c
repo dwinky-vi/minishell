@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/20 18:15:17 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/21 18:40:30 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ int main(int argc, char **argv, char **envp)
 		while (strcmp(str, "\n"))
 		{
 			r = read(0, str, 100);
-			str[r] = '\0';
+			ft_putstr_fd("|>", fd2);
+			ft_putstr_fd(str, fd2);
+			ft_putstr_fd("<|\n", fd2);
+			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')
@@ -161,10 +164,7 @@ int main(int argc, char **argv, char **envp)
 				old_history_line = ft_strdup(history[k]);
 				pressed_key_backspace(&cursor_pos, &line, &history[k]);
 			}
-			else if (!strcmp(str, "\t") || !strcmp(str, "[1;3A") || !strcmp(str, "[1;3B") ||
-					!strcmp(str, ";6A") || !strcmp(str, ";6B") || !strcmp(str, ";6C") || !strcmp(str, ";6B") ||
-					!strcmp(str, ";4A") || !strcmp(str, ";4B") || !strcmp(str, ";4C") || !strcmp(str, ";4D") ||
-					!strcmp(str, ";8A") || !strcmp(str, ";8B") || !strcmp(str, ";8C") || !strcmp(str, ";8D")) // TAB и всякие спец символы
+			else if (is_hotkey(str)) // TAB и всякие спец символы
 			{
 			}
 			else if (!strcmp(str, "\e[H")) /** курсор в начало строки **/
@@ -220,7 +220,7 @@ int main(int argc, char **argv, char **envp)
 				else
 				{
 					write(1, str, r);
-					cursor_pos++;
+					cursor_pos += ft_strlen(str); // это для cmd+V. До этого было просто cursor_pos++
 					line = ft_strjoin_free(line, str, 1);
 					free(history[k]);
 					history[k] = ft_strdup(line);

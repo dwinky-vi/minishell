@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/21 20:50:41 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/22 19:21:25 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	env_err(t_command *cmd, int i)
 
 void	for_signal(int param)
 {
-	// signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
+	// signal (SIGTERM, SIG_IGN);    			// Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
 	if (param == 2)
 	{
 		ft_putstr_fd("\n", 1);
@@ -74,7 +74,6 @@ void	borning_child(t_command *cmd, t_vars *vars)
 		init_term(&vars->term, get_term_name(vars->list_env));
 		if (g_code != 130 && g_code !=131)
 			g_code = status / 256;
-		// printf("status = %d\n", g_code);
 	}
 }
 
@@ -83,9 +82,9 @@ void	processing(t_command *cmd, t_vars *vars)
 	int			name_len;
 
 	cmd->fd[0] = 0;
-	cmd->fd[1] = 1;
+	cmd->fd[1] = 0;
 	g_code = 0;
-	if (cmd->args[0]) // Обновляй $_ и $? !!!
+	if (cmd->args[0]) // Обновляй $_ !!!
 	{
 		vars->command = cmd->args[0];
 		name_len = ft_strlen(cmd->args[0]) + 1;

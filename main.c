@@ -6,17 +6,18 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:49:30 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/22 20:51:45 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	func_for_signal(int param)
+int	set_vars(t_vars *vars, char **envp)
 {
-	signal (SIGQUIT, SIG_IGN);
-	signal (SIGINT, SIG_IGN);
-	// signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
+	vars->envp = envp_copy(envp);								//!!!
+	get_env_to_lst(vars);
+	init_env(vars);												//!!!
+	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -29,21 +30,14 @@ int main(int argc, char **argv, char **envp)
 	size_t	k;
 	char	*line;
 	int		cursor_pos;
-	int		fd2;
 
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
 		vars.miniflag = 1;											//!!!
-	vars.envp = envp_copy(envp);									//!!!
-
-    vars.list_env = get_env(vars.envp);
+	set_vars(&vars, envp);
 	init_term(&vars.term, get_term_name(vars.list_env)); // поставить проверки на termcaps функции, они могут вернуть -1
-	init_env(&vars);												//!!!
-	str = (char *)ft_calloc(2000, 1);
-	fd2 = open("testing", O_CREAT | O_RDWR | O_APPEND, 0600);
+	str = (char *)ft_calloc(4096, 1);
 	k = 0;
-
-	signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
-	signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+	signal_off();
 	int start_k = get_history(&history, &k, &vars); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(4096, 1);
@@ -51,12 +45,14 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 
 	old_history_line = NULL;
+	int		tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
-			r = read(0, str, 100);
+			dup2(tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
+			r = read(0, str, 4096);
 			str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
@@ -151,6 +147,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(ft_strtrim(line, " "), &vars);
+					// printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -203,7 +200,7 @@ int main(int argc, char **argv, char **envp)
 	if (vars.miniflag != 1)										//!!!!
 		return_term(&vars.term);
 	set_history(history, start_k, &vars);
-	return (1);
+	return (1); //													!!! Ctrl-D возвращает 1 !!!
 }
 
 // -|echo ; ;

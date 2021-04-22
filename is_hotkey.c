@@ -46,8 +46,6 @@
 
 int	is_hotkey(char *str)
 {
-	if (!ft_strncmp(str, "\t", 1))
-		return (1);
 	if (!ft_strncmp(str, "\e[1;", 4))
 		str += 4;
 	else

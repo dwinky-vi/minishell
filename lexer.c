@@ -30,6 +30,10 @@ int	lexer(char *line)
 		return (syntax_error(";;"));
 	else if (line[k] == ';')
 		return (syntax_error(";"));
+	if (line[k] == '|' && line[k + 1] == '|')
+		return (syntax_error("||"));
+	else if (line[k] == '|')
+		return (syntax_error("|"));
 	while (line[k])
 	{
 		if (line[k] == '\\')
@@ -58,20 +62,24 @@ int	lexer(char *line)
 			if (line[k] == '\0')
 				return (syntax_error("\'"));
 		}
-		// if (line[k] == '|')
-		// {
-		// 	if (ft_strncmp(line + k, "||||", 4))
-		// 	{
-		// 		return (print_error("bash: syntax error near unexpected token `||'"));
-		// 	}
-		// 	k++;
-		// 	if (line[k] == '|')
-		// 		return (print_error("bash: syntax error near unexpected token `||'"));
-		// 	while (line[k] == ' ')
-		// 		k++;
-		// 	if (line[k] == '\0' || line[k] == ';')
-		// 		return (print_error("bash: syntax error near unexpected token `|'"));
-		// }
+		if (line[k] == '|')
+		{
+			int kk = k;
+			int f_cmd_before = FALSE;
+			k--;
+			while (line[k] == ' ' && k > 0)
+				k--;
+			if (ft_isalpha(line[k]))
+				f_cmd_before = TRUE;
+			k = kk;
+			k++;
+			while (line[k] == ' ')
+				k++;
+			if (line[k] == ';' && f_cmd_before == TRUE)
+				return (syntax_error(";"));
+			else if (line[k] == '|' || line[k] == ';' || line[k] == '\0')
+				return (syntax_error("|"));
+		}
 		if (line[k] == ';')
 		{
 			if (line [k + 1] == ';')

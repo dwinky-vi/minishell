@@ -88,6 +88,8 @@ int		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 
+void	clear_command_line(int cursor_pos, char *previous_history);
+
 int		get_history(char ***history, size_t *k, t_vars *vars);
 
 void	set_history(char **history, int k, t_vars *vars);

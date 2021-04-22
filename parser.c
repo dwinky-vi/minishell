@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 20:18:14 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/22 04:06:00 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	if (lexer(line))
-		return (1);
+	// if (lexer(line))
+	// 	return (1);
 	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -112,11 +112,20 @@ int	parser(char *line, t_vars *vars)
 				while (line[k] == '$')
 					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
 				if (command.args[argc][0] == '\0')
+				{
+					free(command.args[argc]);
 					command.args[argc] = NULL; // and free()!!!!!!!!!!!
+				}
 			}
 			else if (line[k] == '#') // комментарий, это опционально
 			{
 				line[k] = '\0';
+				break ;
+			}
+			else if (line[k] == '|') // комментарий, это опционально
+			{
+				vars->f_pipe = TRUE;
+				k++;
 				break ;
 			}
 			else // это обычный аргумент, без каких-то спец символов
@@ -137,19 +146,18 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		signal (SIGQUIT, SIG_DFL);
-		signal (SIGINT, SIG_DFL);
-		// if (vars->f_pipe == TRUE) //			!!!
-			// make_pipe(&command, vars); //		!!!
-		// else //									!!!
+		signal (SIGQUIT, SIG_DFL); //			!!!
+		signal (SIGINT, SIG_DFL); //			!!!
+		if (vars->f_pipe == TRUE) //			!!!
+			make_pipe(&command, vars); //		!!!
+		else //									!!!
 			processing(&command, vars); //		!!!
-		signal (SIGQUIT, SIG_IGN);
-		signal (SIGINT, SIG_IGN);
-		dup2(STDIN_FILENO, 0); //  				!!!
-		dup2(STDOUT_FILENO, 1); // 				!!!
+		signal (SIGQUIT, SIG_IGN); //			!!!
+		signal (SIGINT, SIG_IGN); //			!!!
 		free_command(&command);
 		if (line[k] == ';')
 			k++;
+		vars->f_pipe = FALSE;
 	}
 	free(command.args);
 	free(line);

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:37:36 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/22 04:11:25 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	func_for_signal(int param)
 {
 	signal (SIGQUIT, SIG_IGN);
 	signal (SIGINT, SIG_IGN);
-	// signal (SIGTERM, SIG_IGN);    			// игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
+	// signal (SIGTERM, SIG_IGN);    			// !!! Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell) !!!
 }
 
 void	clear_terminal_before_promt(int cursor_pos, char *previous_history)
@@ -72,11 +72,13 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 
 	old_history_line = NULL;
+	int		tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
+			dup2(tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
 			r = read(0, str, 100);
 			ft_putstr_fd("|>", fd2);
 			ft_putstr_fd(str, fd2);
@@ -175,6 +177,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(ft_strtrim(line, " "), &vars);
+					printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -227,10 +230,10 @@ int main(int argc, char **argv, char **envp)
 	// while (history[k])
 	// 	ft_putendl_fd(history[k++], 1);
 	// ft_putendl_fd("*****************************", fd2);
-	if (vars.miniflag != 1)										//!!!!
+	if (vars.miniflag != 1)	//										!!! Условие возврата настроек терминала !!!
 		return_term(&vars.term);
 	set_history(history, start_k, &vars);
-	return (1);
+	return (1); //													!!! Ctrl-D возвращает 1 !!!
 }
 
 // обрабатывать одинаково

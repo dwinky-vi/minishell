@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/22 20:51:45 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/23 22:18:54 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	set_vars(t_vars *vars, char **envp)
 	vars->envp = envp_copy(envp);								//!!!
 	get_env_to_lst(vars);
 	init_env(vars);												//!!!
+	vars->f_pipe = FALSE;
+	vars->f_redir = FALSE;
 	return (0);
 }
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv, char **envp)
 		{
 			dup2(tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
 			r = read(0, str, 4096);
-			// str[r] = '\0';
+			str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')
@@ -210,6 +212,8 @@ int main(int argc, char **argv, char **envp)
 // -|echo ; ;
 // -|;
 // >>>|;;
+// << >
+// < >>
 // echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // echo ||  ;
 // export lol=123 olo=$lol

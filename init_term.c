@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_term.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:14:41 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/14 03:04:33 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 17:59:51 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	init_term(struct termios *term, char *term_name)
 	term->c_lflag &= ~(ICANON); //переводим терминал в НЕ каноническое. В каноническом виде read завершается по нажатию \n
 	if (tcsetattr(0, TCSANOW, term) == -1)
 		exit(1);
-	if (tgetent(0, term_name)) // подгружаем базу данных нашего терминала
+	if (tgetent(0, term_name) == -1) // подгружаем базу данных нашего терминала
 		exit(1);
 }
 
@@ -40,6 +40,6 @@ void	return_term(struct termios *term)
 {
 	term->c_lflag |= (ECHO);
 	term->c_lflag |= (ICANON);
-	if (tcsetattr(0, TCSANOW, term))
+	if (tcsetattr(0, TCSANOW, term) == 1)
 		exit(1);
 }

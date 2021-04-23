@@ -4,7 +4,7 @@ SRCS	= \
 		processing.c echo.c pwd.c cd.c env.c other_func.c unset.c export.c exit.c init_env.c \
 		env_utils.c make_pipe.c signals.c \
 		parser.c print_utils.c init_term.c get_env.c key_home_end.c key_backspace_delete.c history.c \
-		lexer.c parse_if_dollar.c parse_if_quote_one.c is_hotkey.c clear_command_line.c
+		parse_if_dollar.c parse_if_quote_one.c is_hotkey.c clear_command_line.c error.c lexer.c lexer_redir.c
 
 NAME		= minishell
 

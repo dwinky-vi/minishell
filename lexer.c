@@ -6,19 +6,24 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:45:04 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:47:09 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/23 20:03:52 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-int	syntax_error(char *token)
+int	lexer_semicolon(char *line, size_t *k)
 {
-	ft_putstr_fd("minishell: ", 1);
-	ft_putstr_fd("syntax error near unexpected token `", 1);
-	ft_putstr_fd(token, 1);
-	ft_putstr_fd("'\n", 1);
-	return (1);
+	if (line[*k + 1] == ';')
+		return (syntax_error(";;"));
+	(*k)++;
+	while (line[*k] == ' ')
+		(*k)++;
+	if (line[*k] == ';' && line[*k + 1] == ';')
+		return (syntax_error(";;"));
+	else if (line[*k] == ';')
+		return (syntax_error(";"));
+	return (FALSE);
 }
 
 int	lexer(char *line)
@@ -85,53 +90,18 @@ int	lexer(char *line)
 		}
 		else if (line[k] == '>')
 		{
-			if (!ft_strncmp(line + k, ">>>>", 4))
-				return (syntax_error(">>"));
-			else if (!ft_strncmp(line + k, ">>>", 3))
-				return (syntax_error(">"));
-			while (line[k] == '>')
-				k++;
-			while (line[k] == ' ')
-				k++;
-			if (line[k] == '>' && line[k + 1] == '>')
-				return (syntax_error(">>"));
-			if (line[k] == '>' )
-				return (syntax_error(">"));
-			if (line[k] == ';')
-				return (syntax_error(";"));
-			if (line[k] == '\0')
-				return (syntax_error("newline"));
+			if (lexer_right_redir(line, &k) == TRUE)
+				return (TRUE);
 		}
 		else if (line[k] == '<')
 		{
-			if (!ft_strncmp(line + k, "<<<<", 4))
-				return (syntax_error("<<"));
-			else if (!ft_strncmp(line + k, "<<<", 3))
-				return (syntax_error("<"));
-			while (line[k] == '<')
-				k++;
-			while (line[k] == ' ')
-				k++;
-			if (line[k] == '<' && line[k + 1] == '<')
-				return (syntax_error("<<"));
-			if (line[k] == '<' )
-				return (syntax_error("<"));
-			if (line[k] == ';')
-				return (syntax_error(";"));
-			if (line[k] == '\0')
-				return (syntax_error("newline"));
+			if (lexer_left_redir(line, &k) == TRUE)
+				return (TRUE);
 		}
 		else if (line[k] == ';')
 		{
-			if (line [k + 1] == ';')
-				return (syntax_error(";;"));
-			k++;
-			while (line[k] == ' ')
-				k++;
-			if (line[k] == ';' && line[k + 1] == ';')
-				return (syntax_error(";;"));
-			else if (line[k] == ';')
-				return (syntax_error(";"));
+			if (lexer_semicolon(line, &k) == TRUE)
+				return (TRUE);
 		}
 		else
 			k++;

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/22 20:16:20 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/23 22:31:17 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,35 @@ int	parser(char *line, t_vars *vars)
 				k++;
 				break ;
 			}
+			else if (line[k] == '>')
+			{
+				vars->f_redir = TRUE;
+				char *file_name;
+				int fd_redir;
+				if (line[k] == '>' && line[k + 1] == '>')
+				{
+					k += 2;
+					while (line[k] == ' ')
+						k++;
+					int start = k;
+					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+						k++;
+					file_name = ft_substr(line, start, k - start);
+					fd_redir = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
+				}
+				else if (line[k] == '>')
+				{
+					k++;
+					while (line[k] == ' ')
+						k++;
+					int start = k;
+					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+						k++;
+					file_name = ft_substr(line, start, k - start);
+					fd_redir = open(file_name, O_CREAT | O_RDWR, 0644);
+				}
+				close(fd_redir);
+			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
 				char *start;
@@ -146,12 +175,19 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
+		// k = 0;
+		// while (command.args[k])
+		// {
+		// 	ft_putendl_fd(command.args[k], 1);
+		// 	k++;
+		// }
 		signal_on();
 		if (vars->f_pipe == TRUE) //			!!!
 			make_pipe(&command, vars); //		!!!
 		else //									!!!
 			processing(&command, vars); //		!!!
 		vars->f_pipe = FALSE;
+		vars->f_redir = FALSE;
 		signal_off();
 		free_command(&command);
 		if (line[k] == ';')

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/22 21:00:16 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/23 18:53:01 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,4 +138,9 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
 
 int		lexer(char *line);
 
+int		lexer_right_redir(char *line, size_t *k);
+
+int		lexer_left_redir(char *line, size_t *k);
+
+int		syntax_error(char *token);
 #endif

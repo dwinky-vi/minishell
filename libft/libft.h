@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/21 19:41:11 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 02:05:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int				ft_tolower(int c);
 
 void			*ft_calloc(size_t count, size_t size);
 char			*ft_strdup(const char *s1);
+char			*ft_strdup_free(const char *s1, int flag);
 
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);

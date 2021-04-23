@@ -6,88 +6,109 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/22 03:50:36 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 19:04:45 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
+void	change_pwd_or_oldpwd(t_list *list_env, char *buf, char *str)
+{
+	char	**pwd;
+
+	pwd = change_env(list_env, str);
+	free(*pwd);
+	*pwd = ft_strdup(buf);
+	if (!(*pwd))
+		mem_err();
+}
+
 void	check_oldpwd(t_list *list_env, char *buf)
 {
-	t_envp	*new_list;
-	char	**pwd;
+	t_envp	*new_env;
 	char	*tmp_pwd;
+	t_list	*new_list;
 
 	if (!get_env_value(list_env, "OLDPWD"))
 	{
-		new_list = (t_envp *)ft_calloc(1, sizeof(t_envp));
-		new_list->name = "OLDPWD";
-		new_list->value = ft_strdup(get_env_value(list_env, "PWD"));
-		ft_lstadd_back(&list_env, ft_lstnew(new_list));
+		new_env = (t_envp *)ft_calloc(1, sizeof(t_envp));
+		if (!new_env)
+			mem_err();
+		new_env->name = "OLDPWD";
+		new_env->value = ft_strdup(get_env_value(list_env, "PWD"));
+		if (!new_env->value)
+			mem_err();
+		new_list = ft_lstnew(new_env);
+		if (!new_list)
+			mem_err();
+		ft_lstadd_back(&list_env, new_list);
 	}
 	else
-	{
-		pwd = change_env(list_env, "OLDPWD");
-		free(*pwd);
-		*pwd = ft_strdup(buf);
-	}
+		change_pwd_or_oldpwd(list_env, buf, "OLDPWD");
 }
 
-void	change_dir(t_command *cmd, t_list *list_env)
+void	change_dir(t_command *cmd, t_vars *vars)
 {
 	char	**pwd;
 	char	buf[BUFSIZE];
+	char	*str;
 
 	getcwd(buf, BUFSIZE);
 	if (chdir(cmd->args[1]) == -1)
 	{
-		ft_putstr_fd("minishell: ", 1);
-		printf("%s: %s: %s\n", cmd->args[0], cmd->args[1], strerror(errno));
-		g_code = 1;
+		str = ft_strjoin(cmd->args[1], ": ");
+		if (!str)
+			mem_err();
+		str = ft_strjoin_free(str, strerror(errno), 1);
+		if (!str)
+			mem_err();
+		shell_err(cmd->args, vars->tmp_fd_1, 1, str);
+		free(str);
 	}
 	else
 	{
-		check_oldpwd(list_env, buf);
-		if (get_env_value(list_env, "PWD"))
+		check_oldpwd(vars->list_env, buf);
+		if (get_env_value(vars->list_env, "PWD"))
 		{
 			getcwd(buf, BUFSIZE);
-			pwd = change_env(list_env, "PWD");
-			free(*pwd);
-			*pwd = ft_strdup(buf);
+			change_pwd_or_oldpwd(vars->list_env, buf, "PWD");
 		}
 	}
 }
 
-void	make_cd(t_command *cmd, t_list *list_env)
+int	go_old_pwd(t_command *cmd, t_vars *vars)
+{
+	free(cmd->args[1]);
+	cmd->args[1] = ft_strdup(get_env_value(vars->list_env, "OLDPWD"));
+	if (!cmd->args[1])
+	{
+		shell_err(cmd->args, vars->tmp_fd_1, 1, "OLDPWD not set");
+		return (0);
+	}
+	else
+		ft_putendl_fd(cmd->args[1], 1);
+	return (1);
+}
+
+void	make_cd(t_command *cmd, t_vars *vars)
 {
 	if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2)) // ~ !!!
 	{
-		cmd->args[1] = ft_strdup(get_env_value(list_env, "HOME"));
+		if (cmd->args[1])
+			free(cmd->args[1]);
+		cmd->args[1] = ft_strdup(get_env_value(vars->list_env, "HOME"));
 		if (!cmd->args[1])
 		{
-			printf("minishell: %s: %s\n", cmd->args[0], "HOME not set");
-			g_code = 1;
+			shell_err(cmd->args, vars->tmp_fd_1, 1, "HOME not set");
 			return ;
 		}
 	}
-	else if (cmd->args[1][0] == '-')
+	else if (!ft_strncmp(cmd->args[1], "-", 2))
 	{
-		free(cmd->args[1]);
-		cmd->args[1] = ft_strdup(get_env_value(list_env, "OLDPWD"));
-		if (!cmd->args[1])
-		{
-			printf("minishell: %s: %s\n", cmd->args[0], "OLDPWD not set");
-			g_code = 1;
+		if (!go_old_pwd(cmd, vars))
 			return ;
-		}
-		else
-			ft_putendl_fd(cmd->args[1], 1);
 	}
 	else if (cmd->args[1][0] == '\0')
-	{
-		free(cmd->args[1]);
-		cmd->args[1] = ft_strdup(".");
-	}
-	change_dir(cmd, list_env);
-	return ;
+		return ;
+	change_dir(cmd, vars);
 }

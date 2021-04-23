@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_pipe.c                                        :+:      :+:    :+:   */
+/*   pipe_n_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/19 16:33:43 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/22 03:53:59 by aquinoa          ###   ########.fr       */
+/*   Created: 2021/04/22 22:19:24 by aquinoa           #+#    #+#             */
+/*   Updated: 2021/04/23 04:26:51 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	make_pipe(t_command *cmd, t_vars *vars)
+void	make_pipe_or_redir(t_command *cmd, t_vars *vars)
 {
 	pid_t	pid;
 	int		status;
 
-	if (pipe(cmd->fd) == -1)
-		return ;
+	if (vars->f_pipe == TRUE)
+		if (pipe(cmd->fd) == -1)
+			return ;
 	pid = fork();
 	if (pid < 0)
 		return ;
@@ -26,16 +27,16 @@ void	make_pipe(t_command *cmd, t_vars *vars)
 	{
 		dup2(cmd->fd[1], 1);
 		close(cmd->fd[0]);
-		processing(cmd, vars);
 		close(cmd->fd[1]);
+		processing(cmd, vars);
 		exit(g_code);
 	}
 	else
 	{
 		dup2(cmd->fd[0], 0);
+		close(cmd->fd[0]);
 		close(cmd->fd[1]);
 		wait(&status);
-		close(cmd->fd[0]);
 		g_code = status / 256;
 	}
 }

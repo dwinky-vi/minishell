@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/22 04:11:24 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 19:20:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ void	mem_err(void)
 {
 	ft_putendl_fd("Memory error!", 1);
 	exit(1);
+}
+
+void	shell_err(char **args, int fd_1, int code, char *str)
+{
+	dup2(fd_1, 1);
+
+	ft_putstr_fd("minishell: ", 1);
+	ft_putstr_fd(args[0], 1);
+	ft_putstr_fd(": ", 1);
+	ft_putendl_fd(str, 1);
+	// printf("minishell: %s: %s\n", args[0], str);
+
+	g_code = code;
 }
 
 void	env_err(t_command *cmd, int i)
@@ -63,7 +76,7 @@ void	borning_child(t_command *cmd, t_vars *vars)
 	{
 		if (ft_strnstr(cmd->args[0], "minishell", BUFSIZE))
 			cmd->args[1] = ft_strdup("child");
-		make_other(cmd, vars->list_env, vars->envp);
+		make_other(cmd, vars->list_env, vars->envp, vars->tmp_fd_1);
 	}
 	else
 	{
@@ -82,18 +95,18 @@ void	processing(t_command *cmd, t_vars *vars)
 	int			name_len;
 
 	cmd->fd[0] = 0;
-	cmd->fd[1] = 0;
+	cmd->fd[1] = 1;
 	g_code = 0;
 	if (cmd->args[0]) // Обновляй $_ !!!
 	{
-		vars->command = cmd->args[0];
+		// vars->command = ft_strdup(cmd->args[0]);
 		name_len = ft_strlen(cmd->args[0]) + 1;
 		if (!ft_strncmp(cmd->args[0], "echo", name_len))
 			make_echo(cmd, vars);
 		else if (!ft_strncmp(cmd->args[0], "pwd", name_len))
 			make_pwd(cmd);
 		else if (!ft_strncmp(cmd->args[0], "cd", name_len))
-			make_cd(cmd, vars->list_env);
+			make_cd(cmd, vars);
 		else if (!ft_strncmp(cmd->args[0], "env", name_len) && \
 					get_env_value(vars->list_env, "PATH"))
 			make_env(cmd, vars->list_env);

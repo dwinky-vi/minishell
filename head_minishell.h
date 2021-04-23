@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/21 19:39:24 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 19:20:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,31 @@ typedef struct s_vars
 	int				f_redir;
 	char			*command;
 	char			*history_path;
+	int				tmp_fd_0;
+	int				tmp_fd_1;
 }				t_vars;
 
 void			init_env(t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
 char			*get_env_value(t_list *list_env, char *key);
-void			make_cd(t_command *cmd, t_list *list_env);
+void			make_cd(t_command *cmd, t_vars *vars);
 void			make_echo(t_command *cmd, t_vars *vars);
 void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list *list_env);
-void			make_other(t_command *cmd, t_list *list_env, char **envp);
+void			make_other(t_command *cmd, t_list *list_env, char **envp, int fd);
 void			make_unset(t_command *cmd, t_vars *vars);
 void			make_export(t_command *cmd, t_vars *vars);
 void			make_exit(t_command *cmd, t_vars *vars);
 void 			mem_err();
+void	shell_err(char **args, int fd_1, int code, char *str);
 char			**change_env(t_list *list_env, char *key);
 void	add_list_env(char *str, t_list *list_env);
 void	add_envp(t_vars *vars, char *str);
-char	**envp_copy(char **envp);
+void	envp_copy(t_vars *vars, char **envp);
 void	new_envp(t_vars *vars);
 void	delet_list(t_list **list_env);
 void	env_err(t_command *cmd, int i);
-void	make_pipe(t_command *cmd, t_vars *vars);
+void	make_pipe_or_redir(t_command *cmd, t_vars *vars);
 
 t_list	*get_env(char **envp);
 

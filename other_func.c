@@ -6,40 +6,44 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/21 19:40:53 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/22 23:17:34 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	dot_err(void)
+void	dot_err(int fd_1)
 {
+	dup2(fd_1, 1);
 	ft_putendl_fd("minishell: .: filename argument required", 1);
 	ft_putendl_fd(".: usage: . filename [arguments]", 1);
 	exit(2);
 }
 
-void	check_absolute_path(t_command *cmd, char **env)
+void	check_absolute_path(t_command *cmd, char **env, int	fd_1)
 {
 	struct stat	buf;
 
 	if (ft_array_len(cmd->args) == 1 && !ft_strncmp(cmd->args[0], ".", 2))
-		dot_err();
+		dot_err(fd_1);
 	if (!lstat(cmd->args[0], &buf))
 	{
 		if (S_ISDIR(buf.st_mode))
 		{
+			dup2(fd_1, 1);
 			printf("minishell: %s: %s\n", cmd->args[0], strerror(EISDIR));
 			exit (126);
 		}
 		if (execve(cmd->args[0], cmd->args, env) == -1 && errno != ENOEXEC)
 		{
+			dup2(fd_1, 1);
 			printf("minishell: %s: %s\n", cmd->args[0], strerror(errno));
 			exit(126);
 		}
 	}
 	else
 	{
+		dup2(fd_1, 1);
 		printf("minishell: %s: %s\n", cmd->args[0], strerror(errno));
 		exit(127);
 	}
@@ -71,13 +75,13 @@ char	*find_path(t_command *cmd, char *paths)
 	return (NULL);
 }
 
-void	make_other(t_command *cmd, t_list *list_env, char **envp)
+void	make_other(t_command *cmd, t_list *list_env, char **envp, int fd_1)
 {
 	char		*paths;
 	char		*path;
 
 	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-		check_absolute_path(cmd, envp);
+		check_absolute_path(cmd, envp, fd_1);
 	else
 	{
 		paths = get_env_value(list_env, "PATH");
@@ -85,12 +89,19 @@ void	make_other(t_command *cmd, t_list *list_env, char **envp)
 		if (!path)
 		{
 			if (!paths)
+			{
+				dup2(fd_1, 1);
 				printf("minishell: %s: %s\n", cmd->args[0], strerror(ENOENT));
+			}
 			else
+			{
+				dup2(fd_1, 1);
 				printf("minishell: %s: %s\n", cmd->args[0], "command not found");
+			}
 		}
 		else if (execve(path, cmd->args, envp) == -1)
 		{
+			dup2(fd_1, 1);
 			printf("minishell: %s: %s\n", path, strerror(errno));
 			exit(126);
 		}

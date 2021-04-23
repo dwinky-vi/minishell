@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/22 04:06:00 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 18:47:02 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,14 +146,14 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		signal (SIGQUIT, SIG_DFL); //			!!!
-		signal (SIGINT, SIG_DFL); //			!!!
-		if (vars->f_pipe == TRUE) //			!!!
-			make_pipe(&command, vars); //		!!!
-		else //									!!!
-			processing(&command, vars); //		!!!
-		signal (SIGQUIT, SIG_IGN); //			!!!
-		signal (SIGINT, SIG_IGN); //			!!!
+		signal (SIGQUIT, SIG_DFL); //									!!!
+		signal (SIGINT, SIG_DFL); //									!!!
+		if (vars->f_pipe == TRUE || vars->f_redir == TRUE) //			!!!
+			make_pipe_or_redir(&command, vars); //						!!!
+		else //															!!!
+			processing(&command, vars); //								!!!
+		signal (SIGQUIT, SIG_IGN); //									!!!
+		signal (SIGINT, SIG_IGN); //									!!!
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

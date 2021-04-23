@@ -3390,7 +3390,31 @@ TIMEOUT
 TIMEOUT
 ================================================================================
 
+|> WITH [EXPORTS A='file'] echo bonjour > $A\n
+TIMEOUT
+================================================================================
+
+|> WITH [EXPORTS A='fi le'] echo bonjour > $A\n
+TIMEOUT
+================================================================================
+
+|> WITH [EXPORTS A='fi le'] echo bonjour > "$A"\n
+TIMEOUT
+================================================================================
+
+|> WITH [EXPORTS A='fi le'] echo bonjour > '$A'\n
+TIMEOUT
+================================================================================
+
 |> WITH [EXPORTS A=' '] echo [$A]\n
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour > "fi le"\n
+TIMEOUT
+================================================================================
+
+|> WITH echo bonjour > 'fi le'\n
 TIMEOUT
 ================================================================================
 
@@ -3479,10 +3503,6 @@ TIMEOUT
 ================================================================================
 
 |> WITH [EXPORTS A='   bonjour     je     suis    splited   '] echo $A$A$A\n
-TIMEOUT
-================================================================================
-
-|> WITH [EXPORTS A=''Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum. ''] echo $A\n
 TIMEOUT
 ================================================================================
 
@@ -3642,22 +3662,8 @@ TIMEOUT
 TIMEOUT
 ================================================================================
 
-|> WITH [EXPORTS A='file'] echo bonjour > $A\n
-TIMEOUT
-================================================================================
 
-|> WITH [EXPORTS A='fi le'] echo bonjour > $A\n
-TIMEOUT
-================================================================================
-
-|> WITH [EXPORTS A='fi le'] echo bonjour > "$A"\n
-TIMEOUT
-================================================================================
-
-|> WITH [EXPORTS A='fi le'] echo bonjour > '$A'\n
-TIMEOUT
-================================================================================
-
+✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 |> WITH 'echo' 'bonjour'\n
 TIMEOUT
 ================================================================================
@@ -3770,15 +3776,6 @@ TIMEOUT
 TIMEOUT
 ================================================================================
 
-|> WITH echo bonjour > "fi le"\n
-TIMEOUT
-================================================================================
-
-|> WITH echo bonjour > 'fi le'\n
-TIMEOUT
-================================================================================
-
-✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 |> WITH ec''ho bonjour\n
 TIMEOUT
 ================================================================================

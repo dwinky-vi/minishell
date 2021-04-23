@@ -35,7 +35,7 @@ static t_envp	*parse_env(char *str)
 	return (env);
 }
 
-int		get_env_to_lst(t_vars *vars)
+void		get_env_to_lst(t_vars *vars)
 {
 	t_list	*head;
 	t_envp	*cur_envp;
@@ -56,5 +56,4 @@ int		get_env_to_lst(t_vars *vars)
 		envp_copy++;
 	}
 	vars->list_env = head;
-	return (0);
 }

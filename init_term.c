@@ -23,20 +23,23 @@ char	*get_term_name(t_list *lst)
 	return ("xterm-256color"); // as default
 }
 
-int	init_term(struct termios *term, char *term_name)
+void	init_term(struct termios *term, char *term_name)
 {
 	if (tcgetattr(0, term) == -1)
-		exit (0);
+		exit(1);
 	term->c_lflag &= ~(ECHO); // отключаем этот флаг (бит) устанавливается на ноль. Отключаем, чтобы read показывал, что печатается
 	term->c_lflag &= ~(ICANON); //переводим терминал в НЕ каноническое. В каноническом виде read завершается по нажатию \n
-	tcsetattr(0, TCSANOW, term);
-	tgetent(0, term_name); // подгружаем базу данных нашего терминала
-	return (0);
+	if (tcsetattr(0, TCSANOW, term) == -1)
+		exit(1);
+	if (tgetent(0, term_name)) // подгружаем базу данных нашего терминала
+		exit(1);
 }
 
+		/** возврат настроек терминала */
 void	return_term(struct termios *term)
 {
-	term->c_lflag |= (ECHO); // ВОЗВРАТ НАСТРОЕК ТЕРМИНАЛА
+	term->c_lflag |= (ECHO);
 	term->c_lflag |= (ICANON);
-	tcsetattr(0, TCSANOW, term);
+	if (tcsetattr(0, TCSANOW, term))
+		exit(1);
 }

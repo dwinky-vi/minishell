@@ -29,8 +29,7 @@ int	get_history(char ***history, size_t *k, t_vars *vars)
 		vars->history_path = ft_strjoin(home_dir, "/.minishell_history");
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (fd == -1)
-		mem_err();
-	// history_buf = *history;
+		exit(1);
 	history_buf = (char **)ft_calloc(1024, sizeof(char *));
 	if (history_buf == NULL)
 		mem_err();
@@ -53,6 +52,8 @@ void	set_history(char **history, int k, t_vars *vars)
 	int		fd;
 
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (fd == -1)
+		exit(1);
 	while (history[k])
 	{
 		ft_putstr_fd(history[k], fd);

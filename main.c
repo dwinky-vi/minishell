@@ -12,6 +12,13 @@
 
 #include "head_minishell.h"
 
+void	check_argv(int argc, char **argv, t_vars *vars)
+{
+
+	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
+		vars->miniflag = 1;											//!!!
+}
+
 int	set_vars(t_vars *vars, char **envp)
 {
 	vars->envp = envp_copy(envp);								//!!!
@@ -23,21 +30,20 @@ int	set_vars(t_vars *vars, char **envp)
 int main(int argc, char **argv, char **envp)
 {
 	t_vars	vars;
-	char	**history;
 	char	*str;
 	int		r;
+	char	**history;
 	size_t	history_size;
 	size_t	k;
 	char	*line;
 	int		cursor_pos;
 
-	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
-		vars.miniflag = 1;											//!!!
+	check_argv(argc, argv, &vars);
 	set_vars(&vars, envp);
+	signal_off();
 	init_term(&vars.term, get_term_name(vars.list_env)); // поставить проверки на termcaps функции, они могут вернуть -1
 	str = (char *)ft_calloc(4096, 1);
 	k = 0;
-	signal_off();
 	int start_k = get_history(&history, &k, &vars); // leaks!!!!!!!!!!!!
 	history_size = k;
 	line = (char *)ft_calloc(4096, 1);
@@ -53,7 +59,7 @@ int main(int argc, char **argv, char **envp)
 		{
 			dup2(tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
 			r = read(0, str, 4096);
-			str[r] = '\0';
+			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')
@@ -177,8 +183,6 @@ int main(int argc, char **argv, char **envp)
 					line = ft_strjoin_free(line, append, 3);
 					free(history[k]);
 					history[k] = ft_strdup(line);
-					// tputs(delete_line, 1, ft_putchar);
-					// print_prompt();
 					clear_command_line(cursor_pos, line);
 					write(1, line, ft_strlen(line));
 					tputs(restore_cursor, 1, ft_putchar);
@@ -205,6 +209,8 @@ int main(int argc, char **argv, char **envp)
 
 // -|echo ; ;
 // -|;
+// >>>|;;
+// echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // echo ||  ;
 // export lol=123 olo=$lol
 // echo $olo

@@ -86,11 +86,11 @@ void	signal_off(void);
 
 char	*get_term_name(t_list *lst);
 
-int		get_env_to_lst(t_vars *vars);
+void		get_env_to_lst(t_vars *vars);
 
 		/** terminal **/
 
-int		init_term(struct termios *term, char *term_name);
+void		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 

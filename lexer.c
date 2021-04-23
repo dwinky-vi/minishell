@@ -38,11 +38,12 @@ int	lexer(char *line)
 	{
 		if (line[k] == '\\')
 		{
-			if (line[k + 1] == '\0')
+			k++;
+			if (line[k] == '\0')
 				return (syntax_error("\\"));
-			k += 2;
+			k++;
 		}
-		if (line[k] == '\"')
+		else if (line[k] == '\"')
 		{
 			k++;
 			while (line[k] != '\"')
@@ -53,16 +54,18 @@ int	lexer(char *line)
 					return (syntax_error("\""));
 				k++;
 			}
+			k++;
 		}
-		if (line[k] == '\'')
+		else if (line[k] == '\'')
 		{
 			k++;
 			while (line[k] && line[k] != '\'')
 				k++;
 			if (line[k] == '\0')
 				return (syntax_error("\'"));
+			k++;
 		}
-		if (line[k] == '|')
+		else if (line[k] == '|')
 		{
 			int kk = k;
 			int f_cmd_before = FALSE;
@@ -80,7 +83,45 @@ int	lexer(char *line)
 			else if (line[k] == '|' || line[k] == ';' || line[k] == '\0')
 				return (syntax_error("|"));
 		}
-		if (line[k] == ';')
+		else if (line[k] == '>')
+		{
+			if (!ft_strncmp(line + k, ">>>>", 4))
+				return (syntax_error(">>"));
+			else if (!ft_strncmp(line + k, ">>>", 3))
+				return (syntax_error(">"));
+			while (line[k] == '>')
+				k++;
+			while (line[k] == ' ')
+				k++;
+			if (line[k] == '>' && line[k + 1] == '>')
+				return (syntax_error(">>"));
+			if (line[k] == '>' )
+				return (syntax_error(">"));
+			if (line[k] == ';')
+				return (syntax_error(";"));
+			if (line[k] == '\0')
+				return (syntax_error("newline"));
+		}
+		else if (line[k] == '<')
+		{
+			if (!ft_strncmp(line + k, "<<<<", 4))
+				return (syntax_error("<<"));
+			else if (!ft_strncmp(line + k, "<<<", 3))
+				return (syntax_error("<"));
+			while (line[k] == '<')
+				k++;
+			while (line[k] == ' ')
+				k++;
+			if (line[k] == '<' && line[k + 1] == '<')
+				return (syntax_error("<<"));
+			if (line[k] == '<' )
+				return (syntax_error("<"));
+			if (line[k] == ';')
+				return (syntax_error(";"));
+			if (line[k] == '\0')
+				return (syntax_error("newline"));
+		}
+		else if (line[k] == ';')
 		{
 			if (line [k + 1] == ';')
 				return (syntax_error(";;"));
@@ -92,7 +133,8 @@ int	lexer(char *line)
 			else if (line[k] == ';')
 				return (syntax_error(";"));
 		}
-		k++;
+		else
+			k++;
 	}
 	return (0);
 }

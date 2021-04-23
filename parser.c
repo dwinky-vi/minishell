@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/23 18:47:02 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 01:09:22 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ int	parser(char *line, t_vars *vars)
 
 	if (line == NULL)
 		return (-1);
-	// if (lexer(line))
-	// 	return (1);
-	command.args = (char **)ft_calloc(30, sizeof(char *)); // кол-во аргументов
+	if (lexer(line))
+		return (1);
+	command.args = (char **)ft_calloc(512, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
 	{
+		// command.fd[0] = 0;
+		// command.fd[1] = 1;
 		while (line[k] == ' ')
 			k++;
 		argc = 0;
@@ -128,6 +130,33 @@ int	parser(char *line, t_vars *vars)
 				k++;
 				break ;
 			}
+			else if (line[k] == '>')
+			{
+				vars->f_redir = TRUE;
+				char *file_name;
+				if (line[k] == '>' && line[k + 1] == '>')
+				{
+					k += 2;
+					while (line[k] == ' ')
+						k++;
+					int start = k;
+					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+						k++;
+					file_name = ft_substr(line, start, k - start);
+					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
+				}
+				else if (line[k] == '>')
+				{
+					k++;
+					while (line[k] == ' ')
+						k++;
+					int start = k;
+					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+						k++;
+					file_name = ft_substr(line, start, k - start);
+					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
+				}
+			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
 				char *start;
@@ -146,32 +175,28 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		signal (SIGQUIT, SIG_DFL); //									!!!
-		signal (SIGINT, SIG_DFL); //									!!!
-		if (vars->f_pipe == TRUE || vars->f_redir == TRUE) //			!!!
+		// k = 0;
+		// while (command.args[k])
+		// {
+		// 	ft_putendl_fd(command.args[k], 1);
+		// 	k++;
+		// }
+		signal_on();
+		if (vars->f_pipe == TRUE) //			!!!
 			make_pipe_or_redir(&command, vars); //						!!!
 		else //															!!!
 			processing(&command, vars); //								!!!
-		signal (SIGQUIT, SIG_IGN); //									!!!
-		signal (SIGINT, SIG_IGN); //									!!!
+		vars->f_pipe = FALSE;
+		vars->f_redir = FALSE;
+		signal_off();
 		free_command(&command);
 		if (line[k] == ';')
 			k++;
-		vars->f_pipe = FALSE;
 	}
 	free(command.args);
 	free(line);
 	return (0);
 }
-	/** Душим, мальчики: **/
-
-// echo!2
-// echo "123"'456' это один символ
-// echo 'qwe'123
-// echo "This $"
-// echo " ' " " ' "
-// export $qwe=123; echo "This \$qwe"\=$qwe\ \!
-// export qwe=$; echo "This \$qwe"$qwePATH
 
 // Символ "!", помещенный в двойные кавычки, порождает сообщение об ошибке, если команда вводится с командной строки.
 // Вероятно это связано с тем, что этот символ интерпретируется как попытка обращения к истории команд.

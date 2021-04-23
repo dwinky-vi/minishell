@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 19:20:06 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/23 22:36:20 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,26 +82,37 @@ void	new_envp(t_vars *vars);
 void	delet_list(t_list **list_env);
 void	env_err(t_command *cmd, int i);
 void	make_pipe_or_redir(t_command *cmd, t_vars *vars);
+void	signal_on(void);
+void	signal_off(void);
 
-t_list	*get_env(char **envp);
+// t_list	*get_env(char **envp);
 
 char	*get_term_name(t_list *lst);
 
-int		init_term(struct termios *term, char *term_name);
+void		get_env_to_lst(t_vars *vars);
+
+		/** terminal **/
+
+void		init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
-
-int		get_history(char ***history, size_t *k, t_vars *vars);
-
-void	set_history(char **history, int k, t_vars *vars);
 
 int		ft_putchar(int ch);
 
 void	print_prompt(void);
 
+void	clear_command_line(int cursor_pos, char *previous_history);
+
 int		is_hotkey(char *str);
 
+		/** history **/
+
+int		get_history(char ***history, size_t *k, t_vars *vars);
+
+void	set_history(char **history, int k, t_vars *vars);
+
 		/** keys **/
+
 void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);
 
 void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
@@ -129,4 +140,10 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
 		/** lexer **/
 
 int		lexer(char *line);
+
+int		lexer_right_redir(char *line, size_t *k);
+
+int		lexer_left_redir(char *line, size_t *k);
+
+int		syntax_error(char *token);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 20:35:08 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/22 19:32:51 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@ int	get_history(char ***history, size_t *k, t_vars *vars)
 	else
 		vars->history_path = ft_strjoin(home_dir, "/.minishell_history");
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
-	history_buf = *history;
 	if (fd == -1)
-		mem_err();
-	history_buf = (char **)ft_calloc(500, sizeof(char *));
+		exit(1);
+	history_buf = (char **)ft_calloc(1024, sizeof(char *));
 	if (history_buf == NULL)
 		mem_err();
 	while ((r = get_next_line(fd, &line)) >= 0)
@@ -53,6 +52,8 @@ void	set_history(char **history, int k, t_vars *vars)
 	int		fd;
 
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
+	if (fd == -1)
+		exit(1);
 	while (history[k])
 	{
 		ft_putstr_fd(history[k], fd);

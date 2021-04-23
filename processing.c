@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 19:20:47 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 01:11:48 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,11 @@ void	processing(t_command *cmd, t_vars *vars)
 {
 	int			name_len;
 
-	cmd->fd[0] = 0;
-	cmd->fd[1] = 1;
+	if (!vars->f_redir)
+	{
+		cmd->fd[0] = 0;
+		cmd->fd[1] = 1;
+	}
 	g_code = 0;
 	if (cmd->args[0]) // Обновляй $_ !!!
 	{
@@ -119,4 +122,6 @@ void	processing(t_command *cmd, t_vars *vars)
 		else
 			borning_child(cmd, vars);
 	}
+	if (vars->f_redir)
+		close(cmd->fd[1]);
 }

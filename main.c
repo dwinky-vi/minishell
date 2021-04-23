@@ -6,68 +6,49 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/23 04:15:44 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 00:55:09 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	func_for_signal(int param)
+void	check_argv(int argc, char **argv, t_vars *vars)
 {
-	signal (SIGQUIT, SIG_IGN);
-	signal (SIGINT, SIG_IGN);
-	// signal (SIGTERM, SIG_IGN);    			// !!! Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell) !!!
+
+	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
+		vars->miniflag = 1;											//!!!
 }
 
-void	clear_terminal_before_promt(int cursor_pos, char *previous_history)
+int	set_vars(t_vars *vars, char **envp)
 {
-	int len;
-
-	if (previous_history == NULL)
-		len = 0;
-	else
-		len = ft_strlen(previous_history);
-	while (cursor_pos < len)
-	{
-		tputs(cursor_right, 1, ft_putchar);
-		cursor_pos++;
-	}
-	while (cursor_pos > 0)
-	{
-		tputs(cursor_left, 1, ft_putchar);
-		tputs(delete_character, 1, ft_putchar);
-		cursor_pos--;
-	}
+	envp_copy(vars, envp);								//!!!
+	get_env_to_lst(vars);
+	init_env(vars);												//!!!
+	vars->f_pipe = FALSE;
+	vars->f_redir = FALSE;
+	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	t_vars	vars;
-	char	**history;
 	char	*str;
 	int		r;
+	char	**history;
 	size_t	history_size;
 	size_t	k;
 	char	*line;
 	int		cursor_pos;
-	int		fd2;
 
-	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
-		vars.miniflag = 1;											//!!!
-	envp_copy(&vars, envp);									//!!!
-
-    vars.list_env = get_env(vars.envp);
-	init_term(&vars.term, get_term_name(vars.list_env));
-	init_env(&vars);												//!!!
-	str = (char *)ft_calloc(2000, 1);
-	fd2 = open("testing", O_CREAT | O_RDWR | O_APPEND, 0600);
+	check_argv(argc, argv, &vars);
+	set_vars(&vars, envp);
+	signal_off();
+	init_term(&vars.term, get_term_name(vars.list_env)); // поставить проверки на termcaps функции, они могут вернуть -1
+	str = (char *)ft_calloc(4096, 1);
 	k = 0;
-
-	signal(SIGINT, &func_for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
-	signal(SIGQUIT, &func_for_signal); // Это ловит ctrl-\. Код сигнала –– 3
 	int start_k = get_history(&history, &k, &vars); // leaks!!!!!!!!!!!!
 	history_size = k;
-	line = (char *)ft_calloc(2000, 1);
+	line = (char *)ft_calloc(4096, 1);
 	cursor_pos = 0;
 	char *old_history_line;
 
@@ -80,7 +61,8 @@ int main(int argc, char **argv, char **envp)
 		while (strcmp(str, "\n"))
 		{
 			dup2(vars.tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
-			r = read(0, str, 100);
+			r = read(0, str, 4096);
+			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')
@@ -93,11 +75,11 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
-				clear_terminal_before_promt(cursor_pos, history[k]);
+				clear_command_line(cursor_pos, history[k]);
 				cursor_pos = 0;
 				if (k > 0)
 					k--;
-				free(old_history_line); // очищаем лики
+				free(old_history_line);
 				old_history_line = ft_strdup(history[k]);
 				if (history_size != 0)
 				{
@@ -109,12 +91,12 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
-				clear_terminal_before_promt(cursor_pos, history[k]);
+				clear_command_line(cursor_pos, history[k]);
 				if (k < history_size)
 					k++;
 				if (history_size == 0)
 					k = 0;
-				free(old_history_line); // очищаем лики
+				free(old_history_line);
 				old_history_line = ft_strdup(history[k]);
 				if (history[k] == NULL)
 				{
@@ -157,7 +139,7 @@ int main(int argc, char **argv, char **envp)
 				old_history_line = ft_strdup(history[k]);
 				pressed_key_backspace(&cursor_pos, &line, &history[k]);
 			}
-			else if (is_hotkey(str)) // TAB и всякие спец символы
+			else if (!ft_strncmp(str, "\t", 1) || is_hotkey(str)) // TAB и всякие спец символы
 			{
 			}
 			else if (!strcmp(str, "\e[H")) /** курсор в начало строки **/
@@ -174,7 +156,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(ft_strtrim(line, " "), &vars);
-					printf("status = %d\n", g_code);
+					// printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -204,8 +186,7 @@ int main(int argc, char **argv, char **envp)
 					line = ft_strjoin_free(line, append, 3);
 					free(history[k]);
 					history[k] = ft_strdup(line);
-					tputs(delete_line, 1, ft_putchar);
-					print_prompt();
+					clear_command_line(cursor_pos, line);
 					write(1, line, ft_strlen(line));
 					tputs(restore_cursor, 1, ft_putchar);
 					tputs(cursor_right, 1, ft_putchar);
@@ -223,22 +204,26 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	k = 0;
-	// while (history[k])
-	// 	ft_putendl_fd(history[k++], 1);
-	// ft_putendl_fd("*****************************", fd2);
-	if (vars.miniflag != 1)	//										!!! Условие возврата настроек терминала !!!
+	if (vars.miniflag != 1)										//!!!!
 		return_term(&vars.term);
 	set_history(history, start_k, &vars);
 	return (1); //													!!! Ctrl-D возвращает 1 !!!
 }
 
-// обрабатывать одинаково
 // -|echo ; ;
 // -|;
-
-// если есть ошибка синтаксиса, то ничего не отсылается в логику
+// >>>|;;
+// << >
+// < >>
+// echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // echo ||  ;
-
 // export lol=123 olo=$lol
 // echo $olo
+
+// echo!2
+// echo "123"'456' это один символ
+// echo 'qwe'123
+// echo "This $"
+// echo " ' " " ' "
+// export $qwe=123; echo "This \$qwe"\=$qwe\ \!
+// export qwe=$; echo "This \$qwe"$qwePATH

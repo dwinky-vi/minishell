@@ -1,0 +1,1354 @@
+❌❓✅
+
+❌|> WITH [EXPORTS A=''Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum. ''] echo $A\n
+TIMEOUT
+================================================================================
+
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd .; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test$
+/Users/dwinky/.cache/minishell_test$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ../..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache$
+/Users/dwinky/.cache$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ../../..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky$
+/Users/dwinky$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ../../../..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users$
+/Users$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ../../../../..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ../../../../../..; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd /; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd ''; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd '' ''; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅❌|> WITH echo $PWD; echo $OLDPWD; cd '' '' ''; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ' '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:  : No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH [SETUP mkdir d] echo $PWD; echo $OLDPWD; cd d ''; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH [SETUP mkdir d] echo $PWD; echo $OLDPWD; cd d d; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH [SETUP mkdir d] echo $PWD; echo $OLDPWD; cd d ' '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox/d$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS HOME='/Users/dwinky'] echo $PWD; echo $OLDPWD; cd $HOME; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky$
+/Users/dwinky$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /.; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /./; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /././././; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+❌|> WITH echo $PWD; echo $OLDPWD; cd //; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ///; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ////; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd //////////////////////////////////////////////////////; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+❌|> WITH echo $PWD; echo $OLDPWD; cd; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: HOME not set$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS HOME='/Users/dwinky'] echo $PWD; echo $OLDPWD; cd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd ' /'; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:  /: No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd ' / '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:  / : No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo $PWD; echo $OLDPWD; cd '                  /'; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:                   /: No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd '                  /              '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:                   /              : No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd ' // '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:  // : No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd //home; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/home$
+/home$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd ' //home'; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:  //home: No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd '     //home    '; pwd; echo $PWD; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd:      //home    : No such file or directory$
+/Users/dwinky/.cache/minishell_test/sandbox$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 001 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 002 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 003 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 004 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 005 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 006 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 007 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 010 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 020 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 030 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 040 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 050 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 060 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 070 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 100 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 200 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 300 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 400 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 500 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 600 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 700 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 755 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 644 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 311 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 111 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 222 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 333 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 0777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 1000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 2000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 3000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 4000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 5000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 6000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 7000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 1777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 2777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 3777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 4777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 5777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 6777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 7777 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/Users/dwinky/.cache/minishell_test/sandbox$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP mkdir -m 0000 d] echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+minishell: cd: d: Permission denied$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; unset PWD; cd /dev; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo $PWD; echo $OLDPWD; cd /; echo $PWD; echo $OLDPWD; export PWD=bonjour; cd /dev; echo $OLDPWD\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+/Users/dwinky/.cache/minishell_test/sandbox$
+$
+/$
+/Users/dwinky/.cache/minishell_test/sandbox$
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH Cd .\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: Cd: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH cD .\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: cD: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] Cd .\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] cD .\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH echo\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo lalalala lalalalal alalalalal alalalala\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+lalalala lalalalal alalalalal alalalala$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo lalalala                lalalalal      alalalalal alalalala\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+lalalala lalalalal alalalalal alalalala$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum. \n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum.$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH echo -n bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n lalalala lalalalal alalalalal alalalala\n
+TIMEOUT
+================================================================================
+
+|> WITH echo -n lalalala                lalalalal      alalalalal alalalala\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+lalalala lalalalal alalalalal alalalala
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum. \n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur. Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed. Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit. Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis. Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis. Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum. Placeat cumque incidunt non repellat sunt perspiciatis ullam. Repellendus repudiandae nostrum quia quis corrupti. Rerum veniam earum cumque pariatur accusantium voluptatum omnis. Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet. Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos. Consequuntur quae corrupti atque. Numquam enim ut ut. Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum.
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo bonjour -n\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour -n$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+✅|> WITH echo -n bonjour -n\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour -n
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH                         echo                     bonjour             je\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour je$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH                         echo       -n            bonjour             je\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour je
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo a '' b '' c '' d\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+a  b  c  d$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo a "" b "" c "" d\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+a  b  c  d$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n a '' b '' c '' d\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+a  b  c  d
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n a "" b "" c "" d\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+a  b  c  d
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo '' '' ''\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+  $
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH Echo bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: Echo: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH eCho bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: eCho: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH ecHo bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: ecHo: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echO bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: echO: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH EchO bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: EchO: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH eCHo bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: eCHo: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH EcHo bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: EcHo: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH eChO bonjour\n
+|  STATUS: expected 127 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: eChO: command not found$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] Echo bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] eCho bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] ecHo bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] echO bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] EchO bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] eCHo bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] EcHo bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] eChO bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] eChO -e 'bonjo\nur'\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+-e bonjo\nur$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH echo -n -n -n -n bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+❌|> WITH echo -nnnnnnnnnnnnnnnnnnnnn bonjour\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+❌|> WITH echo -nnnnnnnnnnnnnnnnnnnnn -n -n -n bonjour -n -n\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+bonjour -n -n
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH env\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+$
+PATH=/Users/dwinky/.cache/minishell_test/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+TERM=xterm-256color$
+_=/Users/dwinky/.cache/minishell_test/bin/env
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP export A=a] env\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+$
+PATH=/Users/dwinky/.cache/minishell_test/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+TERM=xterm-256color$
+_=/Users/dwinky/.cache/minishell_test/bin/env
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP export A=a B=b C=c] env\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+$
+PATH=/Users/dwinky/.cache/minishell_test/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+TERM=xterm-256color$
+_=/Users/dwinky/.cache/minishell_test/bin/env
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [SETUP export A=a B=b C=c] env | cat -e\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+$
+PATH=/Users/dwinky/.cache/minishell_test/bin$$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$$
+SHLVL=1$$
+TERM=xterm-256color$$
+_=/Users/dwinky/.cache/minishell_test/bin/env$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH Env\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+TERM=xterm-256color$
+PATH=/Users/dwinky/.cache/minishell_test/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+_=/Users/dwinky/.cache/minishell_test/bin/Env$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH enV\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+TERM=xterm-256color$
+PATH=/Users/dwinky/.cache/minishell_test/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+_=/Users/dwinky/.cache/minishell_test/bin/enV$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] Env\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+TERM=xterm-256color$
+PATH=/bin:/usr/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+_=/usr/bin/Env$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH [EXPORTS PATH='/bin:/usr/bin'] enV\n
+|  STATUS: expected 0 actual -11
+|---------------------------------------EXPECTED--------------------------------
+TERM=xterm-256color$
+PATH=/bin:/usr/bin$
+PWD=/Users/dwinky/.cache/minishell_test/sandbox$
+SHLVL=1$
+_=/usr/bin/enV$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH exit\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit 1\n
+|  STATUS: expected 1 actual -11
+================================================================================
+
+|> WITH exit 2\n
+|  STATUS: expected 2 actual -11
+================================================================================
+
+|> WITH exit 3\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit ' 3'\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit '\t3'\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit '\t\f\r 3'\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit '3 '\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit '3\t'\n
+|  STATUS: expected 3 actual -11
+================================================================================
+
+|> WITH exit '3\r'\n
+|  STATUS: expected 255 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: exit: 3
+: numeric argument required$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH exit '3\t\f\r '\n
+|  STATUS: expected 255 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: exit: 3	
+ : numeric argument required$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH exit '3     a'\n
+|  STATUS: expected 255 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: exit: 3     a: numeric argument required$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH exit '3\t\t\ta'\n
+|  STATUS: expected 255 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: exit: 3			a: numeric argument required$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+
+|> WITH exit 0\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit -0\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit -1\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit 255\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit 256\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit 2000000\n
+|  STATUS: expected 128 actual -11
+================================================================================
+
+|> WITH exit -2000000\n
+|  STATUS: expected 128 actual -11
+================================================================================
+
+|> WITH exit 2147483647\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit -2147483648\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit 2147483648\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit -2147483649\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit 3147483648\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit -3147483649\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit 4294967295\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit 4294967296\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit -9223372036854775808\n
+|  STATUS: expected 0 actual -11
+================================================================================
+
+|> WITH exit 9223372036854775807\n
+|  STATUS: expected 255 actual -11
+================================================================================
+
+|> WITH exit -9223372036854775809\n
+|  STATUS: expected 255 actual -11
+|---------------------------------------EXPECTED--------------------------------
+minishell: exit: -9223372036854775809: numeric argument required$
+|---------------------------------------ACTUAL----------------------------------
+================================================================================
+

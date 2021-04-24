@@ -6,11 +6,16 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:07:29 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/15 15:45:00 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 20:55:47 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
+
+#define LIGHT_GREEN	"\e[1;32m"
+#define YELLOW "\e[1;33m"
+#define CYAN "\e[1;36m"
+#define NO_COLOR "\e[0m"
 
 void	ft_putline(char *s1, char *s2, char *s3)
 {
@@ -34,7 +39,7 @@ int	ft_putchar(int ch)
 
 void	print_prompt(void)
 {
-	write(1, "\e[1;33m", 7); // the color
+	write(1, LIGHT_GREEN, 7);
 	write(1, "minishell-> ", 12);
-	write(1, "\e[0m", 4);
+	write(1, NO_COLOR, 4);
 }

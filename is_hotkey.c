@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 18:37:05 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 18:58:41 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 20:29:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,3 @@ int	is_hotkey(char *str)
 		return (1);
 	return (0);
 }
-
-	// if (!strcmp(str, "\t") || !strcmp(str, "\e[1;3A") || !strcmp(str, "\e[1;3B") || \
-	// 	!strcmp(str, "\e[1;2A") || !strcmp(str, "\e[1;2B") || !strcmp(str, "\e[1;2C") || !strcmp(str, "\e[1;2D") || \
-	// 	!strcmp(str, "\e[1;4A") || !strcmp(str, "\e[1;4B") || !strcmp(str, "\e[1;4C") || !strcmp(str, "\e[1;4D") || \
-	// 	!strcmp(str, "\e[1;6A") || !strcmp(str, "\e[1;6B") || !strcmp(str, "\e[1;6C") || !strcmp(str, "\e[1;6D") || \
-	// 	!strcmp(str, "\e[1;7A") || !strcmp(str, "\e[1;7B") || !strcmp(str, "\e[1;7C") || !strcmp(str, "\e[1;7D") || \
-	// 	!strcmp(str, "\e[1;8A") || !strcmp(str, "\e[1;8B") || !strcmp(str, "\e[1;8C") || !strcmp(str, "\e[1;8D"))

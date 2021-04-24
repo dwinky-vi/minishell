@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:14:34 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/19 22:41:33 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 20:29:28 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line)
 {
-	int cur_pos;
+	int	cur_pos;
 
 	cur_pos = *cursor_pos;
 	if (cur_pos > 0)

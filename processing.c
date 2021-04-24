@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/24 05:08:50 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 02:32:00 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,11 @@ void	processing(t_command *cmd, t_vars *vars)
 	g_code = 0;
 	if (cmd->args[0]) // Обновляй $_ !!!
 	{
-		// vars->command = ft_strdup(cmd->args[0]);
+		if (ft_array_len(cmd->args) == 1 && cmd->args[0][0] == '\0')
+		{
+			shell_err(cmd->args, cmd->fd[1], 127, "command not found");
+			return ;
+		}
 		name_len = ft_strlen(cmd->args[0]) + 1;
 		if (!ft_strncmp(cmd->args[0], "echo", name_len))
 			make_echo(cmd, vars);

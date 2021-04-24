@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 05:07:18 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 01:30:37 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int main(int argc, char **argv, char **envp)
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
+			g_code = 0;
 			r = read(0, str, 4096);
 			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D

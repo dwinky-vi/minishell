@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 19:31:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 02:29:30 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,27 +119,33 @@ void	making_export(t_list *list_env, int fd_1)
 	ft_free_array(env);
 }
 
-// void	check_args(t_command *cmd, t_list **list_env)
-// {
-// 	int		i;
-// 	int		j;
+int	check_key(t_command *cmd, char *key, int i)
+{
+	int		j;
 
-// 	i = -1;
-// 	while (cmd->args[++i])
-// 	{
-// 		j = -1;
-// 		while (cmd->args[i][++j])
-// 		{
-// 			if (cmd->args[i][j] == '=')
-// 			{
-// 				if (cmd->args[i][j - 1] == ' ' || cmd->args[i][j + 1] == ' ')
-// 					printf("bash: %s: %s: not a valid identifier\n", cmd->args[0], cmd->args[1]);
-// 			}
-// 		}
-// 	}
-// }
+	j = -1;
+	if (!ft_isalpha(key[0]))
+	{
+		env_err(cmd, i);
+		return (0);
+	}
+	while (key[++j])
+	{
+		if (!ft_isalnum(key[j]))
+		{
+			env_err(cmd, i);
+			return (0);
+		}
+	}
+	return (1);
+}
 
-void	make_export(t_command *cmd, t_vars *vars)
+void	adding_variable()
+{
+
+}
+
+void	add_variable(t_command *cmd, t_vars *vars)
 {
 	char	*key;
 	char	*value;
@@ -147,35 +153,53 @@ void	make_export(t_command *cmd, t_vars *vars)
 	int		i;
 	char	**env_value;
 
+	i = 0;
+	while (cmd->args[++i])
+	{
+		if (cmd->args[i][0] == '=')
+		{
+			env_err(cmd, i);
+			continue ;
+		}
+		equal = equal_sign(cmd->args[i]); //	+=	!!!!
+		if (!equal)
+		{
+			env_err(cmd, i);
+			continue ;
+		}
+
+		key = ft_substr(cmd->args[i], 0, equal);
+		if (!key)
+			mem_err();
+		if (!check_key(cmd, key, i))
+		{
+			free(key);
+			continue ;
+		}
+		value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
+		if (!get_env_value(vars->list_env, key))
+			add_list_env(cmd->args[i], vars->list_env);
+		else
+		{
+			env_value = change_env(vars->list_env, key);
+			free(*env_value);
+			*env_value = ft_strdup(value);
+			if (!env_value)
+				mem_err();
+		}
+		free(key);
+		free(value);
+	}
+}
+
+void	make_export(t_command *cmd, t_vars *vars)
+{
+
 	if (!cmd->args[1])
 		making_export(vars->list_env, cmd->fd[1]);
 	else
 	{
-		i = 0;
-		while (cmd->args[++i])
-		{
-			if (!ft_isalpha(cmd->args[i][0]))
-				env_err(cmd, i);
-			equal = equal_sign(cmd->args[i]); //	+=	!!!!
-			if (!equal) //								!!!!
-				return ;
-			key = ft_substr(cmd->args[i], 0, equal);
-			value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
-			if (!key || !key)
-				mem_err();
-			if (!get_env_value(vars->list_env, key))
-				add_list_env(cmd->args[i], vars->list_env);
-			else
-			{
-				env_value = change_env(vars->list_env, key);
-				free(*env_value);
-				*env_value = ft_strdup(value);
-				if (!env_value)
-					mem_err();
-			}
-			free(key);
-			free(value);
-		}
+		add_variable(cmd, vars);
 	}
 	new_envp(vars);
 }

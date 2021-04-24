@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 22:19:24 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/24 04:19:50 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 01:03:17 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ void	make_pipe_or_redir(t_command *cmd, t_vars *vars)
 		return ;
 	else if (pid == 0)
 	{
-		// if (vars->f_redir)
-		// {
-		// 	dup2(cmd->fd[0], 0);)
-		// 	dup2(cmd->fd[1], 1);
-		// }
 		if (vars->f_pipe)
 			dup2(cmd->fd[1], 1);
 		processing(cmd, vars);
@@ -43,7 +38,11 @@ void	make_pipe_or_redir(t_command *cmd, t_vars *vars)
 			dup2(cmd->fd[0], 0);
 		close(cmd->fd[0]);
 		close(cmd->fd[1]);
+		signal(SIGINT, &for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
+		signal(SIGQUIT, &for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+		return_term(&vars->term);
 		wait(&status);
+		init_term(&vars->term, get_term_name(vars->list_env));
 		g_code = status / 256;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 22:36:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 01:00:15 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	env_err(t_command *cmd, int i);
 void	make_pipe_or_redir(t_command *cmd, t_vars *vars);
 void	signal_on(void);
 void	signal_off(void);
+void	for_signal(int param);
 
 // t_list	*get_env(char **envp);
 

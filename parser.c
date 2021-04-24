@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 02:13:30 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 02:45:08 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,23 +196,23 @@ int	parser(char *line, t_vars *vars)
 				else
 					command.args[argc] = ft_strjoin_free(command.args[argc], ft_substr(start, 0, line + k - start), 3);
 			}
+			// if (line[k] == ' ')
+			// 	argc++;
+			// while (line[k] == ' ')
+				// k++;
+			if (line[k] == ' ')
+			{
+				argc++;
+				while (line[k] == ' ')
+					k++;
+				if (line[k] == ';' || line[k] == '\0')
+				{
+					argc--;
+					break ;
+				}
+			}
 			if (line[k] == ';' || line[k] == '\0')
 				break ;
-			if (line[k] == ' ')
-				argc++;
-			while (line[k] == ' ')
-				k++;
-			// if (line[k] == ' ')
-			// {
-			// 	argc++;
-			// 	while (line[k] == ' ')
-			// 		k++;
-			// 	if (line[k] == ';' || line[k] == '\0')
-			// 	{
-			// 		argc--;
-			// 		break ;
-			// 	}
-			// }
 		}
 		signal_on();
 		// k = 0;

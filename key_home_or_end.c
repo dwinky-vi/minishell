@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_home_end.c                                     :+:      :+:    :+:   */
+/*   key_home_or_end.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:06:17 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/17 19:55:04 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 01:56:11 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	pressed_key_home(int *cursor_pos, char **line)
+void	key_home_or_end(char *str, char *line, int *cursor_pos)
 {
-	while (*cursor_pos > 0 )
+	if (!strcmp(str, "\e[H"))
 	{
-		(*cursor_pos)--;
-		tputs(cursor_left, 1, ft_putchar);
+		while (*cursor_pos > 0 )
+		{
+			(*cursor_pos)--;
+			tputs(cursor_left, 1, ft_putchar);
+		}
 	}
-}
-
-void	pressed_key_end(int *cursor_pos, char **line)
-{
-	while (*cursor_pos < ft_strlen(*line))
+	else if (!strcmp(str, "\e[F"))
 	{
-		(*cursor_pos)++;
-		tputs(cursor_right, 1, ft_putchar);
+		while (*cursor_pos < ft_strlen(line))
+		{
+			(*cursor_pos)++;
+			tputs(cursor_right, 1, ft_putchar);
+		}
 	}
 }

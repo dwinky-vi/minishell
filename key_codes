@@ -1,0 +1,38 @@
+⬆️ –– "\e[A"
+⬇️ –– "\e[B"
+<- –– "\e[D"
+-> –– "\e[C"
+***********************
+backspace –– "\177"
+delete (удалить под курсором) –– "\e[3~"
+курсор в начало строки –– "\e[H"
+курсор в конец строки –– "\e[F"
+***********************
+shift + ⬆️   –– "\e[;2A"
+shift + ⬇️   –– "\e[;2B"
+shift + <-   –– "\e[;2D"
+shift + ->   –– "\e[;2C"
+***********************
+option + ⬆️   –– "\e[;3A"
+option + ⬇️   –– "\e[;3B"
+***********************
+shift + option + ⬆️   –– "\e[;4A"
+shift + option + ⬇️   –– "\e[;4B"
+shift + option + ->   –– "\e[;4C"
+shift + option + <-   –– "\e[;4D"
+***********************
+shift + control + ⬆️   –– "\e[;6A"
+shift + control + ⬇️   –– "\e[;6B"
+shift + control + ->   –– "\e[;6C"
+shift + control + <-   –– "\e[;6D"
+***********************
+control + option + ⬆️   –– "\e[;7A"
+control + option + ⬇️   –– "\e[;7B"
+control + option + ->   –– "\e[;7C"
+control + option + <-   –– "\e[;7D"
+***********************
+shift + control + option + ⬆️   –– "\e[;8A"
+shift + control + option + ⬇️   –– "\e[;8B"
+shift + control + option + ->   –– "\e[;8C"
+shift + control + option + <-   –– "\e[;8D"
+***********************

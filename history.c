@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/22 19:32:51 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 20:27:50 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ int	get_history(char ***history, size_t *k, t_vars *vars)
 		else
 			free(line);
 		if (r == 0)
-			break;
+			break ;
 	}
-    *history = history_buf;
+	*history = history_buf;
 	close(fd);
-    return (*k);
+	return (*k);
 }
 
 void	set_history(char **history, int k, t_vars *vars)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(vars->history_path, O_CREAT | O_RDWR | O_APPEND, 0600);
 	if (fd == -1)

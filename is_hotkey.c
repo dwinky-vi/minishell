@@ -6,43 +6,11 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 18:37:05 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 20:29:12 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 21:14:03 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
-
-/**
- * shift + ↑⬆︎⬇︎⬅︎➡⬅︎➡️⬅️⬆️➡️➡️➡️➡️⬅️🔼⏩⬇️
- * shift + ⬆️   –– ;2A
- * shift + ⬇️   –– ;2B
- * shift + <-   –– ;2D
- * shift + ->   –– ;2C
- * ******************
- * option + ⬆️   –– ;3A
- * option + ⬇️   –– ;3B
- * ******************
- * shift + option + ⬆️   –– ;4A
- * shift + option + ⬇️   –– ;4B
- * shift + option + ->   –– ;4C
- * shift + option + <-   –– ;4D
- * ******************
- * shift + control + ⬆️   –– ;6A
- * shift + control + ⬇️   –– ;6B
- * shift + control + ->   –– ;6C
- * shift + control + <-   –– ;6D
- * ******************
- * control + option + ⬆️   –– ;7A
- * control + option + ⬇️   –– ;7B
- * control + option + ->   –– ;7C
- * control + option + <-   –– ;7D
- * ******************
- * shift + control + option + ⬆️   –– ;8A
- * shift + control + option + ⬇️   –– ;8B
- * shift + control + option + ->   –– ;8C
- * shift + control + option + <-   –– ;8D
- * ******************
- */
 
 int	is_hotkey(char *str)
 {

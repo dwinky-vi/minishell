@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 05:10:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 21:50:14 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	parser(char *line, t_vars *vars)
 	size_t		count;
 
 	if (line == NULL)
-		return (-1);
-	if (lexer(line))
-		return (1);
+		return (FAILURE_CODE);
+	if (lexer(line) == FAILURE_CODE)
+		return (FAILURE_CODE);
 	command.args = (char **)ft_calloc(512, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -79,7 +79,7 @@ int	parser(char *line, t_vars *vars)
 					if (line[k] == '$') // идёт до след $
 					{
 						while (line[k] == '$')
-							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 0);
+							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
 					}
 					else if (line[k] == '\\' && (line[k + 1] == '$' || line[k + 1] == '\\' || line[k + 1] == '\"'))
 					{
@@ -94,7 +94,7 @@ int	parser(char *line, t_vars *vars)
 					}
 				}
 				k++;
-				command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 1);
+				command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 3);
 			}
 			else if (line[k] == '\\')
 			{
@@ -142,7 +142,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -154,7 +154,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -164,16 +164,21 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '<')
 			{
+				// https://zalinux.ru/?p=3934#8
 				vars->f_redir = TRUE;
-				char *file_name;
 				k++;
+				if (line[k] == '>')
+				{
+					continue ;
+				}
+				char *file_name;
 				while (line[k] == ' ')
 					k++;
 				int start = k;
-				while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
 					k++;
 				file_name = ft_substr(line, start, k - start);
-				command.fd[0] = open(file_name, O_CREAT | O_RDWR, 0644);
+				command.fd[0] = open(file_name,  O_RDWR, 0644);
 				free(file_name);
 				dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
 			}
@@ -181,7 +186,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				char *start;
 				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '\0')
 					k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_substr(start, 0, line + k - start);
@@ -195,12 +200,6 @@ int	parser(char *line, t_vars *vars)
 			while (line[k] == ' ')
 				k++;
 		}
-		// k = 0;
-		// while (command.args[k])
-		// {
-		// 	ft_putendl_fd(command.args[k], 1);
-		// 	k++;
-		// }
 		signal_on();
 		if (vars->f_pipe == TRUE) //			!!!
 			make_pipe_or_redir(&command, vars); //						!!!
@@ -215,7 +214,7 @@ int	parser(char *line, t_vars *vars)
 	}
 	free(command.args);
 	free(line);
-	return (0);
+	return (SUCCESS_CODE);
 }
 
 // Символ "!", помещенный в двойные кавычки, порождает сообщение об ошибке, если команда вводится с командной строки.

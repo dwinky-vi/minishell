@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/21 19:54:02 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/24 21:31:54 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key)
 	}
 	return (ft_strdup(""));
 }
-
+		/** need to free tree result */
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 {
 	size_t	size;

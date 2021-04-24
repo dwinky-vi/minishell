@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 05:07:18 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 22:49:14 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	check_argv(int argc, char **argv, t_vars *vars)
 {
-
 	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))
 		vars->miniflag = 1;
 }
@@ -42,19 +41,20 @@ int main(int argc, char **argv, char **envp)
 	char	*line;
 	int		cursor_pos;
 
+	// preparing();
 	check_argv(argc, argv, &vars);
 	set_vars(&vars, envp);
 	signal_off();
-	init_term(&vars.term, get_term_name(vars.list_env)); // поставить проверки на termcaps функции, они могут вернуть -1
+	init_term(&vars.term, get_term_name(vars.list_env));
 	str = (char *)ft_calloc(4096, 1);
 	k = 0;
-	int start_k = get_history(&history, &k, &vars); // leaks!!!!!!!!!!!!
+	int start_k = get_history(&history, &k, &vars);
 	history_size = k;
 	line = (char *)ft_calloc(4096, 1);
-	cursor_pos = 0;
-	char *old_history_line;
 
+	char *old_history_line;
 	old_history_line = NULL;
+	cursor_pos = 0;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
@@ -110,21 +110,9 @@ int main(int argc, char **argv, char **envp)
 					line = ft_strdup(history[k]);
 				}
 			}
-			else if (!strcmp(str, "\e[D")) // LEFT
+			else if (!strcmp(str, "\e[D") || !strcmp(str, "\e[C"))
 			{
-				if (0 < cursor_pos)
-				{
-					tputs(cursor_left, 1, ft_putchar);
-					cursor_pos--;
-				}
-			}
-			else if (!strcmp(str, "\e[C")) // RIGHT
-			{
-				if (0 <= cursor_pos && cursor_pos < ft_strlen(line))
-				{
-					tputs(cursor_right, 1, ft_putchar);
-					cursor_pos++;
-				}
+				key_left_or_right(&cursor_pos, str, ft_strlen(line));
 			}
 			else if (!strcmp(str, "\e[3~")) // delete (удалить под курсором)
 			{
@@ -149,6 +137,14 @@ int main(int argc, char **argv, char **envp)
 			{
 				pressed_key_end(&cursor_pos, &line);
 			}
+			else if (!strcmp(str, "\eb"))
+			{
+				move_word_left(line, &cursor_pos);
+			}
+			else if (!strcmp(str, "\ef"))
+			{
+				move_word_right(line, &cursor_pos);
+			}
 			else
 			{
 				if (!strcmp(str, "\n"))
@@ -160,7 +156,7 @@ int main(int argc, char **argv, char **envp)
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
 					{
-						free(history[k]); // очищаем лики
+						free(history[k]);
 						history[k] = ft_strdup(old_history_line); // Что с ликами??? ПРОВЕРИТЬ СУКА
 						k = history_size;
 						free(old_history_line);
@@ -168,7 +164,7 @@ int main(int argc, char **argv, char **envp)
 					}
 					if (strcmp(line, ""))
 					{
-						free(history[k]); // очищаем лики
+						free(history[k]);
 						history[k] = ft_strdup(line);
 						history_size++;
 						k = history_size;
@@ -212,9 +208,12 @@ int main(int argc, char **argv, char **envp)
 // -|echo ; ;
 // -|;
 // >>>|;;
+// ""
 // << >
 // < >>
-// echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// echo "10 qwe 123"hello  world" 'hello   world'  $PATH"					!!!!!!!!!!!!!!!!!!!!!!!!!
+// echo q 2|cat -e
+// echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!
 // echo ||  ;
 // export lol=123 olo=$lol
 // echo $olo

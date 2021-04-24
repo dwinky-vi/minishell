@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 22:36:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 22:49:49 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,25 @@
 # include <sys/wait.h> // waitpid
 
 // # include "head_parser.h"
+# ifndef TRUE
+#  define TRUE 1
+# endif
 
-# define TRUE 1
-# define FALSE 0
+# ifndef FALSE
+#  define FALSE 0
+# endif
+
+# ifndef BUFSIZE
 # define BUFSIZE 1024
+# endif
+
+# ifndef SUCCESS_CODE
+#  define SUCCESS_CODE 0
+# endif
+
+# ifndef FAILURE_CODE
+#  define FAILURE_CODE 1
+# endif
 
 int			g_code;
 
@@ -113,6 +128,8 @@ void	set_history(char **history, int k, t_vars *vars);
 
 		/** keys **/
 
+void	key_left_or_right(int *cursor_pos, char *str, size_t line_len);
+
 void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);
 
 void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
@@ -120,6 +137,10 @@ void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
 void	pressed_key_home(int *cursor_pos, char **line);
 
 void	pressed_key_end(int *cursor_pos, char **line);
+
+void	move_word_left(char *line, int *cursor_pos);
+
+void	move_word_right(char *line, int *cursor_pos);
 
 		/** parser **/
 
@@ -141,9 +162,17 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
 
 int		lexer(char *line);
 
+int		lexer_shielding(char *line, size_t *k);
+
+int		lexer_quote(char *line, size_t *k);
+
+int		lexer_pipe(char *line, size_t *k);
+
 int		lexer_right_redir(char *line, size_t *k);
 
 int		lexer_left_redir(char *line, size_t *k);
+
+int		lexer_semicolon(char *line, size_t *k);
 
 int		syntax_error(char *token);
 #endif

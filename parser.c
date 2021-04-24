@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 01:09:22 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 05:10:54 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	parser(char *line, t_vars *vars)
 	k = 0;
 	while (line[k])
 	{
+		// dup2(vars->tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
+		// dup2(vars->tmp_fd_1, 1); //				!!! Возвращаю stdout fd после пайпа !!!
 		// command.fd[0] = 0;
 		// command.fd[1] = 1;
 		while (line[k] == ' ')
@@ -144,6 +146,7 @@ int	parser(char *line, t_vars *vars)
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
+					free(file_name);
 				}
 				else if (line[k] == '>')
 				{
@@ -155,7 +158,24 @@ int	parser(char *line, t_vars *vars)
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
+					free(file_name);
 				}
+				dup2(command.fd[1], 1); //				!!! Заменяю fd для записи в файл !!!
+			}
+			else if (line[k] == '<')
+			{
+				vars->f_redir = TRUE;
+				char *file_name;
+				k++;
+				while (line[k] == ' ')
+					k++;
+				int start = k;
+				while (line[k] != ' ' && line[k] != '\0' && line[k] != ';')
+					k++;
+				file_name = ft_substr(line, start, k - start);
+				command.fd[0] = open(file_name, O_CREAT | O_RDWR, 0644);
+				free(file_name);
+				dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
 			}
 			else // это обычный аргумент, без каких-то спец символов
 			{

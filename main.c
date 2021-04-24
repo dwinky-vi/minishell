@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 00:55:09 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/24 05:07:18 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 void	check_argv(int argc, char **argv, t_vars *vars)
 {
 
-	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))			//!!!
-		vars->miniflag = 1;											//!!!
+	if (argc == 2 && ft_strnstr(argv[1], "child", BUFSIZE))
+		vars->miniflag = 1;
 }
 
 int	set_vars(t_vars *vars, char **envp)
 {
-	envp_copy(vars, envp);								//!!!
+	envp_copy(vars, envp);
 	get_env_to_lst(vars);
-	init_env(vars);												//!!!
+	init_env(vars);
+	vars->tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
+	vars->tmp_fd_1 = dup(1); //				!!! Запоминаю stdout fd !!!
 	vars->f_pipe = FALSE;
 	vars->f_redir = FALSE;
 	return (0);
@@ -53,14 +55,11 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 
 	old_history_line = NULL;
-	vars.tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
-	vars.tmp_fd_1 = dup(1); //				!!! Запоминаю stdin fd !!!
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
-			dup2(vars.tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
 			r = read(0, str, 4096);
 			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
@@ -156,7 +155,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(ft_strtrim(line, " "), &vars);
-					// printf("status = %d\n", g_code);
+					printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
@@ -204,7 +203,7 @@ int main(int argc, char **argv, char **envp)
 			ft_bzero(str, ft_strlen(str));
 		}
 	}
-	if (vars.miniflag != 1)										//!!!!
+	if (vars.miniflag != 1)
 		return_term(&vars.term);
 	set_history(history, start_k, &vars);
 	return (1); //													!!! Ctrl-D возвращает 1 !!!

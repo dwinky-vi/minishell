@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 19:31:09 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 20:11:54 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 01:21:48 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,5 @@ int	lexer_semicolon(char *line, size_t *k)
 		return (syntax_error(";;"));
 	else if (line[*k] == ';')
 		return (syntax_error(";"));
-	return (FALSE);
+	return (SUCCESS_CODE);
 }

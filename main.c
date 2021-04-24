@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 22:49:14 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 02:29:32 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv, char **envp)
 					break ;
 				}
 				else
-					pressed_key_delete(&cursor_pos, &line, &history[k]);
+					pressed_key_delete(&line, &cursor_pos, &history[k]);
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
@@ -114,36 +114,22 @@ int main(int argc, char **argv, char **envp)
 			{
 				key_left_or_right(&cursor_pos, str, ft_strlen(line));
 			}
-			else if (!strcmp(str, "\e[3~")) // delete (удалить под курсором)
+			else if (!strcmp(str, "\177") || !strcmp(str, "\e[3~"))
 			{
 				free(old_history_line);
 				old_history_line = ft_strdup(history[k]);
-				pressed_key_delete(&cursor_pos, &line, &history[k]);
-			}
-			else if (!strcmp(str, "\177")) // backspace
-			{
-				free(old_history_line);
-				old_history_line = ft_strdup(history[k]);
-				pressed_key_backspace(&cursor_pos, &line, &history[k]);
+				key_backspace_or_delete(str, &line, &cursor_pos, &history[k]);
 			}
 			else if (!ft_strncmp(str, "\t", 1) || is_hotkey(str)) // TAB и всякие спец символы
 			{
 			}
-			else if (!strcmp(str, "\e[H")) /** курсор в начало строки **/
+			else if (!strcmp(str, "\e[H") || !strcmp(str, "\e[F"))
 			{
-				pressed_key_home(&cursor_pos, &line);
+				key_home_or_end(str, line, &cursor_pos);
 			}
-			else if (!strcmp(str, "\e[F"))  /** курсор в конец строки **/
+			else if (!strcmp(str, "\eb") || !strcmp(str, "\ef"))
 			{
-				pressed_key_end(&cursor_pos, &line);
-			}
-			else if (!strcmp(str, "\eb"))
-			{
-				move_word_left(line, &cursor_pos);
-			}
-			else if (!strcmp(str, "\ef"))
-			{
-				move_word_right(line, &cursor_pos);
+				move_word(str, line, &cursor_pos);
 			}
 			else
 			{

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 21:50:14 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 02:13:30 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ int	parser(char *line, t_vars *vars)
 	if (line == NULL)
 		return (FAILURE_CODE);
 	if (lexer(line) == FAILURE_CODE)
+	{
+		free(line);
 		return (FAILURE_CODE);
+	}
 	command.args = (char **)ft_calloc(512, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])
@@ -59,7 +62,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				char *quote_str = parse_if_quote_one(line, &k);
 				if (quote_str == NULL)
-					return (-1);
+					return (FAILURE_CODE);
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup(quote_str);
 				else
@@ -70,8 +73,8 @@ int	parser(char *line, t_vars *vars)
 			else if (line[k] == '\"')
 			{
 				k++;
-				char *quote_line; // кавычка
-				quote_line = ft_strdup("");
+				// char *quote_line;
+				// quote_line = ft_strdup("");
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
 				while (line[k] != '\"')
@@ -84,17 +87,17 @@ int	parser(char *line, t_vars *vars)
 					else if (line[k] == '\\' && (line[k + 1] == '$' || line[k + 1] == '\\' || line[k + 1] == '\"'))
 					{
 						k++;
-						quote_line = ft_strjoin_free(quote_line, char_convert_to_str(line[k]), 3);
+						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
 						k++;
 					}
 					else
 					{
-						quote_line = ft_strjoin_free(quote_line, char_convert_to_str(line[k]), 3);
+						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
 						k++;
 					}
 				}
 				k++;
-				command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 3);
+				// command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 3);
 			}
 			else if (line[k] == '\\')
 			{
@@ -199,8 +202,25 @@ int	parser(char *line, t_vars *vars)
 				argc++;
 			while (line[k] == ' ')
 				k++;
+			// if (line[k] == ' ')
+			// {
+			// 	argc++;
+			// 	while (line[k] == ' ')
+			// 		k++;
+			// 	if (line[k] == ';' || line[k] == '\0')
+			// 	{
+			// 		argc--;
+			// 		break ;
+			// 	}
+			// }
 		}
 		signal_on();
+		// k = 0;
+		// while (command.args[k])
+		// {
+		// 	ft_putendl_fd(command.args[k], 1);
+		// 	k++;
+		// }
 		if (vars->f_pipe == TRUE) //			!!!
 			make_pipe_or_redir(&command, vars); //						!!!
 		else //															!!!

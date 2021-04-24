@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:45:04 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 20:20:31 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 01:15:44 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ int	lexer(char *line)
 	size_t	k;
 
 	k = 0;
-	// if (line[k] == ';' && line[k + 1] == ';')
-	// 	return (syntax_error(";;"));
-	// else if (line[k] == ';')
+	// if (line[k] == ';' && line[k + 1] != ';')
 	// 	return (syntax_error(";"));
-	// if (line[k] == '|' && line[k + 1] == '|')
-	// 	return (syntax_error("||"));
-	// else if (line[k] == '|')
-	// 	return (syntax_error("|"));
+	if (line[k] == ';' && line[k + 1] == ';')
+		return (syntax_error(";;"));
+	else if (line[k] == ';')
+		return (syntax_error(";"));
 	while (line[k])
 	{
 		if (line[k] == '\\')

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/24 22:49:49 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 02:30:50 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,13 @@ void	set_history(char **history, int k, t_vars *vars);
 
 void	key_left_or_right(int *cursor_pos, char *str, size_t line_len);
 
-void	pressed_key_backspace(int *cursor_pos, char **line, char **history_line);
+void	key_backspace_or_delete(char *str, char **line, int *cursor_pos, char **history_line);
 
-void	pressed_key_delete(int *cursor_pos, char **line, char **history_line);
+void	pressed_key_delete(char **line, int *cursor_pos, char **history_line);
 
-void	pressed_key_home(int *cursor_pos, char **line);
+void	key_home_or_end(char *str, char *line, int *cursor_pos);
 
-void	pressed_key_end(int *cursor_pos, char **line);
+void	move_word(char *str, char *line, int *cursor_pos);
 
 void	move_word_left(char *line, int *cursor_pos);
 

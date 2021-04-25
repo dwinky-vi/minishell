@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 06:20:29 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 20:32:38 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ int	set_vars(t_vars *vars, char **envp)
 	vars->f_pipe = FALSE;
 	vars->f_redir = FALSE;
 	return (0);
+}
+
+void	func_for_signal(int param)
+{
+	if (param == 2)
+		ft_putchar_fd('1', 1);
+	// print_prompt();
 }
 
 int main(int argc, char **argv, char **envp)
@@ -62,6 +69,11 @@ int main(int argc, char **argv, char **envp)
 		while (strcmp(str, "\n"))
 		{
 			r = read(0, str, 4096);
+			void (*funcptr)(int) = signal(SIGINT, SIG_IGN);
+			if (funcptr == SIG_IGN)
+			{
+				// ft_putchar_fd('0', 1);
+			}
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')
@@ -71,6 +83,10 @@ int main(int argc, char **argv, char **envp)
 				}
 				else
 					pressed_key_delete(&line, &cursor_pos, &history[k]);
+			}
+			else if (!strcmp(str, "\3"))
+			{
+				// ft_putstr_fd("C", 1);
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{

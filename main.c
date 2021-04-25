@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 06:09:07 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 06:20:29 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int main(int argc, char **argv, char **envp)
 				if (!strcmp(str, "\n"))
 				{
 					write(1, str, r);
-					parser(ft_strtrim(line, " "), &vars);
+					parser(line, &vars);
 					printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;

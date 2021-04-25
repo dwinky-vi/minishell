@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 04:27:12 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 06:20:19 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ void    preprocessing(t_command *cmd, t_vars *vars);
 
 char	*get_term_name(t_list *lst);
 
-void		get_env_to_lst(t_vars *vars);
+void	get_env_to_lst(t_vars *vars);
 
 		/** terminal **/
 
-void		init_term(struct termios *term, char *term_name);
+void	init_term(struct termios *term, char *term_name);
 
 void	return_term(struct termios *term);
 

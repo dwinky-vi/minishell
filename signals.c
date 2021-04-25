@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 19:54:54 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 21:35:06 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 21:39:37 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	signal_on(void)
 {
-	signal (SIGINT, SIG_DFL);
-	signal (SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	signal_off(void)

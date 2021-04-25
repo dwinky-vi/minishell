@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 03:10:50 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 06:05:15 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	parser(char *line, t_vars *vars)
 				line[k] = '\0';
 				break ;
 			}
-			else if (line[k] == '|') // комментарий, это опционально
+			else if (line[k] == '|')
 			{
 				vars->f_pipe = TRUE;
 				k++;

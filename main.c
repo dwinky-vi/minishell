@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 06:20:29 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 21:35:31 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int main(int argc, char **argv, char **envp)
 	// preparing();
 	check_argv(argc, argv, &vars);
 	set_vars(&vars, envp);
-	signal_off();
 	init_term(&vars.term, get_term_name(vars.list_env));
 	str = (char *)ft_calloc(4096, 1);
 	k = 0;
@@ -55,12 +54,12 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 	old_history_line = NULL;
 	cursor_pos = 0;
-	g_code = 0;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
+			g_code = 0;
 			r = read(0, str, 4096);
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
@@ -71,6 +70,25 @@ int main(int argc, char **argv, char **envp)
 				}
 				else
 					pressed_key_delete(&line, &cursor_pos, &history[k]);
+			}
+			else if (!strcmp(str, "\3")) // ctrl-C
+			{
+				ft_putendl_fd("", 1);
+				print_prompt();
+				cursor_pos = 0;
+				ft_bzero(line, ft_strlen(line));
+				g_code = 1;
+				if (k == history_size)
+				{
+					free(history[k]);
+					history[k] = NULL;
+				}
+				k = history_size;
+				continue ;
+			}
+			else if (!strcmp(str, "\034")) // ctrl-\_
+			{
+				continue ;
 			}
 			else if (!strcmp(str, "\e[A")) // UP
 			{
@@ -176,7 +194,7 @@ int main(int argc, char **argv, char **envp)
 				else
 				{
 					write(1, str, r);
-					cursor_pos += ft_strlen(str); // это для cmd+V. До этого было просто cursor_pos++
+					cursor_pos++; // это для cmd+V. До этого было просто cursor_pos++
 					line = ft_strjoin_free(line, str, 1);
 					free(history[k]);
 					history[k] = ft_strdup(line);

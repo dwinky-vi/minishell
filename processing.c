@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 06:14:00 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 21:33:48 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,23 @@ void	for_signal(int param)
 		ft_putstr_fd("error\n", 1);
 }
 
+void	child_signal(int param)
+{
+	// signal (SIGTERM, SIG_IGN);    			// Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell)
+	if (param == 2)
+	{
+		// ft_putstr_fd("\n", 1);
+		g_code = 130;
+	}
+	else if (param == 3)
+	{
+		// ft_putendl_fd("Quit: 3", 1);
+		g_code = 131;
+	}
+	else
+		ft_putstr_fd("error\n", 1);
+}
+
 void	borning_child(t_command *cmd, t_vars *vars)
 {
 	pid_t		pid;
@@ -80,12 +97,20 @@ void	borning_child(t_command *cmd, t_vars *vars)
 	}
 	else
 	{
-		signal(SIGINT, &for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
-		signal(SIGQUIT, &for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+		if (!vars->miniflag)
+		{
+			signal(SIGINT, &for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
+			signal(SIGQUIT, &for_signal); // Это ловит ctrl-\. Код сигнала –– 3
+		}
+		else if (vars->miniflag)
+		{
+			signal(SIGINT, &child_signal); // Это ловит ctrl-C.  Код сигнала –– 2
+			signal(SIGQUIT, &child_signal); // Это ловит ctrl-\. Код сигнала –– 3
+		}
 		return_term(&vars->term);
 		wait(&status);
 		init_term(&vars->term, get_term_name(vars->list_env));
-		if (g_code != 130 && g_code !=131)
+		if (g_code != 130 && g_code !=131 && vars->miniflag)
 			g_code = status / 256;
 	}
 }

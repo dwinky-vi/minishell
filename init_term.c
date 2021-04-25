@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:14:41 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 01:01:01 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 19:32:30 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*get_term_name(t_list *lst)
 void	init_term(struct termios *term, char *term_name)
 {
 	tcgetattr(0, term);
+	term->c_lflag &= ~(ISIG);
 	term->c_lflag &= ~(ECHO); // отключаем этот флаг (бит) устанавливается на ноль. Отключаем, чтобы read показывал, что печатается
 	term->c_lflag &= ~(ICANON); //переводим терминал в НЕ каноническое. В каноническом виде read завершается по нажатию \n
 	tcsetattr(0, TCSANOW, term);
@@ -35,6 +36,7 @@ void	init_term(struct termios *term, char *term_name)
 		/** возврат настроек терминала */
 void	return_term(struct termios *term)
 {
+	term->c_lflag |= (ISIG);
 	term->c_lflag |= (ECHO);
 	term->c_lflag |= (ICANON);
 	tcsetattr(0, TCSANOW, term);

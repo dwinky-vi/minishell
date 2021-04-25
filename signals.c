@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 19:54:54 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/22 19:55:13 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 21:35:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	signal_on(void)
 
 void	signal_off(void)
 {
-	signal (SIGINT, SIG_IGN);  // Это ловит ctrl-C.  Код сигнала –– 2
-	signal (SIGQUIT, SIG_IGN);  // Это ловит ctrl-\. Код сигнала –– 3
-	// signal (SIGTERM, SIG_IGN);    			// !!! Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell) !!!
+	signal (SIGINT, SIG_IGN);  //  ctrl-C.  Код сигнала –– 2
+	signal (SIGQUIT, SIG_IGN);  // ctrl-\. Код сигнала –– 3
+	// signal (SIGTERM, SIG_IGN); // !!! Игнорирует сигнал прерывания процесса  (ЗАЩИТА ОТ kill minishell) !!!
 }

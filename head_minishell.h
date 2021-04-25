@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 02:50:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 03:11:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	env_err(t_command *cmd, int i);
 void	make_pipe_or_redir(t_command *cmd, t_vars *vars);
 void	signal_on(void);
 void	signal_off(void);
-void	for_signal(int param);
 
 // t_list	*get_env(char **envp);
 

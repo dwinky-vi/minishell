@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 02:50:57 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 03:10:50 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,9 @@ int	parser(char *line, t_vars *vars)
 	size_t		argc;
 	size_t		count;
 
-	if (line == NULL)
-		return (FAILURE_CODE);
 	if (lexer(line) == FAILURE_CODE)
-	{
-		free(line);
 		return (FAILURE_CODE);
-	}
+	line = ft_strdup(line);
 	command.args = (char **)ft_calloc(512, sizeof(char *)); // кол-во аргументов
 	k = 0;
 	while (line[k])

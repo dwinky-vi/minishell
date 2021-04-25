@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 04:44:20 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/23 03:05:26 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 04:48:43 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	make_echo(t_command *cmd, t_vars *vars)
 
 	flag = FALSE;
 	args_count = ft_array_len(cmd->args);
-	if (args_count == 1 || cmd->args[1][0] == '\0')
+	if (args_count == 1 || (args_count == 2 && cmd->args[1][0] == '\0'))
 	{
 		write(cmd->fd[1], "\n", 1);
 		return ;

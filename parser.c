@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 02:50:57 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 06:02:18 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,6 @@ int	parser(char *line, t_vars *vars)
 	k = 0;
 	while (line[k])
 	{
-		// dup2(vars->tmp_fd_0, 0); //				!!! Возвращаю stdin fd после пайпа !!!
-		// dup2(vars->tmp_fd_1, 1); //				!!! Возвращаю stdout fd после пайпа !!!
-		// command.fd[0] = 0;
-		// command.fd[1] = 1;
 		while (line[k] == ' ')
 			k++;
 		argc = 0;
@@ -164,6 +160,8 @@ int	parser(char *line, t_vars *vars)
 					free(file_name);
 				}
 				dup2(command.fd[1], 1); //				!!! Заменяю fd для записи в файл !!!
+				while (line[k] == ' ')
+					k++;
 			}
 			else if (line[k] == '<')
 			{
@@ -184,6 +182,8 @@ int	parser(char *line, t_vars *vars)
 				command.fd[0] = open(file_name,  O_RDWR, 0644);
 				free(file_name);
 				dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
+				while (line[k] == ' ')
+					k++;
 			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
@@ -214,20 +214,7 @@ int	parser(char *line, t_vars *vars)
 			if (line[k] == ';' || line[k] == '\0')
 				break ;
 		}
-		signal_on();
-		// k = 0;
-		// while (command.args[k])
-		// {
-		// 	ft_putendl_fd(command.args[k], 1);
-		// 	k++;
-		// }
-		if (vars->f_pipe == TRUE) //			!!!
-			make_pipe_or_redir(&command, vars); //						!!!
-		else //															!!!
-			processing(&command, vars); //								!!!
-		vars->f_pipe = FALSE;
-		vars->f_redir = FALSE;
-		signal_off();
+		preprocessing(&command, vars);
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

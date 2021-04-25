@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 02:51:03 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 06:09:07 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,13 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 	old_history_line = NULL;
 	cursor_pos = 0;
+	g_code = 0;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
-			g_code = 0;
 			r = read(0, str, 4096);
-			// str[r] = '\0';
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
 				if (line[0] == '\0')

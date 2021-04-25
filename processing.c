@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 02:32:00 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/25 06:14:00 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	processing(t_command *cmd, t_vars *vars)
 		cmd->fd[0] = 0;
 		cmd->fd[1] = 1;
 	}
-	g_code = 0;
 	if (cmd->args[0]) // Обновляй $_ !!!
 	{
 		if (ft_array_len(cmd->args) == 1 && cmd->args[0][0] == '\0')
@@ -128,9 +127,4 @@ void	processing(t_command *cmd, t_vars *vars)
 	}
 	dup2(vars->tmp_fd_0, 0); //				!!! Возвращаю stdin fd !!!
 	dup2(vars->tmp_fd_1, 1); //				!!! Возвращаю stdout fd !!!
-	if (vars->f_redir)
-	{
-		close(cmd->fd[1]);
-		close(cmd->fd[0]);
-	}
 }

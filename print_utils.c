@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:07:29 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 20:55:47 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 04:21:26 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_putchar(int ch)
 
 void	print_prompt(void)
 {
-	write(1, LIGHT_GREEN, 7);
+	write(1, CYAN, 7);
 	write(1, "minishell-> ", 12);
 	write(1, NO_COLOR, 4);
 }

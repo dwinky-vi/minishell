@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_if_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 21:31:54 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/25 06:18:04 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*get_value_in_lst_for_parser(t_list *list_env, char *key)
 	}
 	return (ft_strdup(""));
 }
-		/** need to free tree result */
+		/** need to free the result */
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 {
 	size_t	size;
@@ -48,8 +48,7 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	else if (line[*k] == '?')
 	{
 		*k += 1;
-		// vars.code
-		return (ft_strdup(""));
+		return (ft_itoa(g_code));
 	}
 	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';' || line[*k] == '\'' || line[*k] == '\"' || line[*k] == '\\')
 	{

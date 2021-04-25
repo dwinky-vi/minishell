@@ -2,7 +2,7 @@
 SRCS	= \
 		main.c \
 		processing.c echo.c pwd.c cd.c env.c other_func.c unset.c export.c exit.c init_env.c \
-		env_utils.c pipe_n_redir.c signals.c \
+		env_utils.c pipe_n_redir.c signals.c preprocessing.c \
 		parser.c print_utils.c init_term.c get_env.c \
 		key_left_right.c key_home_or_end.c key_backspace_or_delete.c move_word.c history.c \
 		parse_if_dollar.c parse_if_quote_one.c is_hotkey.c clear_command_line.c error.c \

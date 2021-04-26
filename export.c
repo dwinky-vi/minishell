@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 02:29:30 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 13:15:23 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*make_env_arr(t_list *list_env)
 	return (env);
 }
 
-char	**sort_env(t_list *list_env)
+char	**sort_env(t_vars *vars)
 {
 	char	**env;
 	int		i;
@@ -79,8 +79,8 @@ char	**sort_env(t_list *list_env)
 	char	*tmp_env;
 	t_list	*tmp_list;
 
-	tmp_list = list_env;
-	env = (char **)ft_calloc(ft_lstsize(tmp_list) + 1, sizeof(char *));
+	tmp_list = vars->list_env;
+	env = (char **)ft_calloc(ft_lstsize(tmp_list) + ft_lstsize(vars->export) + 1, sizeof(char *));
 	if (!env)
 		mem_err();
 	i = 0;
@@ -91,7 +91,7 @@ char	**sort_env(t_list *list_env)
 		i++;
 	}
 	i = -1;
-	while (++i < ft_array_len(env) - 1)
+	while (++i < ft_lstsize(tmp_list) - 1)
 	{
 		j = i + 1;
 		if (ft_strncmp(env[i], env[j], BUFSIZE) > 0)
@@ -105,18 +105,27 @@ char	**sort_env(t_list *list_env)
 	return (env);
 }
 
-void	making_export(t_list *list_env, int fd_1)
+void	making_export(t_vars *vars, int fd_1)
 {
 	char	**env;
 	int		i;
 
-	env = sort_env(list_env);
+	t_list *tmp_list;
+
+	env = sort_env(vars);
 	i = -1;
 	while (env[++i])
 	{
 		ft_putendl_fd(env[i], fd_1);
 	}
 	ft_free_array(env);
+	tmp_list = vars->export;
+	while (tmp_list)
+	{
+		ft_putstr_fd("declare -x ", fd_1);
+		ft_putendl_fd(tmp_list->content, fd_1);
+		tmp_list = tmp_list->next;
+	}
 }
 
 int	check_key(t_command *cmd, char *key, int i)
@@ -140,9 +149,42 @@ int	check_key(t_command *cmd, char *key, int i)
 	return (1);
 }
 
-void	adding_variable()
+void	del_exp(t_list *exp)
 {
+	t_list	*previous;
+	t_list	*del_list;
+	t_list	*following;
 
+	previous = exp;
+	del_list = exp->next;
+	following = del_list->next;
+	free(del_list->content);
+	free(del_list);
+	previous->next = following;
+}
+
+void	check_exp(t_vars *vars, char *str)
+{
+	t_list	*tmp;
+
+	tmp = vars->export;
+	if (!ft_strncmp(tmp->content, str, BUFSIZE))
+	{
+		vars->export = vars->export->next;
+		free(tmp->content);
+		free(tmp);
+		return ;
+	}
+	tmp = vars->export;
+	while (tmp->next)
+	{
+		if (!ft_strncmp(tmp->next->content, str, BUFSIZE))
+		{
+			del_exp(tmp);
+			break ;
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	add_variable(t_command *cmd, t_vars *vars)
@@ -152,10 +194,12 @@ void	add_variable(t_command *cmd, t_vars *vars)
 	int		equal;
 	int		i;
 	char	**env_value;
+	t_list	*lst;
 
 	i = 0;
 	while (cmd->args[++i])
 	{
+		ft_putendl_fd(cmd->args[i], 1);
 		if (cmd->args[i][0] == '=')
 		{
 			env_err(cmd, i);
@@ -164,11 +208,38 @@ void	add_variable(t_command *cmd, t_vars *vars)
 		equal = equal_sign(cmd->args[i]); //	+=	!!!!
 		if (!equal)
 		{
-			env_err(cmd, i);
+			if (!check_key(cmd, cmd->args[i], i))
+				continue ;
+			else
+			{
+				lst = vars->list_env;
+				while (lst)
+				{
+					if (!ft_strncmp(((t_envp *)lst->content)->name, cmd->args[i], BUFSIZE))
+						break ;
+					lst = lst->next;
+				}
+				if (lst != NULL)
+					continue ;
+				lst = vars->export;
+				while (lst)
+				{
+					if (!ft_strncmp(lst->content, cmd->args[i], BUFSIZE))
+						break ;
+					lst = lst->next;
+				}
+				if (lst != NULL)
+					continue ;
+				lst = ft_lstnew(ft_strdup(cmd->args[i]));
+				if (!lst)
+					mem_err();
+				ft_lstadd_back(&vars->export, lst);
+			}
 			continue ;
 		}
-
 		key = ft_substr(cmd->args[i], 0, equal);
+		if (vars->export)
+			check_exp(vars, key);
 		if (!key)
 			mem_err();
 		if (!check_key(cmd, key, i))
@@ -196,7 +267,7 @@ void	make_export(t_command *cmd, t_vars *vars)
 {
 
 	if (!cmd->args[1])
-		making_export(vars->list_env, cmd->fd[1]);
+		making_export(vars, cmd->fd[1]);
 	else
 	{
 		add_variable(cmd, vars);

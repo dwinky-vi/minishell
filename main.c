@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 20:49:25 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 21:03:26 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	set_vars(t_vars *vars, char **envp)
 	envp_copy(vars, envp);
 	get_env_to_lst(vars);
 	init_env(vars);
+	vars->export = NULL;
 	vars->tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	vars->tmp_fd_1 = dup(1); //				!!! Запоминаю stdout fd !!!
 	vars->f_pipe = FALSE;
@@ -45,21 +46,20 @@ int main(int argc, char **argv, char **envp)
 	check_argv(argc, argv, &vars);
 	set_vars(&vars, envp);
 	init_term(&vars.term, get_term_name(vars.list_env));
-	str = (char *)ft_calloc(4096, 1);
-	k = 0;
 	int start_k = get_history(&history, &k, &vars);
 	history_size = k;
+	str = (char *)ft_calloc(4096, 1);
 	line = (char *)ft_calloc(4096, 1);
 
 	char *old_history_line;
 	old_history_line = NULL;
 	cursor_pos = 0;
+	g_code = 0;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
-			g_code = 0;
 			r = read(0, str, 4096);
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
@@ -73,7 +73,7 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\3")) // ctrl-C
 			{
-				ft_putendl_fd("", 1);
+				ft_putchar_fd('\n', 1);
 				print_prompt();
 				cursor_pos = 0;
 				ft_bzero(line, ft_strlen(line));
@@ -155,7 +155,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(line, &vars);
-					printf("status = %d\n", g_code);
+					// printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

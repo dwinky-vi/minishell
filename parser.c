@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 15:23:39 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 21:35:29 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '>')
 			{
+				if (vars->f_redir == TRUE)
+					close(command.fd[1]);
 				vars->f_redir = TRUE;
 				char *file_name;
 				if (line[k] == '>' && line[k + 1] == '>')
@@ -137,7 +139,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -149,7 +151,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -161,39 +163,43 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '<')
 			{
+				if (parse_if_back_redir(vars, &command, line, &k) == FAILURE_CODE)
+					return (FAILURE_CODE);
 				// https://zalinux.ru/?p=3934#8
-				vars->f_redir = TRUE;
-				k++;
-				if (line[k] == '>')
-				{
-					continue ;
-				}
-				char *file_name;
-				while (line[k] == ' ')
-					k++;
-				int start = k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
-					k++;
-				file_name = ft_substr(line, start, k - start);
-				int fd_tmp = command.fd[0];
-				command.fd[0] = open(file_name, O_RDWR, 0644);
-				if (command.fd[0] == -1)
-				{
-					vars->f_redir = FALSE;
-					ft_putstr_fd("minishell: ", 1);
-					ft_putstr_fd(file_name, 1);
-					ft_putstr_fd(": ", 1);
-					ft_putendl_fd(strerror(errno), 1);
-					g_code = 1;
-					command.fd[0] = fd_tmp;
-				}
-				else
-				{
-					dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
-				}
-				free(file_name);
-				while (line[k] == ' ')
-					k++;
+				// if (vars->f_redir == TRUE)
+				// 	close(command.fd[0]);
+				// vars->f_redir = TRUE;
+				// k++;
+				// if (line[k] == '>')
+				// {
+				// 	continue ;
+				// }
+				// char *file_name;
+				// while (line[k] == ' ')
+				// 	k++;
+				// int start = k;
+				// while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
+				// 	k++;
+				// file_name = ft_substr(line, start, k - start);
+				// command.fd[0] = open(file_name, O_RDWR, 0644);
+				// if (command.fd[0] == -1)
+				// {
+				// 	vars->f_redir = FALSE;
+				// 	ft_putstr_fd("minishell: ", 1);
+				// 	ft_putstr_fd(file_name, 1);
+				// 	ft_putstr_fd(": ", 1);
+				// 	ft_putendl_fd(strerror(errno), 1);
+				// 	g_code = 1;
+				// 	command.fd[0] = vars->tmp_fd_0;
+				// 	return (FAILURE_CODE);
+				// }
+				// else
+				// {
+				// 	dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
+				// }
+				// free(file_name);
+				// while (line[k] == ' ')
+				// 	k++;
 			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
@@ -225,6 +231,8 @@ int	parser(char *line, t_vars *vars)
 				break ;
 		}
 		preprocessing(&command, vars);
+		vars->f_pipe = FALSE;
+		vars->f_redir = FALSE;
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

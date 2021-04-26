@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 19:13:28 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 21:37:28 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_vars
 	char			*history_path;
 	int				tmp_fd_0;
 	int				tmp_fd_1;
+	t_list			*export;
 }				t_vars;
 
 void			init_env(t_vars *vars);
@@ -150,6 +151,8 @@ void	move_word_right(char *line, int *cursor_pos);
 
 		/** parser **/
 
+int		is_special_character(char ch);
+
 int		parser(char *line, t_vars *vars);
 
 void	ft_putline(char *s1, char *s2, char *s3);
@@ -162,6 +165,7 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
 
 char	*parse_if_quote_one(char *line, size_t *k);
 
+int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k);
 char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
 
 		/** lexer **/
@@ -181,4 +185,5 @@ int		lexer_left_redir(char *line, size_t *k);
 int		lexer_semicolon(char *line, size_t *k);
 
 int		syntax_error(char *token);
+
 #endif

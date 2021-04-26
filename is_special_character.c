@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   is_special_character.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/12 13:30:45 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 10:51:46 by aquinoa          ###   ########.fr       */
+/*   Created: 2021/04/26 21:28:01 by dwinky            #+#    #+#             */
+/*   Updated: 2021/04/26 21:31:29 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "head_minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+int	is_special_character(char ch)
 {
-	del(lst->content);
-	free(lst);
+	if (ch == ' ' && ch == ';' && ch == '|' && ch == '>' && ch == '<' && ch == '\0')
+		return (TRUE);
+	return (FALSE);
 }

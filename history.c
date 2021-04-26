@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 20:27:50 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 20:57:22 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	get_history(char ***history, size_t *k, t_vars *vars)
 	int		fd;
 	char	*home_dir;
 
+	*k = 0;
 	home_dir = get_env_value(vars->list_env, "HOME");
 	if (home_dir == NULL)
 		vars->history_path = ft_strdup(".minishell_history");

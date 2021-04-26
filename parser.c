@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 15:39:58 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 19:55:31 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '>')
 			{
+				if (vars->f_redir == TRUE)
+					close(command.fd[1]);
 				vars->f_redir = TRUE;
 				char *file_name;
 				if (line[k] == '>' && line[k + 1] == '>')
@@ -137,7 +139,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -149,7 +151,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
+					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -162,6 +164,8 @@ int	parser(char *line, t_vars *vars)
 			else if (line[k] == '<')
 			{
 				// https://zalinux.ru/?p=3934#8
+				if (vars->f_redir == TRUE)
+					close(command.fd[0]);
 				vars->f_redir = TRUE;
 				k++;
 				if (line[k] == '>')
@@ -172,7 +176,7 @@ int	parser(char *line, t_vars *vars)
 				while (line[k] == ' ')
 					k++;
 				int start = k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 					k++;
 				file_name = ft_substr(line, start, k - start);
 				command.fd[0] = open(file_name, O_RDWR, 0644);
@@ -199,7 +203,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				char *start;
 				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 					k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_substr(start, 0, line + k - start);
@@ -225,6 +229,8 @@ int	parser(char *line, t_vars *vars)
 				break ;
 		}
 		preprocessing(&command, vars);
+		vars->f_pipe = FALSE;
+		vars->f_redir = FALSE;
 		free_command(&command);
 		if (line[k] == ';')
 			k++;

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 15:44:27 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 20:49:41 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,9 @@ void	borning_child(t_command *cmd, t_vars *vars)
 		return_term(&vars->term);
 		wait(&status);
 		init_term(&vars->term, get_term_name(vars->list_env));
-		if (g_code != 130 && g_code !=131)
+		if (status == 66)
+			g_code = 1;
+		else if (g_code != 130 && g_code !=131)
 			g_code = status / 256;
 	}
 }

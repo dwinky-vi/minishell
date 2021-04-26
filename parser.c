@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 21:17:52 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 15:39:58 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,6 @@ int	parser(char *line, t_vars *vars)
 				while (line[k] != ' ' && line[k] != ';' && line[k] != '\0')
 					k++;
 				file_name = ft_substr(line, start, k - start);
-				int fd_tmp = command.fd[0];
 				command.fd[0] = open(file_name, O_RDWR, 0644);
 				if (command.fd[0] == -1)
 				{
@@ -185,7 +184,8 @@ int	parser(char *line, t_vars *vars)
 					ft_putstr_fd(": ", 1);
 					ft_putendl_fd(strerror(errno), 1);
 					g_code = 1;
-					command.fd[0] = fd_tmp;
+					command.fd[0] = vars->tmp_fd_0;
+					return (FAILURE_CODE);
 				}
 				else
 				{

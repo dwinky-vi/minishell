@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 19:15:12 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 10:03:34 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_vars
 	char			*history_path;
 	int				tmp_fd_0;
 	int				tmp_fd_1;
+	t_list			*export;
 }				t_vars;
 
 void			init_env(t_vars *vars);

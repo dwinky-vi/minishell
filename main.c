@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 21:39:16 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 15:25:51 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	set_vars(t_vars *vars, char **envp)
 	envp_copy(vars, envp);
 	get_env_to_lst(vars);
 	init_env(vars);
+	vars->export = NULL;
 	vars->tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	vars->tmp_fd_1 = dup(1); //				!!! Запоминаю stdout fd !!!
 	vars->f_pipe = FALSE;
@@ -54,12 +55,12 @@ int main(int argc, char **argv, char **envp)
 	char *old_history_line;
 	old_history_line = NULL;
 	cursor_pos = 0;
+	g_code = 0;
 	while (strcmp(str, "\4"))
 	{
 		print_prompt();
 		while (strcmp(str, "\n"))
 		{
-			g_code = 0;
 			r = read(0, str, 4096);
 			if (!strcmp(str, "\4")) // ctrl-D
 			{
@@ -155,7 +156,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					write(1, str, r);
 					parser(line, &vars);
-					printf("status = %d\n", g_code);
+					// printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
 					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки

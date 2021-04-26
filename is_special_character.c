@@ -14,7 +14,7 @@
 
 int	is_special_character(char ch)
 {
-	if (ch == ' ' && ch == ';' && ch == '|' && ch == '>' && ch == '<' && ch == '\0')
+	if (ch == ' ' || ch == ';' || ch == '|' || ch == '>' || ch == '<' || ch == '$')
 		return (TRUE);
 	return (FALSE);
 }

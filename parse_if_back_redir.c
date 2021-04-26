@@ -40,7 +40,7 @@ int	parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k)
 	while (line[*k] == ' ')
 		(*k)++;
 	start = *k;
-	while (is_special_character(line[*k]) == FALSE)
+	while (is_special_character(line[*k]) == FALSE && line[*k] != '\0')
 		(*k)++;
 	file_name = ft_substr(line, start, *k - start);
 	command->fd[0] = open(file_name, O_RDWR, 0644);

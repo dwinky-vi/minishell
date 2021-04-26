@@ -116,11 +116,6 @@ int	parser(char *line, t_vars *vars)
 					command.args[argc] = NULL; // and free()!!!!!!!!!!!
 				}
 			}
-			else if (line[k] == '#') // комментарий, это опционально
-			{
-				line[k] = '\0';
-				break ;
-			}
 			else if (line[k] == '|')
 			{
 				vars->f_pipe = TRUE;
@@ -139,7 +134,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
+					while (is_special_character(line[k]) == FALSE && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -151,7 +146,7 @@ int	parser(char *line, t_vars *vars)
 					while (line[k] == ' ')
 						k++;
 					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
+					while (is_special_character(line[k]) == FALSE && line[k] != '\0')
 						k++;
 					file_name = ft_substr(line, start, k - start);
 					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -165,41 +160,6 @@ int	parser(char *line, t_vars *vars)
 			{
 				if (parse_if_back_redir(vars, &command, line, &k) == FAILURE_CODE)
 					return (FAILURE_CODE);
-				// https://zalinux.ru/?p=3934#8
-				// if (vars->f_redir == TRUE)
-				// 	close(command.fd[0]);
-				// vars->f_redir = TRUE;
-				// k++;
-				// if (line[k] == '>')
-				// {
-				// 	continue ;
-				// }
-				// char *file_name;
-				// while (line[k] == ' ')
-				// 	k++;
-				// int start = k;
-				// while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-				// 	k++;
-				// file_name = ft_substr(line, start, k - start);
-				// command.fd[0] = open(file_name, O_RDWR, 0644);
-				// if (command.fd[0] == -1)
-				// {
-				// 	vars->f_redir = FALSE;
-				// 	ft_putstr_fd("minishell: ", 1);
-				// 	ft_putstr_fd(file_name, 1);
-				// 	ft_putstr_fd(": ", 1);
-				// 	ft_putendl_fd(strerror(errno), 1);
-				// 	g_code = 1;
-				// 	command.fd[0] = vars->tmp_fd_0;
-				// 	return (FAILURE_CODE);
-				// }
-				// else
-				// {
-				// 	dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
-				// }
-				// free(file_name);
-				// while (line[k] == ' ')
-				// 	k++;
 			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
@@ -212,10 +172,6 @@ int	parser(char *line, t_vars *vars)
 				else
 					command.args[argc] = ft_strjoin_free(command.args[argc], ft_substr(start, 0, line + k - start), 3);
 			}
-			// if (line[k] == ' ')
-			// 	argc++;
-			// while (line[k] == ' ')
-				// k++;
 			if (line[k] == ' ')
 			{
 				argc++;

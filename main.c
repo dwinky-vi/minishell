@@ -206,7 +206,7 @@ int main(int argc, char **argv, char **envp)
 	if (vars.miniflag != 1)
 		return_term(&vars.term);
 	set_history(history, start_k, &vars);
-	return (1); //													!!! Ctrl-D возвращает 1 !!!
+	return (FAILURE_CODE); //													!!! Ctrl-D возвращает 1 !!!
 }
 
 // -|echo ; ;

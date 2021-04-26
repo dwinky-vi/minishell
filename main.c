@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 21:39:16 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 20:49:25 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[D") || !strcmp(str, "\e[C"))
 			{
-				key_left_or_right(&cursor_pos, str, ft_strlen(line));
+				key_left_or_right(&cursor_pos, str, line);
 			}
 			else if (!strcmp(str, "\177") || !strcmp(str, "\e[3~"))
 			{

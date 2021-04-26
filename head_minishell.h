@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/25 19:15:12 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/26 19:13:28 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@
 
 # ifndef FAILURE_CODE
 #  define FAILURE_CODE 1
+# endif
+
+# ifndef WIDTH_PROMT
+#  define WIDTH_PROMT 12
 # endif
 
 int			g_code;
@@ -130,7 +134,7 @@ void	set_history(char **history, int k, t_vars *vars);
 
 		/** keys **/
 
-void	key_left_or_right(int *cursor_pos, char *str, size_t line_len);
+void	key_left_or_right(int *cursor_pos, char *str, char *line);
 
 void	key_backspace_or_delete(char *str, char **line, int *cursor_pos, char **history_line);
 

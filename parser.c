@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 21:17:52 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/26 15:23:39 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				char *start;
 				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '\0')
+				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
 					k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_substr(start, 0, line + k - start);

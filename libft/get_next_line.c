@@ -6,25 +6,12 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 21:59:43 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 18:45:05 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 18:47:51 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #define BUFFER_SIZE 1
-/*
-** 1 –– всё прочитано, записано и конец файла не был достигнут
-** 0 –– линия прочитана, записана, но файл закончился (была последняя строчка)
-** -1 –– при любой ошибки: fd –– испорчиный, не смогли аллоцировать память и тд
-*/
-
-static int	ft_error(char **str, char *str2)
-{
-	free(*str);
-	*str = NULL;
-	free(str2);
-	return (-1);
-}
 
 static int	check_tail(char **line, char **tail, char **find_end)
 {
@@ -94,7 +81,7 @@ int	get_next_line(int fd, char **line)
 		return (r);
 	array = (char *)malloc(BUFFER_SIZE + 1);
 	if (array == NULL)
-		return (ft_error(&tail, NULL));
+		exit(1);
 	r = 1;
 	while (!find_end && r > 0)
 	{

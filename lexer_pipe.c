@@ -6,11 +6,31 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 18:54:30 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/24 19:59:50 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 21:03:05 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
+
+int	lexer_pipe_or_redir(char *line, size_t *k)
+{
+	if (line[*k] == '|')
+	{
+		if (lexer_pipe(line, k) == FAILURE_CODE)
+			return (FAILURE_CODE);
+	}
+	else if (line[*k] == '>')
+	{
+		if (lexer_right_redir(line, k) == FAILURE_CODE)
+			return (FAILURE_CODE);
+	}
+	else if (line[*k] == '<')
+	{
+		if (lexer_left_redir(line, k) == FAILURE_CODE)
+			return (FAILURE_CODE);
+	}
+	return (SUCCESS_CODE);
+}
 
 int	lexer_pipe(char *line, size_t *k)
 {

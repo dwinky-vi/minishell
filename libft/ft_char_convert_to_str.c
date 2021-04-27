@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 22:49:57 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/17 22:51:55 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 15:22:07 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /** This function allocate memory for str */
 char	*char_convert_to_str(char ch)
 {
-	char *str;
+	char	*str;
 
 	str = (char *)ft_calloc(2, sizeof(char));
 	if (str == NULL)

@@ -2,7 +2,7 @@
 
 void	clear_command_line(int cursor_pos, char *previous_history)
 {
-	int len;
+	int	len;
 
 	if (previous_history == NULL)
 		len = 0;

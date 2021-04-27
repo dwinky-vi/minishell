@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 22:49:15 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 01:40:19 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 18:07:26 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,39 +20,43 @@ void	move_word(char *str, char *line, int *cursor_pos)
 		move_word_right(line, cursor_pos);
 }
 
-void	move_word_left(char *line, int *cursor_pos)
+void	move_word_left(char *line, int *cursor)
 {
-	if (*cursor_pos <= 0)
+	if (*cursor <= 0)
 		return ;
-	*cursor_pos -= 1;
-	while (!ft_isdigit(line[*cursor_pos]) && !ft_isalpha(line[*cursor_pos]) && *cursor_pos >= 0)
+	*cursor -= 1;
+	while (!ft_isdigit(line[*cursor]) && !ft_isalpha(line[*cursor]) && \
+											*cursor >= 0)
 	{
 		tputs(cursor_left, 1, ft_putchar);
-		(*cursor_pos)--;
+		(*cursor)--;
 	}
-	while ((ft_isdigit(line[*cursor_pos]) || ft_isalpha(line[*cursor_pos])) && *cursor_pos >= 0)
+	while ((ft_isdigit(line[*cursor]) || ft_isalpha(line[*cursor])) && \
+											*cursor >= 0)
 	{
 		tputs(cursor_left, 1, ft_putchar);
-		(*cursor_pos)--;
+		(*cursor)--;
 	}
-	*cursor_pos += 1;
+	*cursor += 1;
 }
 
-void	move_word_right(char *line, int *cursor_pos)
+void	move_word_right(char *line, int *cursor)
 {
 	size_t	line_len;
 
 	line_len = ft_strlen(line);
-	if (*cursor_pos == line_len)
+	if ((size_t)(*cursor) == line_len)
 		return ;
-	while (!ft_isdigit(line[*cursor_pos]) && !ft_isalpha(line[*cursor_pos]) && *cursor_pos < line_len)
+	while (!ft_isdigit(line[*cursor]) && !ft_isalpha(line[*cursor]) && \
+											(size_t)(*cursor) < line_len)
 	{
 		tputs(cursor_right, 1, ft_putchar);
-		(*cursor_pos)++;
+		(*cursor)++;
 	}
-	while ((ft_isdigit(line[*cursor_pos]) || ft_isalpha(line[*cursor_pos])) && *cursor_pos < line_len)
+	while ((ft_isdigit(line[*cursor]) || ft_isalpha(line[*cursor])) && \
+											(size_t)(*cursor) < line_len)
 	{
 		tputs(cursor_right, 1, ft_putchar);
-		(*cursor_pos)++;
+		(*cursor)++;
 	}
 }

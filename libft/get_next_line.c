@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 21:59:43 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 17:43:58 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 18:45:05 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,23 @@ static int	check_tail(char **line, char **tail, char **find_end)
 	char	*cur_ptr;
 
 	cur_ptr = NULL;
-	*find_end = ft_strchr(*tail, '\n');
-	if ((*tail) != NULL && *find_end)
+	if ((*tail) != NULL)
 	{
-		*(*find_end) = '\0';
-		*line = ft_strdup(*tail);
-		cur_ptr = *tail;
-		*tail = ft_strdup(*find_end + 1);
-		ft_clear_tail(&cur_ptr);
-		return (1);
-	}
-	else if (*tail != NULL)
-	{
-		*line = ft_strdup(*tail);
-		ft_clear_tail(tail);
+		*find_end = ft_strchr(*tail, '\n');
+		if (*find_end)
+		{
+			*(*find_end) = '\0';
+			*line = ft_strdup(*tail);
+			cur_ptr = *tail;
+			*tail = ft_strdup(*find_end + 1);
+			ft_clear_tail(&cur_ptr);
+			return (1);
+		}
+		else
+		{
+			*line = ft_strdup(*tail);
+			ft_clear_tail(tail);
+		}
 	}
 	else if (*tail == NULL)
 		*line = ft_strdup("");
@@ -89,7 +92,9 @@ int	get_next_line(int fd, char **line)
 	r = check_tail(line, &tail, &find_end);
 	if (r != 2)
 		return (r);
-	array = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	array = (char *)malloc(BUFFER_SIZE + 1);
+	if (array == NULL)
+		return (ft_error(&tail, NULL));
 	r = 1;
 	while (!find_end && r > 0)
 	{

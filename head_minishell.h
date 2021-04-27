@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 21:37:28 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 21:24:28 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ void	new_envp(t_vars *vars);
 void	delet_list(t_list **list_env);
 void	env_err(t_command *cmd, int i);
 void	make_pipe_or_redir(t_command *cmd, t_vars *vars);
-void	signal_on(void);
-void	signal_off(void);
 void	for_signal(int param);
 void    preprocessing(t_command *cmd, t_vars *vars);
 
@@ -112,6 +110,8 @@ void    preprocessing(t_command *cmd, t_vars *vars);
 char	*get_term_name(t_list *lst);
 
 void	get_env_to_lst(t_vars *vars);
+
+int		ft_find_in(char *str, char find);
 
 		/** terminal **/
 
@@ -166,15 +166,22 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
 char	*parse_if_quote_one(char *line, size_t *k);
 
 int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k);
-char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
+
+char	*get_env_parser(t_list *list_env, char *key);
 
 		/** lexer **/
 
 int		lexer(char *line);
 
+int		lexing_begin_line(char *line, size_t k);
+
+int		lexing_special_character(char *line, size_t *k);
+
 int		lexer_shielding(char *line, size_t *k);
 
 int		lexer_quote(char *line, size_t *k);
+
+int		lexer_pipe_or_redir(char *line, size_t *k);
 
 int		lexer_pipe(char *line, size_t *k);
 

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 21:03:26 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 18:33:38 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int main(int argc, char **argv, char **envp)
 					}
 					ft_bzero(line, ft_strlen(line)); // чтобы после enter строка очищалась
 				}
-				else if (cursor_pos < ft_strlen(line))
+				else if ((size_t)cursor_pos < ft_strlen(line))
 				{
 					tputs(save_cursor, 1, ft_putchar);
 					char *append;
@@ -215,6 +215,7 @@ int main(int argc, char **argv, char **envp)
 // ""
 // << >
 // < >>
+// echo $"PATH"
 // echo "10 qwe 123"hello  world" 'hello   world'  $PATH"					!!!!!!!!!!!!!!!!!!!!!!!!!
 // echo q 2|cat -e
 // echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 10:02:52 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/27 17:59:45 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	change_pwd_or_oldpwd(t_list *list_env, char *buf, char *str)
 void	check_oldpwd(t_list *list_env, char *buf)
 {
 	t_envp	*new_env;
-	char	*tmp_pwd;
 	t_list	*new_list;
 
 	if (!get_env_value(list_env, "OLDPWD"))
@@ -49,7 +48,6 @@ void	check_oldpwd(t_list *list_env, char *buf)
 
 void	change_dir(t_command *cmd, t_vars *vars)
 {
-	char	**pwd;
 	char	buf[BUFSIZE];
 	char	*str;
 

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 20:03:37 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 00:48:42 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_vars
 typedef struct s_history
 {
 	char	**arr;
+	char	**old_arr;
 	size_t	size;
 	size_t	current;
 	size_t	start_local_history;
@@ -150,6 +151,14 @@ void	print_prompt(void);
 void	clear_command_line(int cursor_pos, char *previous_history);
 
 int		is_hotkey(char *str);
+
+void	signal_ctrl_c(char **line, int *cursor, t_history *history);
+
+int		signal_ctrl_d(char **line, int *cursor, t_history *history);
+
+void	pressed_key_up(char **line, int *cursor, t_history *history, char **old_history_line);
+
+void	pressed_key_down(char **line, int *cursor, t_history *history, char **old_history_line);
 
 		/** history **/
 

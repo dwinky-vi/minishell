@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/29 00:33:15 by aquinoa           #+#    #+#             */
+/*   Updated: 2021/04/29 01:04:30 by dwinky           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head_minishell.h"
 
 void	parent_signal(int param)
@@ -24,4 +36,31 @@ void	child_signal(int param)
 		g_code = 131;
 	else
 		ft_putstr_fd("error\n", 1);
+}
+
+int	signal_ctrl_d(char **line, int *cursor, t_history *history)
+{
+	if ((*line)[0] == '\0')
+	{
+		ft_putstr_fd("exit\n", 1);
+		return (FAILURE_CODE);
+	}
+	else
+		pressed_key_delete(line, cursor, &history->arr[history->current]);
+	return (SUCCESS_CODE);
+}
+
+void	signal_ctrl_c(char **line, int *cursor, t_history *history)
+{
+	ft_bzero(*line, ft_strlen(*line));
+	ft_putchar_fd('\n', 1);
+	print_prompt();
+	*cursor = 0;
+	g_code = 1;
+	if (history->current == history->size)
+	{
+		free(history->arr[history->current]);
+		history->arr[history->current] = NULL;
+	}
+	history->current = history->size;
 }

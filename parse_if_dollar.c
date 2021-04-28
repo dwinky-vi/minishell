@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 06:18:04 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 13:56:38 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';' || line[*k] == '\'' || line[*k] == '\"' || line[*k] == '\\')
 	{
 		return (ft_strdup("$"));
+	}
+	else if (line[*k] == '_')
+	{
+		*k += 1;
+		return (get_value_in_lst_for_parser(list_env, "_"));
 	}
 	while (ft_isalnum(line[*k + size]) && line[*k + size] != '\0')
 		size++;

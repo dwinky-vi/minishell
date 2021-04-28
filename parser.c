@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 19:55:31 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 13:22:15 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,9 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '>')
 			{
-				if (vars->f_redir == TRUE)
+				if (vars->f_redir_1 == TRUE)
 					close(command.fd[1]);
-				vars->f_redir = TRUE;
+				vars->f_redir_1 = TRUE;
 				char *file_name;
 				if (line[k] == '>' && line[k + 1] == '>')
 				{
@@ -164,9 +164,9 @@ int	parser(char *line, t_vars *vars)
 			else if (line[k] == '<')
 			{
 				// https://zalinux.ru/?p=3934#8
-				if (vars->f_redir == TRUE)
+				if (vars->f_redir_0 == TRUE)
 					close(command.fd[0]);
-				vars->f_redir = TRUE;
+				vars->f_redir_0 = TRUE;
 				k++;
 				if (line[k] == '>')
 				{
@@ -182,7 +182,7 @@ int	parser(char *line, t_vars *vars)
 				command.fd[0] = open(file_name, O_RDWR, 0644);
 				if (command.fd[0] == -1)
 				{
-					vars->f_redir = FALSE;
+					vars->f_redir_0 = FALSE;
 					ft_putstr_fd("minishell: ", 1);
 					ft_putstr_fd(file_name, 1);
 					ft_putstr_fd(": ", 1);
@@ -229,9 +229,6 @@ int	parser(char *line, t_vars *vars)
 				break ;
 		}
 		preprocessing(&command, vars);
-		vars->f_pipe = FALSE;
-		vars->f_redir = FALSE;
-		free_command(&command);
 		if (line[k] == ';')
 			k++;
 	}

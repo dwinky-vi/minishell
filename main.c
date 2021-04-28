@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/26 20:52:56 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 13:10:59 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	set_vars(t_vars *vars, char **envp)
 	vars->tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	vars->tmp_fd_1 = dup(1); //				!!! Запоминаю stdout fd !!!
 	vars->f_pipe = FALSE;
-	vars->f_redir = FALSE;
+	vars->f_redir_0 = FALSE;
+	vars->f_redir_1 = FALSE;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 22:23:51 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 12:28:56 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*get_env_parser(t_list *lst, char *key)
 	return (ft_strdup(""));
 }
 
-		/** need to free the result */
+		/** need to free the value result */
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 {
 	size_t	len;

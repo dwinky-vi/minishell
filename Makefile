@@ -7,7 +7,7 @@ SRCS	= \
 		init_term.c get_env.c ft_find_in.c \
 		is_hotkey.c clear_command_line.c error.c is_special_character.c print_utils.c \
 		history.c key_home_or_end.c key_up_or_down.c key_left_or_right.c key_backspace_or_delete.c move_word.c \
-		parser.c parse_if_dollar.c parse_if_quote_one.c parse_if_back_redir.c \
+		parser.c parse_if_dollar.c parse_if_quote_one.c parse_if_quote_two.c parse_if_back_redir.c \
 		lexer.c lexer_redir.c lexer_pipe.c lexer_func.c
 
 NAME		= minishell
@@ -18,7 +18,7 @@ HEADER		= head_minishell.h
 
 CC		= gcc
 
-CFLAGS	= -g -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra
 
 # создаём скрытую директорию, в которой будут .o файлы
 OBJS_DIR =	.obj

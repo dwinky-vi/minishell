@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 21:24:28 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 16:47:34 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ typedef struct s_vars
 	t_list			*export;
 }				t_vars;
 
+typedef struct s_history
+{
+	char	**arr;
+	size_t	size;
+	size_t	current;
+	size_t	start_local_history;
+}				t_history;
+
 void			init_env(t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
 char			*get_env_value(t_list *list_env, char *key);
@@ -113,6 +121,9 @@ void	get_env_to_lst(t_vars *vars);
 
 int		ft_find_in(char *str, char find);
 
+void	ft_putline(char *s1, char *s2, char *s3);
+
+void	ft_putline_nbr(char *s1, int nbr);
 		/** terminal **/
 
 void	init_term(struct termios *term, char *term_name);
@@ -129,9 +140,9 @@ int		is_hotkey(char *str);
 
 		/** history **/
 
-int		get_history(char ***history, size_t *k, t_vars *vars);
+void	get_history(t_history *history, t_vars *vars);
 
-void	set_history(char **history, int k, t_vars *vars);
+void	set_history(t_history *history, t_vars *vars);
 
 		/** keys **/
 
@@ -155,15 +166,11 @@ int		is_special_character(char ch);
 
 int		parser(char *line, t_vars *vars);
 
-void	ft_putline(char *s1, char *s2, char *s3);
+char	*parse_if_quote_one(char *line, size_t *k);
 
-void	ft_putline_nbr(char *s1, int nbr);
-
-int		syntactic_parsing(char *line);
+char	*parse_if_quote_two(char *line, size_t *k, t_list *list_env);
 
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
-
-char	*parse_if_quote_one(char *line, size_t *k);
 
 int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k);
 

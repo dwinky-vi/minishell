@@ -6,16 +6,10 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 22:24:11 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 14:12:48 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
-Одиночные кавычки (' ') схожи по своему действию с двойными кавычками, только не допускают обращение к переменным, поскольку специальный символ "$" внутри одинарных кавычек воспринимается как обычный символ.
-Внутри одиночных кавычек, любой специальный символ, за исключением ', интерпретируется как простой символ.
-Одиночные кавычки ("строгие, или полные кавычки") следует рассматривать как более строгий вариант чем двойные кавычки ("нестрогие, или неполные кавычки").
-Поскольку внутри одиночных кавычек даже экранирующий (\) символ воспринимается как обычный символ, попытка вывести одиночную кавычку внутри строки, ограниченной одинарными кавычками,
-**/
 #include "head_minishell.h"
 
 void	free_command(t_command *cmd)
@@ -29,6 +23,16 @@ void	free_command(t_command *cmd)
 		cmd->args[k] = 0;
 		k++;
     }
+}
+
+char	*just_an_argument(char *line, size_t *k)
+{
+	char *start;
+
+	start = line + *k;
+	while (!is_special_character(line[*k]) && line[*k] != '\0')
+		(*k)++;
+	return (ft_substr(start, 0, (line + *k) - start));
 }
 
 int	parser(char *line, t_vars *vars)
@@ -60,26 +64,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
-				k++;
-				while (line[k] != '\"')
-				{
-					if  (line[k] == '$')
-					{
-						while (line[k] == '$')
-							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
-					}
-					else if (line[k] == '\\' && (line[k + 1] == '$' || line[k + 1] == '\\' || line[k + 1] == '\"'))
-					{
-						k++;
-						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
-						k++;
-					}
-					else
-					{
-						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
-						k++;
-					}
-				}
+				command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_quote_two(line, &k, vars->list_env), 3);
 				k++;
 			}
 			else if (line[k] == '\\')
@@ -95,11 +80,11 @@ int	parser(char *line, t_vars *vars)
 					command.args[argc] = ft_strdup("");
 				while (line[k] == '$')
 					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
-				if (command.args[argc][0] == '\0')
-				{
-					free(command.args[argc]);
-					command.args[argc] = NULL;
-				}
+				// if (command.args[argc][0] == '\0')
+				// {
+				// 	free(command.args[argc]);
+				// 	command.args[argc] = NULL;
+				// }
 			}
 			else if (line[k] == '|')
 			{
@@ -124,15 +109,12 @@ int	parser(char *line, t_vars *vars)
 					// {
 					// 	if (line[k] = '\'')
 					// 	{
-							
 					// 	}
 					// 	else if (line[k] = '\"')
 					// 	{
-							
 					// 	}
 					// 	else if (line[k] = '\\')
 					// 	{
-							
 					// 	}
 					// 	else if (line[k] = '$')
 					// 	{
@@ -178,14 +160,9 @@ int	parser(char *line, t_vars *vars)
 			}
 			else // это обычный аргумент, без каких-то спец символов
 			{
-				char *start;
-				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-					k++;
 				if (command.args[argc] == NULL)
-					command.args[argc] = ft_substr(start, 0, line + k - start);
-				else
-					command.args[argc] = ft_strjoin_free(command.args[argc], ft_substr(start, 0, line + k - start), 3);
+					command.args[argc] = ft_strdup("");
+				command.args[argc] = ft_strjoin_free(command.args[argc], just_an_argument(line, &k), 3);
 			}
 			if (line[k] == ' ')
 			{

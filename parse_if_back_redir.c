@@ -6,15 +6,15 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 21:18:02 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 19:18:22 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 20:21:43 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-static int	redir_error(t_vars *vars, t_command *command, char *file_name)
+int	redir_error(t_vars *vars, t_command *command, char *file_name)
 {
-	vars->f_redir = FALSE;
+	vars->f_redir_0 = FALSE;
 	command->fd[0] = vars->tmp_fd_0;
 	g_code = 1;
 	ft_putstr_fd("minishell: ", 1);
@@ -30,9 +30,9 @@ int	parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k)
 	char	*file_name;
 	size_t	start;
 
-	if (vars->f_redir == TRUE)
+	if (vars->f_redir_0 == TRUE)
 		close(command->fd[0]);
-	vars->f_redir = TRUE;
+	vars->f_redir_0 = TRUE;
 	(*k)++;
 	if (line[*k] == '>')
 		return (SUCCESS_CODE);

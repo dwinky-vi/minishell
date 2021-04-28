@@ -2,12 +2,12 @@
 SRCS	= \
 		main.c \
 		processing.c echo.c pwd.c cd.c env.c other_func.c unset.c export.c exit.c init_env.c \
-		env_utils.c pipe_n_redir.c preprocessing.c \
+		env_utils.c make_pipe.c signals.c export_utils_1.c export_utils_2.c \
 		\
 		init_term.c get_env.c ft_find_in.c \
 		is_hotkey.c clear_command_line.c error.c is_special_character.c print_utils.c \
 		history.c key_home_or_end.c key_up_or_down.c key_left_or_right.c key_backspace_or_delete.c move_word.c \
-		parser.c parse_if_dollar.c parse_if_quote_one.c parse_if_quote_two.c parse_if_back_redir.c \
+		parser.c parse_if_dollar.c parse_if_quote_one.c parse_if_quote_two.c parse_if_redir.c parse_if_back_redir.c \
 		lexer.c lexer_redir.c lexer_pipe.c lexer_func.c
 
 NAME		= minishell

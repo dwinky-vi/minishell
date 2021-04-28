@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 21:34:58 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 18:01:16 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 17:06:39 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	check_minus(t_command *cmd, t_vars *vars)
 void	make_exit(t_command *cmd, t_vars *vars)
 {
 	if (!vars->f_pipe)
-		ft_putendl_fd("exit", cmd->fd[1]);
+		ft_putendl_fd("exit", vars->tmp_fd_1);
 	if (!cmd->args[1])
 		making_exit(vars, 0);
 	else

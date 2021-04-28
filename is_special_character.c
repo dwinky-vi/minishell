@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 21:28:01 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 19:18:49 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 17:28:34 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,3 +19,4 @@ int	is_special_character(char ch)
 		return (TRUE);
 	return (FALSE);
 }
+

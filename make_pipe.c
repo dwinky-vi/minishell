@@ -1,53 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_n_redir.c                                     :+:      :+:    :+:   */
+/*   make_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 22:19:24 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/26 17:05:32 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 10:47:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	make_pipe_or_redir(t_command *cmd, t_vars *vars)
+void	write_in_pipe(t_command *cmd, t_vars *vars)
 {
-	pid_t	pid;
+	dup2(cmd->fd[1], 1);
+	processing(cmd, vars);
+	close(cmd->fd[0]);
+	close(cmd->fd[1]);
+	exit(g_code);
+}
+
+void	read_from_pipe(t_command *cmd, t_vars *vars)
+{
 	int		status;
 
-	if (vars->f_redir)
+	dup2(cmd->fd[0], 0);
+	close(cmd->fd[0]);
+	close(cmd->fd[1]);
+	signal(SIGINT, &parent_signal);
+	signal(SIGQUIT, &parent_signal);
+	return_term(&vars->term);
+	wait(&status);
+	init_term(&vars->term, get_term_name(vars->list_env));
+	g_code = status / 256;
+}
+
+void	make_pipe(t_command *cmd, t_vars *vars)
+{
+	pid_t	pid;
+
+	if (vars->f_redir_0 || vars->f_redir_1)
 	{
 		close(cmd->fd[1]);
 		close(cmd->fd[0]);
 	}
-	if (vars->f_pipe == TRUE)
-		if (pipe(cmd->fd) == -1)
-			return ;
+	if (pipe(cmd->fd) == -1)
+		return ;
 	pid = fork();
 	if (pid < 0)
 		return ;
 	else if (pid == 0)
-	{
-		if (vars->f_pipe)
-			dup2(cmd->fd[1], 1);
-		processing(cmd, vars);
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
-		exit(g_code);
-	}
+		write_in_pipe(cmd, vars);
 	else
-	{
-		if (vars->f_pipe)
-			dup2(cmd->fd[0], 0);
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
-		signal(SIGINT, &for_signal); // Это ловит ctrl-C.  Код сигнала –– 2
-		signal(SIGQUIT, &for_signal); // Это ловит ctrl-\. Код сигнала –– 3
-		return_term(&vars->term);
-		wait(&status);
-		init_term(&vars->term, get_term_name(vars->list_env));
-		g_code = status / 256;
-	}
+		read_from_pipe(cmd, vars);
 }

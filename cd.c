@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 17:59:45 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 17:06:25 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	go_old_pwd(t_command *cmd, t_vars *vars)
 
 void	make_cd(t_command *cmd, t_vars *vars)
 {
-	if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2)) // ~ !!!
+	if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2))
 	{
 		if (cmd->args[1])
 			free(cmd->args[1]);

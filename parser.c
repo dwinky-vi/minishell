@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 14:12:48 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 20:44:55 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,24 @@ char	*just_an_argument(char *line, size_t *k)
 	while (!is_special_character(line[*k]) && line[*k] != '\0')
 		(*k)++;
 	return (ft_substr(start, 0, (line + *k) - start));
+}
+
+int	checking_end(char *line, size_t *k, size_t *argc)
+{
+	if (line[*k] == ' ')
+	{
+		(*argc)++;
+		while (line[*k] == ' ')
+			(*k)++;
+		if (line[*k] == ';' || line[*k] == '\0')
+		{
+			(*argc)--;
+			return (FAILURE_CODE);
+		}
+	}
+	if (line[*k] == ';' || line[*k] == '\0')
+		return (FAILURE_CODE);
+	return (SUCCESS_CODE);
 }
 
 int	parser(char *line, t_vars *vars)
@@ -80,11 +98,11 @@ int	parser(char *line, t_vars *vars)
 					command.args[argc] = ft_strdup("");
 				while (line[k] == '$')
 					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
-				// if (command.args[argc][0] == '\0')
-				// {
-				// 	free(command.args[argc]);
-				// 	command.args[argc] = NULL;
-				// }
+				if (command.args[argc][0] == '\0')
+				{
+					free(command.args[argc]);
+					command.args[argc] = NULL;
+				}
 			}
 			else if (line[k] == '|')
 			{
@@ -94,94 +112,24 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '>')
 			{
-				if (vars->f_redir == TRUE)
-					close(command.fd[1]);
-				vars->f_redir = TRUE;
-				char *file_name;
-				file_name = ft_strdup("");
-				if (line[k] == '>' && line[k + 1] == '>')
-				{
-					k += 2;
-					while (line[k] == ' ')
-						k++;
-					int start = k;
-					// while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-					// {
-					// 	if (line[k] = '\'')
-					// 	{
-					// 	}
-					// 	else if (line[k] = '\"')
-					// 	{
-					// 	}
-					// 	else if (line[k] = '\\')
-					// 	{
-					// 	}
-					// 	else if (line[k] = '$')
-					// 	{
-					// 		while (line[k] == '$')
-					// 			file_name = ft_strjoin_free(file_name, parse_if_dollar(line, &k, &vars->list_env), 3);
-					// 	}
-					// 	k++;
-					// }
-					file_name = ft_substr(line, start, k - start);
-					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
-					if (command.fd[1] == -1)
-					{
-						ft_putendl_fd(strerror(errno), 1);
-						return (FAILURE_CODE);
-					}
-					free(file_name);
-				}
-				else if (line[k] == '>')
-				{
-					k++;
-					while (line[k] == ' ')
-						k++;
-					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-						k++;
-					file_name = ft_substr(line, start, k - start);
-					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
-					if (command.fd[1] == -1)
-					{
-						ft_putendl_fd(strerror(errno), 1);
-						return (FAILURE_CODE);
-					}
-					free(file_name);
-				}
-				dup2(command.fd[1], 1); //				!!! Заменяю fd для записи в файл !!!
-				while (line[k] == ' ')
-					k++;
+				if (parse_if_redir(line, &k, vars, &command) == FAILURE_CODE)
+					return (FAILURE_CODE);
 			}
 			else if (line[k] == '<')
 			{
 				if (parse_if_back_redir(vars, &command, line, &k) == FAILURE_CODE)
 					return (FAILURE_CODE);
 			}
-			else // это обычный аргумент, без каких-то спец символов
+			else
 			{
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
 				command.args[argc] = ft_strjoin_free(command.args[argc], just_an_argument(line, &k), 3);
 			}
-			if (line[k] == ' ')
-			{
-				argc++;
-				while (line[k] == ' ')
-					k++;
-				if (line[k] == ';' || line[k] == '\0')
-				{
-					argc--;
-					break ;
-				}
-			}
-			if (line[k] == ';' || line[k] == '\0')
+			if (checking_end(line, &k, &argc) == FAILURE_CODE)
 				break ;
 		}
 		preprocessing(&command, vars);
-		vars->f_pipe = FALSE;
-		vars->f_redir = FALSE;
-		free_command(&command);
 		if (line[k] == ';')
 			k++;
 	}

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 12:28:56 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 17:23:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	value = check_second_character(line, k);
 	if (value != NULL)
 		return (value);
-	while (ft_isalnum(line[*k + len]) && line[*k + len] != '\0')
+	while ((ft_isalnum(line[*k + len]) || line[*k + len] == '_') && line[*k + len] != '\0')
 		len++;
 	key = ft_substr(line + *k, 0, len);
 	value = get_env_parser(list_env, key);

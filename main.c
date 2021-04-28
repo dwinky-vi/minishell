@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 17:00:15 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 18:04:16 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	set_vars(t_vars *vars, char **envp)
 	vars->tmp_fd_0 = dup(0); //				!!! Запоминаю stdin fd !!!
 	vars->tmp_fd_1 = dup(1); //				!!! Запоминаю stdout fd !!!
 	vars->f_pipe = FALSE;
-	vars->f_redir = FALSE;
+	vars->f_redir_0 = FALSE;
+	vars->f_redir_1 = FALSE;
 	return (0);
 }
 
@@ -37,11 +38,9 @@ int main(int argc, char **argv, char **envp)
 	t_history	history_t;
 	char	*str;
 	int		r;
-	//
 	char	**history;
 	size_t	history_size;
-	size_t	k;
-	//
+	size_t	k = 0;
 	char	*line;
 	int		cursor_pos;
 
@@ -113,24 +112,24 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
-				clear_command_line(cursor_pos, history[k]);
-				if (k < history_t.size)
+				clear_command_line(cursor_pos, history_t.arr[k]);
+				if (k < history_size)
 					k++;
-				if (history_t.size == 0)
+				if (history_size == 0)
 					k = 0;
 				free(old_history_line);
-				old_history_line = ft_strdup(history[k]);
-				if (history[k] == NULL)
+				old_history_line = ft_strdup(history_t.arr[k]);
+				if (history_t.arr[k] == NULL)
 				{
 					cursor_pos = 0;
 					ft_bzero(line, ft_strlen(line));
 				}
-				else if (history_t.size != 0)
+				else if (history_size != 0)
 				{
-					ft_putstr_fd(history[k], 1);
-					cursor_pos = ft_strlen(history[k]);
+					ft_putstr_fd(history_t.arr[k], 1);
+					cursor_pos = ft_strlen(history_t.arr[k]);
 					free(line);
-					line = ft_strdup(history[k]);
+					line = ft_strdup(history_t.arr[k]);
 				}
 			}
 			else if (!strcmp(str, "\e[D") || !strcmp(str, "\e[C"))
@@ -163,11 +162,11 @@ int main(int argc, char **argv, char **envp)
 					// printf("status = %d\n", g_code);
 					print_prompt();
 					cursor_pos = 0;
-					if (k != history_t.size) // это для истории. Когда мы нажимали на стрелочки
+					if (k != history_size) // это для истории. Когда мы нажимали на стрелочки
 					{
 						free(history[k]);
 						history[k] = ft_strdup(old_history_line); // Что с ликами??? ПРОВЕРИТЬ СУКА
-						k = history_t.size;
+						k = history_size;
 						free(old_history_line);
 						old_history_line = NULL;
 					}
@@ -175,8 +174,8 @@ int main(int argc, char **argv, char **envp)
 					{
 						free(history[k]);
 						history[k] = ft_strdup(line);
-						history_t.size++;
-						k = history_t.size;
+						history_size++;
+						k = history_size;
 					}
 					ft_bzero(line, ft_strlen(line)); // чтобы после enter строка очищалась
 				}

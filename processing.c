@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 14:11:09 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 19:16:48 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ void	preprocessing(t_command *cmd, t_vars *vars)
 
 	g_code = 0;
 	args_count = ft_array_len(cmd->args) - 1;
-	**tmp = change_env(vars->list_env, "_");
+	ft_putnbr_fd(args_count, vars->tmp_fd_1);
+	tmp = change_env(vars->list_env, "_");
 	free(*tmp);
-	if (cmd->args[args_count][0] != '-')
+	if (cmd->args[0] && cmd->args[args_count][0] != '-')
 		*tmp = ft_strdup(cmd->args[args_count]);
 	else
 		*tmp = ft_strdup("");

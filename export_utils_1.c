@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 18:43:39 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 13:09:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 18:16:22 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ void	add_list_env(char *str, t_list *list_env)
 	ft_lstadd_back(&list_env, new_list);
 }
 
-void	adding_variable(char *str, t_vars *vars, char **key, char **value)
+void	adding_variable(char *str, t_vars *vars, char *key, char *val)
 {
 	char	**env_value;
 
-	if (!get_env_value(vars->list_env, *key))
+	if (!get_env_value(vars->list_env, key))
 		add_list_env(str, vars->list_env);
 	else
 	{
-		env_value = change_env(vars->list_env, *key);
+		env_value = change_env(vars->list_env, key);
 		free(*env_value);
-		*env_value = ft_strdup(*value);
+		*env_value = ft_strdup(val);
 		if (!env_value)
 			mem_err();
 	}

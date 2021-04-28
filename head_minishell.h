@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 13:29:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 18:15:04 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # endif
 
 # ifndef BUFSIZE
-# define BUFSIZE 1024
+#  define BUFSIZE 1024
 # endif
 
 # ifndef SUCCESS_CODE
@@ -58,8 +58,8 @@ typedef struct s_envp
 typedef struct s_command
 {
 	struct termios	term;
-	char	**args;
-	int		fd[2];
+	char			**args;
+	int				fd[2];
 }				t_command;
 
 typedef struct s_vars
@@ -71,51 +71,51 @@ typedef struct s_vars
 	int				f_pipe;
 	int				f_redir_0;
 	int				f_redir_1;
-	char			*last_arg;
 	char			*history_path;
 	int				tmp_fd_0;
 	int				tmp_fd_1;
 	t_list			*export;
 }				t_vars;
 
-void			init_env(t_vars *vars);
+void			preprocessing(t_command *cmd, t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
-char			*get_env_value(t_list *list_env, char *key);
-void			make_cd(t_command *cmd, t_vars *vars);
+
 void			make_echo(t_command *cmd, t_vars *vars);
+void			make_cd(t_command *cmd, t_vars *vars);
 void			make_pwd(t_command *cmd);
 void			make_env(t_command *cmd, t_list *list_env);
-void			child_process(t_command *cmd, t_list *list_env, char **envp, int fd);
-void			make_unset(t_command *cmd, t_vars *vars);
 void			make_export(t_command *cmd, t_vars *vars);
+void			make_unset(t_command *cmd, t_vars *vars);
 void			make_exit(t_command *cmd, t_vars *vars);
-void	make_other(t_command *cmd, t_vars *vars);
-void 			mem_err();
-void	dot_err(int fd_1);
-void	shell_err(char **args, int fd_1, int code, char *str);
-char			**change_env(t_list *list_env, char *key);
-void	add_list_env(char *str, t_list *list_env);
-void	add_envp(t_vars *vars, char *str);
-void	envp_copy(t_vars *vars, char **envp);
-void	new_envp(t_vars *vars);
-void	delet_list(t_list **list_env);
-void	env_err(t_command *cmd, int i, int fd_1);
-void	make_pipe(t_command *cmd, t_vars *vars);
-void	signal_on(void);
-void	signal_off(void);
-void	parent_signal(int param);
-void    preprocessing(t_command *cmd, t_vars *vars);
-void	del_exp(t_list *exp);
-int	check_key(t_command *cmd, char *key, int i, int fd_1);
-void	check_exp(t_vars *vars, char *str);
-void	adding_variable(char *str, t_vars *vars, char **key, char **value);
-int	searching_variable(t_command *cmd, t_vars *vars, int i);
-char	**sort_env(t_list *list, int flag);
-int	equal_sign(char *str);
-void	parent_signal(int param);
-void	child_signal(int param);
+void			make_other(t_command *cmd, t_vars *vars);
+void			make_pipe(t_command *cmd, t_vars *vars);
 
-void	free_command(t_command *cmd);
+void			mem_err(void);
+void			dot_err(int fd_1);
+void			env_err(t_command *cmd, int i, int fd_1);
+void			shell_err(char **args, int fd_1, int code, char *str);
+
+void			init_env(t_vars *vars);
+void			envp_copy(t_vars *vars, char **envp);
+char			*get_env_value(t_list *list_env, char *key);
+char			**change_env(t_list *list_env, char *key);
+void			add_envp(t_vars *vars, char *str);
+void			add_list_env(char *str, t_list *list_env);
+void			new_envp(t_vars *vars);
+char			**sort_env(t_list *list, int flag);
+
+void			delet_list(t_list **list_env);
+void			del_exp(t_list *exp);
+int				check_key(t_command *cmd, char *key, int i, int fd_1);
+void			check_exp(t_vars *vars, char *str);
+void			adding_variable(char *str, t_vars *vars, char *key, char *val);
+int				searching_variable(t_command *cmd, t_vars *vars, int i);
+int				equal_sign(char *str);
+
+void			parent_signal(int param);
+void			child_signal(int param);
+
+void			free_command(t_command *cmd);
 
 // t_list	*get_env(char **envp);
 

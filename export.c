@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 13:08:23 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 18:15:20 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	add_varible(t_command *cmd, t_vars *vars, int i, int equal)
 	value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
 	if (!value)
 		mem_err();
-	adding_variable(cmd->args[i], vars, &key, &value);
+	adding_variable(cmd->args[i], vars, key, value);
 	free(key);
 	free(value);
 }

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 19:16:48 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 20:53:20 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	what_command(t_command *cmd, t_vars *vars)
 	}
 	name_len = ft_strlen(cmd->args[0]) + 1;
 	if (!ft_strncmp(cmd->args[0], "echo", name_len))
-		make_echo(cmd, vars);
+		make_echo(cmd);
 	else if (!ft_strncmp(cmd->args[0], "pwd", name_len))
-		make_pwd(cmd);
+		make_pwd();
 	else if (!ft_strncmp(cmd->args[0], "cd", name_len))
 		make_cd(cmd, vars);
 	else if (!ft_strncmp(cmd->args[0], "env", name_len) && \
 				get_env_value(vars->list_env, "PATH"))
-		make_env(cmd, vars->list_env);
+		make_env(vars->list_env);
 	else if (!ft_strncmp(cmd->args[0], "unset", name_len))
 		make_unset(cmd, vars);
 	else if (!ft_strncmp(cmd->args[0], "export", name_len))
@@ -60,7 +60,6 @@ void	preprocessing(t_command *cmd, t_vars *vars)
 
 	g_code = 0;
 	args_count = ft_array_len(cmd->args) - 1;
-	ft_putnbr_fd(args_count, vars->tmp_fd_1);
 	tmp = change_env(vars->list_env, "_");
 	free(*tmp);
 	if (cmd->args[0] && cmd->args[args_count][0] != '-')

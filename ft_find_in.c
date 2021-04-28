@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_if_quote_one.c                               :+:      :+:    :+:   */
+/*   ft_find_in.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/17 22:42:50 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 13:37:52 by dwinky           ###   ########.fr       */
+/*   Created: 2021/04/27 21:17:20 by dwinky            #+#    #+#             */
+/*   Updated: 2021/04/27 22:31:57 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-char	*parse_if_quote_one(char *line, size_t *k)
+int	ft_find_in(char *str, char find)
 {
-	char	*quote_line;
-	char	*ch;
+	size_t	k;
 
-	(*k)++;
-	quote_line = ft_strdup("");
-	while (line[*k] != '\'')
+	k = 0;
+	while (str[k])
 	{
-		ch = char_convert_to_str(line[*k]);
-		quote_line = ft_strjoin_free(quote_line, ch, 3);
-		(*k)++;
+		if (str[k] == find)
+			return (TRUE);
+		k++;
 	}
-	return (quote_line);
+	return (FALSE);
 }

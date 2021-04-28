@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 04:44:20 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 14:10:23 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 17:36:29 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_flag(t_command *cmd, int *flag)
 	return (count);
 }
 
-void	make_echo(t_command *cmd, t_vars *vars)
+void	make_echo(t_command *cmd)
 {
 	int		i;
 	int		args_count;

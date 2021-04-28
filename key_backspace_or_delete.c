@@ -6,17 +6,17 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:14:34 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/25 02:28:51 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/27 15:27:09 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-static void	pressed_key_backspace(char **line, int *cursor_pos, char **history_line)
+static void	pressed_key_backspace(char **line, int *cursor, char **history_line)
 {
 	int	cur_pos;
 
-	cur_pos = *cursor_pos;
+	cur_pos = *cursor;
 	if (cur_pos > 0)
 	{
 		tputs(cursor_left, 1, ft_putchar);
@@ -28,7 +28,7 @@ static void	pressed_key_backspace(char **line, int *cursor_pos, char **history_l
 		free(*history_line);
 		*history_line = ft_strdup(*line);
 	}
-	*cursor_pos = cur_pos;
+	*cursor = cur_pos;
 }
 
 void	pressed_key_delete(char **line, int *cursor_pos, char **history_line)
@@ -44,10 +44,11 @@ void	pressed_key_delete(char **line, int *cursor_pos, char **history_line)
 	}
 }
 
-void	key_backspace_or_delete(char *str, char **line, int *cursor_pos, char **history_line)
+void	key_backspace_or_delete(char *str, char **line, int *cursor, \
+														char **history_line)
 {
 	if (!strcmp(str, "\177"))
-		pressed_key_backspace(line, cursor_pos, history_line);
+		pressed_key_backspace(line, cursor, history_line);
 	else if (!strcmp(str, "\e[3~"))
-		pressed_key_delete(line, cursor_pos, history_line);
+		pressed_key_delete(line, cursor, history_line);
 }

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 18:15:04 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 21:53:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@
 #  define FAILURE_CODE 1
 # endif
 
+# ifndef WIDTH_PROMT
+#  define WIDTH_PROMT 12
+# endif
+
 int			g_code;
 
 typedef struct s_envp
@@ -77,13 +81,21 @@ typedef struct s_vars
 	t_list			*export;
 }				t_vars;
 
+typedef struct s_history
+{
+	char	**arr;
+	size_t	size;
+	size_t	current;
+	size_t	start_local_history;
+}				t_history;
+
 void			preprocessing(t_command *cmd, t_vars *vars);
 void			processing(t_command *cmd, t_vars *vars);
 
-void			make_echo(t_command *cmd, t_vars *vars);
+void			make_echo(t_command *cmd);
 void			make_cd(t_command *cmd, t_vars *vars);
-void			make_pwd(t_command *cmd);
-void			make_env(t_command *cmd, t_list *list_env);
+void			make_pwd(void);
+void			make_env(t_list *list_env);
 void			make_export(t_command *cmd, t_vars *vars);
 void			make_unset(t_command *cmd, t_vars *vars);
 void			make_exit(t_command *cmd, t_vars *vars);
@@ -123,6 +135,11 @@ char	*get_term_name(t_list *lst);
 
 void	get_env_to_lst(t_vars *vars);
 
+int		ft_find_in(char *str, char find);
+
+void	ft_putline(char *s1, char *s2, char *s3);
+
+void	ft_putline_nbr(char *s1, int nbr);
 		/** terminal **/
 
 void	init_term(struct termios *term, char *term_name);
@@ -139,13 +156,13 @@ int		is_hotkey(char *str);
 
 		/** history **/
 
-int		get_history(char ***history, size_t *k, t_vars *vars);
+void	get_history(t_history *history, t_vars *vars);
 
-void	set_history(char **history, int k, t_vars *vars);
+void	set_history(t_history *history, t_vars *vars);
 
 		/** keys **/
 
-void	key_left_or_right(int *cursor_pos, char *str, size_t line_len);
+void	key_left_or_right(int *cursor_pos, char *str, char *line);
 
 void	key_backspace_or_delete(char *str, char **line, int *cursor_pos, char **history_line);
 
@@ -161,27 +178,37 @@ void	move_word_right(char *line, int *cursor_pos);
 
 		/** parser **/
 
+int		is_special_character(char ch);
+
+int		redir_error(t_vars *vars, t_command *command, char *file_name);
+
 int		parser(char *line, t_vars *vars);
-
-void	ft_putline(char *s1, char *s2, char *s3);
-
-void	ft_putline_nbr(char *s1, int nbr);
-
-int		syntactic_parsing(char *line);
-
-char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
 
 char	*parse_if_quote_one(char *line, size_t *k);
 
-char	*get_value_in_lst_for_parser(t_list *list_env, char *key);
+char	*parse_if_quote_two(char *line, size_t *k, t_list *list_env);
+
+char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
+
+int		parse_if_redir(char *line, size_t *k, t_vars *vars, t_command *command);
+
+int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k);
+
+char	*get_env_parser(t_list *list_env, char *key);
 
 		/** lexer **/
 
 int		lexer(char *line);
 
+int		lexing_begin_line(char *line, size_t k);
+
+int		lexing_special_character(char *line, size_t *k);
+
 int		lexer_shielding(char *line, size_t *k);
 
 int		lexer_quote(char *line, size_t *k);
+
+int		lexer_pipe_or_redir(char *line, size_t *k);
 
 int		lexer_pipe(char *line, size_t *k);
 
@@ -192,4 +219,5 @@ int		lexer_left_redir(char *line, size_t *k);
 int		lexer_semicolon(char *line, size_t *k);
 
 int		syntax_error(char *token);
+
 #endif

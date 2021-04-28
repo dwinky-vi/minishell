@@ -6,16 +6,10 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 19:37:25 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 20:52:56 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
-Одиночные кавычки (' ') схожи по своему действию с двойными кавычками, только не допускают обращение к переменным, поскольку специальный символ "$" внутри одинарных кавычек воспринимается как обычный символ.
-Внутри одиночных кавычек, любой специальный символ, за исключением ', интерпретируется как простой символ.
-Одиночные кавычки ("строгие, или полные кавычки") следует рассматривать как более строгий вариант чем двойные кавычки ("нестрогие, или неполные кавычки").
-Поскольку внутри одиночных кавычек даже экранирующий (\) символ воспринимается как обычный символ, попытка вывести одиночную кавычку внутри строки, ограниченной одинарными кавычками,
-**/
 #include "head_minishell.h"
 
 void	free_command(t_command *cmd)
@@ -31,12 +25,39 @@ void	free_command(t_command *cmd)
     }
 }
 
+char	*just_an_argument(char *line, size_t *k)
+{
+	char *start;
+
+	start = line + *k;
+	while (!is_special_character(line[*k]) && line[*k] != '\0')
+		(*k)++;
+	return (ft_substr(start, 0, (line + *k) - start));
+}
+
+int	checking_end(char *line, size_t *k, size_t *argc)
+{
+	if (line[*k] == ' ')
+	{
+		(*argc)++;
+		while (line[*k] == ' ')
+			(*k)++;
+		if (line[*k] == ';' || line[*k] == '\0')
+		{
+			(*argc)--;
+			return (FAILURE_CODE);
+		}
+	}
+	if (line[*k] == ';' || line[*k] == '\0')
+		return (FAILURE_CODE);
+	return (SUCCESS_CODE);
+}
+
 int	parser(char *line, t_vars *vars)
 {
 	t_command	command;
 	size_t		k;
 	size_t		argc;
-	size_t		count;
 
 	if (lexer(line) == FAILURE_CODE)
 		return (FAILURE_CODE);
@@ -52,74 +73,36 @@ int	parser(char *line, t_vars *vars)
 		{
 			if (line[k] == '\'')
 			{
-				char *quote_str = parse_if_quote_one(line, &k);
-				if (quote_str == NULL)
-					return (FAILURE_CODE);
 				if (command.args[argc] == NULL)
-					command.args[argc] = ft_strdup(quote_str);
-				else
-					command.args[argc] = ft_strjoin_free(command.args[argc], ft_strdup(quote_str), 3);
-				free(quote_str);
+					command.args[argc] = ft_strdup("");
+				command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_quote_one(line, &k), 3);
 				k++;
 			}
 			else if (line[k] == '\"')
 			{
-				k++;
-				// char *quote_line;
-				// quote_line = ft_strdup("");
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
-				while (line[k] != '\"')
-				{
-					if (line[k] == '$') // идёт до след $
-					{
-						while (line[k] == '$')
-							command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
-					}
-					else if (line[k] == '\\' && (line[k + 1] == '$' || line[k + 1] == '\\' || line[k + 1] == '\"'))
-					{
-						k++;
-						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
-						k++;
-					}
-					else
-					{
-						command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
-						k++;
-					}
-				}
+				command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_quote_two(line, &k, vars->list_env), 3);
 				k++;
-				// command.args[argc] = ft_strjoin_free(command.args[argc], quote_line, 3);
 			}
 			else if (line[k] == '\\')
 			{
-				k++;
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
-				command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k]), 3);
-				k++;
+				command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k + 1]), 3);
+				k += 2;
 			}
 			else if (line[k] == '$')
 			{
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
-				if (ft_isdigit(line[k + 1]))
-				{
-					k += 2;
-					continue ;
-				}
 				while (line[k] == '$')
 					command.args[argc] = ft_strjoin_free(command.args[argc], parse_if_dollar(line, &k, &vars->list_env), 3);
 				if (command.args[argc][0] == '\0')
 				{
 					free(command.args[argc]);
-					command.args[argc] = NULL; // and free()!!!!!!!!!!!
+					command.args[argc] = NULL;
 				}
-			}
-			else if (line[k] == '#') // комментарий, это опционально
-			{
-				line[k] = '\0';
-				break ;
 			}
 			else if (line[k] == '|')
 			{
@@ -129,103 +112,21 @@ int	parser(char *line, t_vars *vars)
 			}
 			else if (line[k] == '>')
 			{
-				if (vars->f_redir_1 == TRUE)
-					close(command.fd[1]);
-				vars->f_redir_1 = TRUE;
-				char *file_name;
-				if (line[k] == '>' && line[k + 1] == '>')
-				{
-					k += 2;
-					while (line[k] == ' ')
-						k++;
-					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-						k++;
-					file_name = ft_substr(line, start, k - start);
-					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_APPEND, 0644);
-					free(file_name);
-				}
-				else if (line[k] == '>')
-				{
-					k++;
-					while (line[k] == ' ')
-						k++;
-					int start = k;
-					while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-						k++;
-					file_name = ft_substr(line, start, k - start);
-					command.fd[1] = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
-					free(file_name);
-				}
-				dup2(command.fd[1], 1); //				!!! Заменяю fd для записи в файл !!!
-				while (line[k] == ' ')
-					k++;
+				if (parse_if_redir(line, &k, vars, &command) == FAILURE_CODE)
+					return (FAILURE_CODE);
 			}
 			else if (line[k] == '<')
 			{
-				// https://zalinux.ru/?p=3934#8
-				if (vars->f_redir_0 == TRUE)
-					close(command.fd[0]);
-				vars->f_redir_0 = TRUE;
-				k++;
-				if (line[k] == '>')
-				{
-					continue ;
-				}
-				char *file_name;
-				while (line[k] == ' ')
-					k++;
-				int start = k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-					k++;
-				file_name = ft_substr(line, start, k - start);
-				command.fd[0] = open(file_name, O_RDWR, 0644);
-				if (command.fd[0] == -1)
-				{
-					vars->f_redir_0 = FALSE;
-					ft_putstr_fd("minishell: ", 1);
-					ft_putstr_fd(file_name, 1);
-					ft_putstr_fd(": ", 1);
-					ft_putendl_fd(strerror(errno), 1);
-					g_code = 1;
-					command.fd[0] = vars->tmp_fd_0;
+				if (parse_if_back_redir(vars, &command, line, &k) == FAILURE_CODE)
 					return (FAILURE_CODE);
-				}
-				else
-				{
-					dup2(command.fd[0], 0); //				!!! Заменяю fd для чтения с файла !!!
-				}
-				free(file_name);
-				while (line[k] == ' ')
-					k++;
 			}
-			else // это обычный аргумент, без каких-то спец символов
+			else
 			{
-				char *start;
-				start = line + k;
-				while (line[k] != ' ' && line[k] != ';' && line[k] != '\\'  && line[k] != '\'' && line[k] != '\"' && line[k] != '$' && line[k] != '|' && line[k] != '>' && line[k] != '<' && line[k] != '\0')
-					k++;
 				if (command.args[argc] == NULL)
-					command.args[argc] = ft_substr(start, 0, line + k - start);
-				else
-					command.args[argc] = ft_strjoin_free(command.args[argc], ft_substr(start, 0, line + k - start), 3);
+					command.args[argc] = ft_strdup("");
+				command.args[argc] = ft_strjoin_free(command.args[argc], just_an_argument(line, &k), 3);
 			}
-			// if (line[k] == ' ')
-			// 	argc++;
-			// while (line[k] == ' ')
-				// k++;
-			if (line[k] == ' ')
-			{
-				argc++;
-				while (line[k] == ' ')
-					k++;
-				if (line[k] == ';' || line[k] == '\0')
-				{
-					argc--;
-					break ;
-				}
-			}
-			if (line[k] == ';' || line[k] == '\0')
+			if (checking_end(line, &k, &argc) == FAILURE_CODE)
 				break ;
 		}
 		preprocessing(&command, vars);
@@ -236,29 +137,3 @@ int	parser(char *line, t_vars *vars)
 	free(line);
 	return (SUCCESS_CODE);
 }
-
-// Символ "!", помещенный в двойные кавычки, порождает сообщение об ошибке, если команда вводится с командной строки.
-// Вероятно это связано с тем, что этот символ интерпретируется как попытка обращения к истории команд.
-// Однако внутри сценариев такой прием проблем не вызывает.
-
-/** ' одиночная кавычка
- * экранирование не работает, переменные окружения тоже.
- * любой символ интерпретируется как обычный символ
- * Одинарные кавычки не могут находиться в одинарных кавычках.
-**/
-
-/** " двойная кавычка
- * только $ и \
- *
-Обратная косая черта должна сохранять свое особое значение как escape-символ (см. Escape-символ ( обратная косая черта ) ) только тогда, когда за ней следует один из следующих символов, если они считаются специальными:
-$ `" \ <новая строка>
-**/
-
-/** $ переменные окружения
- * парсятся до спец символа ($ \ " ' )
-**/
-
-// Обратная косая черта, которая не заключена в кавычки, должна сохранять буквальное значение следующего символа, за исключением <новой строки>.
-// Если за обратной косой чертой следует <новая строка>, оболочка интерпретирует это как продолжение строки.
-// Обратная косая черта и <новая строка> должны быть удалены перед разделением ввода на токены.
-// Поскольку экранированная <новая строка> полностью удаляется из ввода и не заменяется пробелами, она не может служить разделителем токенов.

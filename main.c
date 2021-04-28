@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 13:10:59 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 21:44:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ int	set_vars(t_vars *vars, char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
-	t_vars	vars;
+	t_vars		vars;
+	t_history	history_t;
 	char	*str;
 	int		r;
 	char	**history;
 	size_t	history_size;
-	size_t	k;
+	size_t	k = 0;
 	char	*line;
 	int		cursor_pos;
 
@@ -47,10 +48,11 @@ int main(int argc, char **argv, char **envp)
 	check_argv(argc, argv, &vars);
 	set_vars(&vars, envp);
 	init_term(&vars.term, get_term_name(vars.list_env));
-	str = (char *)ft_calloc(4096, 1);
-	k = 0;
-	int start_k = get_history(&history, &k, &vars);
+	get_history(&history_t, &vars);
+	k = history_t.current;
+	history = history_t.arr;
 	history_size = k;
+	str = (char *)ft_calloc(4096, 1);
 	line = (char *)ft_calloc(4096, 1);
 
 	char *old_history_line;
@@ -75,7 +77,7 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\3")) // ctrl-C
 			{
-				ft_putendl_fd("", 1);
+				ft_putchar_fd('\n', 1);
 				print_prompt();
 				cursor_pos = 0;
 				ft_bzero(line, ft_strlen(line));
@@ -110,29 +112,29 @@ int main(int argc, char **argv, char **envp)
 			}
 			else if (!strcmp(str, "\e[B")) // DOWN
 			{
-				clear_command_line(cursor_pos, history[k]);
+				clear_command_line(cursor_pos, history_t.arr[k]);
 				if (k < history_size)
 					k++;
 				if (history_size == 0)
 					k = 0;
 				free(old_history_line);
-				old_history_line = ft_strdup(history[k]);
-				if (history[k] == NULL)
+				old_history_line = ft_strdup(history_t.arr[k]);
+				if (history_t.arr[k] == NULL)
 				{
 					cursor_pos = 0;
 					ft_bzero(line, ft_strlen(line));
 				}
 				else if (history_size != 0)
 				{
-					ft_putstr_fd(history[k], 1);
-					cursor_pos = ft_strlen(history[k]);
+					ft_putstr_fd(history_t.arr[k], 1);
+					cursor_pos = ft_strlen(history_t.arr[k]);
 					free(line);
-					line = ft_strdup(history[k]);
+					line = ft_strdup(history_t.arr[k]);
 				}
 			}
 			else if (!strcmp(str, "\e[D") || !strcmp(str, "\e[C"))
 			{
-				key_left_or_right(&cursor_pos, str, ft_strlen(line));
+				key_left_or_right(&cursor_pos, str, line);
 			}
 			else if (!strcmp(str, "\177") || !strcmp(str, "\e[3~"))
 			{
@@ -177,7 +179,7 @@ int main(int argc, char **argv, char **envp)
 					}
 					ft_bzero(line, ft_strlen(line)); // чтобы после enter строка очищалась
 				}
-				else if (cursor_pos < ft_strlen(line))
+				else if ((size_t)cursor_pos < ft_strlen(line))
 				{
 					tputs(save_cursor, 1, ft_putchar);
 					char *append;
@@ -196,7 +198,10 @@ int main(int argc, char **argv, char **envp)
 				else
 				{
 					write(1, str, r);
-					cursor_pos++; // это для cmd+V. До этого было просто cursor_pos++
+					if (str[0] != '\e')
+						cursor_pos += ft_strlen(str); // это для cmd+V. До этого было просто cursor_pos++
+					else
+						cursor_pos++;
 					line = ft_strjoin_free(line, str, 1);
 					free(history[k]);
 					history[k] = ft_strdup(line);
@@ -207,27 +212,16 @@ int main(int argc, char **argv, char **envp)
 	}
 	if (vars.miniflag != 1)
 		return_term(&vars.term);
-	set_history(history, start_k, &vars);
-	return (1); //													!!! Ctrl-D возвращает 1 !!!
+	set_history(&history_t, &vars);
+	return (FAILURE_CODE); //													!!! Ctrl-D возвращает 1 !!!
 }
 
-// -|echo ; ;
-// -|;
-// >>>|;;
-// ""
 // << >
-// < >>
-// echo "10 qwe 123"hello  world" 'hello   world'  $PATH"					!!!!!!!!!!!!!!!!!!!!!!!!!
-// echo q 2|cat -e
-// echo hello >| file              											!!!!!!!!!!!!!!!!!!!!!!!!!
-// echo ||  ;
-// export lol=123 olo=$lol
-// echo $olo
+
+// echo $"PATH"																!!!!!!!!!!!!!!!!!!!!!!!!1
+
+// echo hello >| file
+
+// echo ||  ;																!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // echo!2
-// echo "123"'456' это один символ
-// echo 'qwe'123
-// echo "This $"
-// echo " ' " " ' "
-// export $qwe=123; echo "This \$qwe"\=$qwe\ \!
-// export qwe=$; echo "This \$qwe"$qwePATH

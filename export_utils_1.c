@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 18:43:39 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 18:16:22 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 21:08:54 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_key(t_command *cmd, char *key, int i, int fd_1)
 {
 	int		j;
 
-	if (!ft_isalpha(key[0]))
+	if (ft_isdigit(key[0]))
 	{
 		env_err(cmd, i, fd_1);
 		return (0);

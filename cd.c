@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 19:34:02 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 21:22:54 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	change_pwd_or_oldpwd(t_list *list_env, char *buf, char *str)
 void	check_oldpwd(t_list *list_env, char *buf)
 {
 	t_envp	*new_env;
-	char	*tmp_pwd;
 	t_list	*new_list;
 
 	if (!get_env_value(list_env, "OLDPWD"))
@@ -35,7 +34,7 @@ void	check_oldpwd(t_list *list_env, char *buf)
 		if (!new_env)
 			mem_err();
 		new_env->name = "OLDPWD";
-		new_env->value = ft_strdup(get_env_value(list_env, "PWD"));
+		new_env->value = ft_strdup(buf);
 		if (!new_env->value)
 			mem_err();
 		new_list = ft_lstnew(new_env);
@@ -49,7 +48,6 @@ void	check_oldpwd(t_list *list_env, char *buf)
 
 void	change_dir(t_command *cmd, t_vars *vars)
 {
-	char	**pwd;
 	char	buf[BUFSIZE];
 	char	*str;
 

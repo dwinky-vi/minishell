@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/23 18:51:39 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 13:03:16 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 21:55:23 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	shell_err(char **args, int fd_1, int code, char *str)
 	ft_putstr_fd(args[0], 1);
 	ft_putstr_fd(": ", 1);
 	ft_putendl_fd(str, 1);
-	// printf("minishell: %s: %s\n", args[0], str);
 	g_code = code;
 }
 

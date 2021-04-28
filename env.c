@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 21:10:51 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 11:10:00 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/28 17:38:06 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	make_env(t_command *cmd, t_list *list_env)
+void	make_env(t_list *list_env)
 {
 	char	*str;
 	t_list	*tmp_list;

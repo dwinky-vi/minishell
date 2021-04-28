@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_if_quote_one.c                               :+:      :+:    :+:   */
+/*   key_up_or_down.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/17 22:42:50 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 13:37:52 by dwinky           ###   ########.fr       */
+/*   Created: 2021/04/26 21:04:49 by dwinky            #+#    #+#             */
+/*   Updated: 2021/04/27 19:19:05 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-char	*parse_if_quote_one(char *line, size_t *k)
-{
-	char	*quote_line;
-	char	*ch;
-
-	(*k)++;
-	quote_line = ft_strdup("");
-	while (line[*k] != '\'')
-	{
-		ch = char_convert_to_str(line[*k]);
-		quote_line = ft_strjoin_free(quote_line, ch, 3);
-		(*k)++;
-	}
-	return (quote_line);
-}
+// void	 pressed_key_up(int *cursor_pos, char **history, int *k)
+// {
+// 	clear_command_line(*cursor_pos, history[k]);
+// 	*cursor_pos = 0;
+// 	if (*k > 0)
+// 		(*k)--;
+// 	free(old_history_line);
+// 	old_history_line = ft_strdup(history[*k]);
+// 	if (history_size != 0)
+// 	{
+// 		ft_putstr_fd(history[*k], 1);
+// 		free(line);
+// 		line = ft_strdup(history[*k]);
+// 		*cursor_pos = ft_strlen(history[*k]);
+// 	}
+// }

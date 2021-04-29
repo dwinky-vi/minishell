@@ -12,7 +12,7 @@ SRCS	= \
 		ft_lstnew.c ft_lstsize.c ft_lstlast.c ft_lstadd_front.c ft_lstadd_back.c \
 		ft_lstiter.c ft_lstdelone.c ft_lstclear.c ft_lstmap.c \
 		get_next_line.c get_next_line_utils.c \
-		ft_strjoin_free.c ft_strdup_free.c ft_strjoin_char.c ft_char_convert_to_str.c
+		ft_strjoin_free.c ft_strdup_free.c ft_strjoin_char.c ft_char_to_str.c
 
 NAME	= libft.a
 

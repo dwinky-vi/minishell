@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_special_character.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 21:28:01 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 17:28:34 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 04:09:20 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,3 @@ int	is_special_character(char ch)
 		return (TRUE);
 	return (FALSE);
 }
-

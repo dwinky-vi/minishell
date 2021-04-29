@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 17:28:09 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 01:34:29 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 04:09:51 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_envp	*parse_env(char *str)
 	return (env);
 }
 
-void		get_env_to_lst(t_vars *vars)
+void	get_env_to_lst(t_vars *vars)
 {
 	t_list	*head;
 	t_envp	*cur_envp;

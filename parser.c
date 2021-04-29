@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:58:51 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 20:52:56 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 04:37:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_command(t_command *cmd)
 {
-	int k;
+	int	k;
 
 	k = 0;
 	while (cmd->args[k])
@@ -22,12 +22,12 @@ void	free_command(t_command *cmd)
 		free(cmd->args[k]);
 		cmd->args[k] = 0;
 		k++;
-    }
+	}
 }
 
 char	*just_an_argument(char *line, size_t *k)
 {
-	char *start;
+	char	*start;
 
 	start = line + *k;
 	while (!is_special_character(line[*k]) && line[*k] != '\0')
@@ -62,7 +62,7 @@ int	parser(char *line, t_vars *vars)
 	if (lexer(line) == FAILURE_CODE)
 		return (FAILURE_CODE);
 	line = ft_strdup(line);
-	command.args = (char **)ft_calloc(512, sizeof(char *)); // кол-во аргументов
+	command.args = (char **)ft_calloc(512, sizeof(char *));
 	k = 0;
 	while (line[k])
 	{
@@ -89,7 +89,7 @@ int	parser(char *line, t_vars *vars)
 			{
 				if (command.args[argc] == NULL)
 					command.args[argc] = ft_strdup("");
-				command.args[argc] = ft_strjoin_free(command.args[argc], char_convert_to_str(line[k + 1]), 3);
+				command.args[argc] = ft_strjoin_free(command.args[argc], char_to_str(line[k + 1]), 3);
 				k += 2;
 			}
 			else if (line[k] == '$')
@@ -130,6 +130,10 @@ int	parser(char *line, t_vars *vars)
 				break ;
 		}
 		preprocessing(&command, vars);
+		// go_to_new_line();
+		vars->f_pipe = FALSE;
+		vars->f_redir_0 = FALSE;
+		vars->f_redir_1 = FALSE;
 		if (line[k] == ';')
 			k++;
 	}

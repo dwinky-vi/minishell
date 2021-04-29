@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_backspace_or_delete.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:14:34 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 15:27:09 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 04:19:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static void	pressed_key_backspace(char **line, int *cursor, char **history_line)
 	*cursor = cur_pos;
 }
 
-void	pressed_key_delete(char **line, int *cursor_pos, char **history_line)
+void	pressed_key_delete(char **line, int *cursor, char **history_line)
 {
-	if (*cursor_pos >= 0)
+	if (*cursor >= 0)
 	{
 		tputs(delete_character, 1, ft_putchar);
-		(*line)[*cursor_pos] = '\0';
-		if ((*line)[*cursor_pos + 1] != '\0')
-			(*line) = ft_strjoin_free((*line), (*line) + *cursor_pos + 1, 1);
+		(*line)[*cursor] = '\0';
+		if ((*line)[*cursor + 1] != '\0')
+			(*line) = ft_strjoin_free((*line), (*line) + *cursor + 1, 1);
 		free(*history_line);
 		*history_line = ft_strdup(*line);
 	}

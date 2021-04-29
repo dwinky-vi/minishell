@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 01:25:41 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 04:42:37 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ char	*check_second_character(char *line, size_t *k)
 		*k += 1;
 		return (ft_itoa(g_code));
 	}
-	else if (line[*k] == '\0' || line[*k] == ' ' || line[*k] == ';' || line[*k] == '\\')
+	else if (ft_find_in(" ;\\", line[*k]) == TRUE || line[*k] == '\0')
 		return (ft_strdup("$"));
 	else if (line[*k] == '\'' || line[*k] == '\"')
 		return (ft_strdup(""));
 	return (NULL);
 }
 
-char	*get_env_parser(t_list *lst, char *key)
+static char	*get_env_parser(t_list *lst, char *key)
 {
 	int	tmp;
 
@@ -66,7 +66,8 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst)
 	value = check_second_character(line, k);
 	if (value != NULL)
 		return (value);
-	while ((ft_isalnum(line[*k + len]) || line[*k + len] == '_') && line[*k + len] != '\0')
+	while ((ft_isalnum(line[*k + len]) || line[*k + len] == '_') && \
+													line[*k + len] != '\0')
 		len++;
 	key = ft_substr(line + *k, 0, len);
 	value = get_env_parser(list_env, key);

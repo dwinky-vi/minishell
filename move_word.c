@@ -3,24 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   move_word.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 22:49:15 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 18:07:26 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 04:30:26 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	move_word(char *str, char *line, int *cursor_pos)
-{
-	if (!strcmp(str, "\eb"))
-		move_word_left(line, cursor_pos);
-	else if (!strcmp(str, "\ef"))
-		move_word_right(line, cursor_pos);
-}
-
-void	move_word_left(char *line, int *cursor)
+static void	move_word_left(char *line, int *cursor)
 {
 	if (*cursor <= 0)
 		return ;
@@ -40,7 +32,7 @@ void	move_word_left(char *line, int *cursor)
 	*cursor += 1;
 }
 
-void	move_word_right(char *line, int *cursor)
+static void	move_word_right(char *line, int *cursor)
 {
 	size_t	line_len;
 
@@ -59,4 +51,12 @@ void	move_word_right(char *line, int *cursor)
 		tputs(cursor_right, 1, ft_putchar);
 		(*cursor)++;
 	}
+}
+
+void	move_word(char *str, char *line, int *cursor_pos)
+{
+	if (!strcmp(str, KEY_LEFT_WORD_FT))
+		move_word_left(line, cursor_pos);
+	else if (!strcmp(str, KEY_RIGHT_WORD_FT))
+		move_word_right(line, cursor_pos);
 }

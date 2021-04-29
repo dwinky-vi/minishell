@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 02:50:32 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 04:11:06 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,5 @@ void	preprocessing(t_command *cmd, t_vars *vars)
 		close(cmd->fd[0]);
 	if (vars->f_redir_1)
 		close(cmd->fd[1]);
-	vars->f_pipe = FALSE;
-	vars->f_redir_0 = FALSE;
-	vars->f_redir_1 = FALSE;
 	free_command(cmd);
 }

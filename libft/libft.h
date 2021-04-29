@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 20:38:50 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 13:34:05 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 04:32:55 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ int				get_next_line(int fd, char **line);
 void			ft_clear_tail(char **s_tail);
 char			*ft_strjoin_gnl(char **s1, char *s2);
 
-char			*char_convert_to_str(char ch);
+char			*char_to_str(char ch);
 #endif

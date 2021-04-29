@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:07:20 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 01:43:49 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 04:34:03 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	get_file_name(char *line, size_t *k, t_vars *vars, char **file)
 		else if (line[*k] == '\\')
 		{
 			*file = ft_strjoin_free(*file, \
-										char_convert_to_str(line[*k + 1]), 3);
+										char_to_str(line[*k + 1]), 3);
 			*k += 2;
 		}
 		else if (line[*k] == '$')
@@ -49,7 +49,7 @@ void	get_file_name(char *line, size_t *k, t_vars *vars, char **file)
 		}
 		else
 		{
-			*file = ft_strjoin_free(*file, char_convert_to_str(line[*k]), 3);
+			*file = ft_strjoin_free(*file, char_to_str(line[*k]), 3);
 			(*k)++;
 		}
 	}

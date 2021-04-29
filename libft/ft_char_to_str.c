@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_char_convert_to_str.c                           :+:      :+:    :+:   */
+/*   ft_char_to_str.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 22:49:57 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 15:22:07 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 04:31:59 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /** This function allocate memory for str */
-char	*char_convert_to_str(char ch)
+char	*char_to_str(char ch)
 {
 	char	*str;
 

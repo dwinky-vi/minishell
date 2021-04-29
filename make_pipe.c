@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 22:19:24 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 10:47:06 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 21:37:56 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,11 @@ void	make_pipe(t_command *cmd, t_vars *vars)
 {
 	pid_t	pid;
 
-	if (vars->f_redir_0 || vars->f_redir_1)
+	if (vars->f_redir_0)
+		close(cmd->fd[0]);
+	if (vars->f_redir_1)
 	{
 		close(cmd->fd[1]);
-		close(cmd->fd[0]);
 	}
 	if (pipe(cmd->fd) == -1)
 		return ;

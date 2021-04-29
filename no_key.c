@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 03:19:25 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:37:23 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 20:16:07 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	performing(char *line, int *cursor, t_vars *vars, t_history *history)
 								ft_strdup(history->old_arr[history->current]);
 		history->current = history->size;
 	}
-	if (strcmp(line, ""))
+	if (ft_strncmp(line, "", 1))
 	{
 		free(history->arr[history->current]);
 		history->arr[history->current] = ft_strdup(line);

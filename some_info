@@ -18,7 +18,7 @@
 // echo ||  ;
 // export lol=123 olo=$lol
 // echo $olo
-
+// echo -n ';' ; echo -n ';'$_ –– (несколько раз повторить)
 // echo!2
 // echo "123"'456' это один символ
 // echo 'qwe'123

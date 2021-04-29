@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 04:11:06 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 20:07:02 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	what_command(t_command *cmd, t_vars *vars)
 {
-	int			name_len;
+	int		name_len;
 
 	if (ft_array_len(cmd->args) == 1 && cmd->args[0][0] == '\0')
 	{
@@ -78,4 +78,17 @@ void	preprocessing(t_command *cmd, t_vars *vars)
 	if (vars->f_redir_1)
 		close(cmd->fd[1]);
 	free_command(cmd);
+}
+
+void	free_command(t_command *cmd)
+{
+	int	k;
+
+	k = 0;
+	while (cmd->args[k])
+	{
+		free(cmd->args[k]);
+		cmd->args[k] = 0;
+		k++;
+	}
 }

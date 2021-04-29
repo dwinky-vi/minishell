@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:06:17 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:22:53 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 20:18:40 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	key_home_or_end(char *str, char *line, int *cursor)
 {
-	if (!strcmp(str, KEY_HOME_FT))
+	if (!ft_strncmp(str, KEY_HOME_FT, ft_strlen(KEY_HOME_FT)))
 	{
 		while (*cursor > 0)
 		{
@@ -22,7 +22,7 @@ void	key_home_or_end(char *str, char *line, int *cursor)
 			tputs(cursor_left, 1, ft_putchar);
 		}
 	}
-	else if (!strcmp(str, KEY_END_FT))
+	else if (!ft_strncmp(str, KEY_END_FT, ft_strlen(KEY_END_FT)))
 	{
 		while ((size_t)(*cursor) < ft_strlen(line))
 		{

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_if_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:42:37 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 19:22:50 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-char	*check_second_character(char *line, size_t *k)
+static char	*check_second_character(char *line, size_t *k)
 {
 	if (ft_isdigit(line[*k]))
 	{
@@ -29,10 +29,8 @@ char	*check_second_character(char *line, size_t *k)
 		*k += 1;
 		return (ft_itoa(g_code));
 	}
-	else if (ft_find_in(" ;\\", line[*k]) == TRUE || line[*k] == '\0')
+	else if (ft_find_in(" ;\\\'\"", line[*k]) == TRUE || line[*k] == '\0')
 		return (ft_strdup("$"));
-	else if (line[*k] == '\'' || line[*k] == '\"')
-		return (ft_strdup(""));
 	return (NULL);
 }
 

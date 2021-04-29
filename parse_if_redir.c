@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:07:20 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 01:12:02 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 01:47:54 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	quote_mini(char *line, size_t *k, char **file, t_list *lst_env)
 void	get_file_name(char *line, size_t *k, t_vars *vars, char **file)
 {
 	*file = ft_strdup("");
-	while (ft_find_in(" ;|><", line[*k]) || line[*k] != '\0')
+	while (ft_find_in(" ;|><", line[*k] == FALSE) && line[*k] != '\0')
 	{
 		if (line[*k] == '\'' || line[*k] == '\"')
 		{

@@ -6,13 +6,13 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 21:04:49 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 00:23:23 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 03:46:20 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head_minishell.h"
 
-void	 pressed_key_up(char **line, int *cursor, t_history *history, char **old_history_line)
+static void	 pressed_key_up(char **line, int *cursor, t_history *history)
 {
 	if (history->current > 0)
 	{
@@ -20,8 +20,10 @@ void	 pressed_key_up(char **line, int *cursor, t_history *history, char **old_hi
 		*cursor = 0;
 		if (history->current > 0)
 			(history->current)--;
-		free(*old_history_line);
-		*old_history_line = ft_strdup(history->arr[history->current]);
+		// free(history->old_arr[history->current]);
+		// history->old_arr[history->current] = ft_strdup(history->arr[history->current]);
+		// free(*old_history_line);
+		// *old_history_line = ft_strdup(history->arr[history->current]);
 		if (history->size != 0)
 		{
 			ft_putstr_fd(history->arr[history->current], 1);
@@ -32,7 +34,7 @@ void	 pressed_key_up(char **line, int *cursor, t_history *history, char **old_hi
 	}
 }
 
-void	 pressed_key_down(char **line, int *cursor, t_history *history, char **old_history_line)
+static void	 pressed_key_down(char **line, int *cursor, t_history *history)
 {
 	if (history->current < history->size)
 	{
@@ -41,8 +43,8 @@ void	 pressed_key_down(char **line, int *cursor, t_history *history, char **old_
 			history->current++;
 		if (history->size == 0)
 			history->current = 0;
-		free(*old_history_line);
-		*old_history_line = ft_strdup(history->arr[history->current]);
+		// free(*old_history_line);
+		// *old_history_line = ft_strdup(history->arr[history->current]);
 		if (history->arr[history->current] == NULL)
 		{
 			*cursor = 0;
@@ -56,4 +58,21 @@ void	 pressed_key_down(char **line, int *cursor, t_history *history, char **old_
 			*line = ft_strdup(history->arr[history->current]);
 		}
 	}
+}
+
+int	is_up_or_down_key(char *str)
+{
+	if (!ft_strncmp(str, KEY_UP_FT, ft_strlen(KEY_UP_FT) + 1))
+		return (TRUE);
+	else if (!ft_strncmp(str, KEY_DOWN_FT, ft_strlen(KEY_DOWN_FT) + 1))
+		return (TRUE);
+	return (FALSE);
+}
+
+void	make_up_or_down_key(char *str, char **line, int *cursor, t_history *history)
+{
+	if (!ft_strncmp(str, KEY_UP_FT, ft_strlen(KEY_UP_FT) + 1))
+		pressed_key_up(line, cursor, history);
+	else if (!ft_strncmp(str, KEY_DOWN_FT, ft_strlen(KEY_DOWN_FT) + 1))
+		pressed_key_down(line, cursor, history);
 }

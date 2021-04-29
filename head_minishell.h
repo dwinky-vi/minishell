@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 00:48:42 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 03:47:26 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define HEAD_MINISHELL_H
 
 # include "./libft/libft.h"
-# include <stdio.h> // printf
 # include <errno.h> // strerror, errno
 # include <term.h> // termcap function
 # include <unistd.h> // write, read, fork, execve, getcwd, chdir, dup, dup2, pipe, pid_t
@@ -26,7 +25,6 @@
 # include <fcntl.h> // open
 # include <sys/wait.h> // waitpid
 
-// # include "head_parser.h"
 # ifndef TRUE
 #  define TRUE 1
 # endif
@@ -50,6 +48,21 @@
 # ifndef WIDTH_PROMT
 #  define WIDTH_PROMT 12
 # endif
+
+# define KEY_UP_FT "\e[A"
+# define KEY_DOWN_FT "\e[B"
+# define KEY_LEFT_FT "\e[D"
+# define KEY_RIGHT_FT "\e[C"
+# define KEY_BACKSPACE_FT "\177"
+# define KEY_DELETE_FT "\e[3~"
+# define KEY_HOME_FT "\e[H"
+# define KEY_END_FT "\e[F"
+# define KEY_LEFT_WORD_FT "\eb"
+# define KEY_RIGHT_WORD_FT "\ef"
+# define KEY_TAB_FT "\t"
+# define KEY_CTRL_FS_FT "\034"
+# define KEY_CTRL_C_FT "\3"
+# define KEY_CTRL_D_FT "\4"
 
 int			g_code;
 
@@ -75,7 +88,6 @@ typedef struct s_vars
 	int				f_pipe;
 	int				f_redir_0;
 	int				f_redir_1;
-	// char			*last_arg;
 	char			*history_path;
 	int				tmp_fd_0;
 	int				tmp_fd_1;
@@ -91,17 +103,17 @@ typedef struct s_history
 	size_t	start_local_history;
 }				t_history;
 
-void			init_env(t_vars *vars);
-void			processing(t_command *cmd, t_vars *vars);
-char			*get_env_value(t_list *list_env, char *key);
-void			make_cd(t_command *cmd, t_vars *vars);
-void			make_echo(t_command *cmd);
-void			make_pwd(void);
-void			make_env(t_list *list_env);
-void			child_process(t_command *cmd, t_list *list_env, char **envp, int fd);
-void			make_unset(t_command *cmd, t_vars *vars);
-void			make_export(t_command *cmd, t_vars *vars);
-void			make_exit(t_command *cmd, t_vars *vars);
+void		init_env(t_vars *vars);
+void		processing(t_command *cmd, t_vars *vars);
+char		*get_env_value(t_list *list_env, char *key);
+void		make_cd(t_command *cmd, t_vars *vars);
+void		make_echo(t_command *cmd);
+void		make_pwd(void);
+void		make_env(t_list *list_env);
+void		child_process(t_command *cmd, t_list *list_env, char **envp, int fd);
+void		make_unset(t_command *cmd, t_vars *vars);
+void		make_export(t_command *cmd, t_vars *vars);
+void		make_exit(t_command *cmd, t_vars *vars);
 void	make_other(t_command *cmd, t_vars *vars);
 void 			mem_err();
 void	dot_err(int fd_1);
@@ -126,6 +138,8 @@ void	parent_signal(int param);
 void	child_signal(int param);
 
 void	free_command(t_command *cmd);
+void	preparing(int argc, char **argv, char **envp, t_vars *vars);
+int		return_func(t_vars *vars, t_history *history);
 
 // t_list	*get_env(char **envp);
 
@@ -138,6 +152,11 @@ int		ft_find_in(char *str, char find);
 void	ft_putline(char *s1, char *s2, char *s3);
 
 void	ft_putline_nbr(char *s1, int nbr);
+
+int		is_bonus_key(char *str);
+
+void	make_bonus(char *str, char *line, int *cursor_pos);
+
 		/** terminal **/
 
 void	init_term(struct termios *term, char *term_name);
@@ -152,13 +171,27 @@ void	clear_command_line(int cursor_pos, char *previous_history);
 
 int		is_hotkey(char *str);
 
-void	signal_ctrl_c(char **line, int *cursor, t_history *history);
+int		is_signal(char *str);
 
-int		signal_ctrl_d(char **line, int *cursor, t_history *history);
+int		make_signal(char *str, char **line, int *cursor, t_history *history);
 
-void	pressed_key_up(char **line, int *cursor, t_history *history, char **old_history_line);
+// void	signal_ctrl_c(char **line, int *cursor, t_history *history);
 
-void	pressed_key_down(char **line, int *cursor, t_history *history, char **old_history_line);
+// int		signal_ctrl_d(char **line, int *cursor, t_history *history);
+
+int		is_up_or_down_key(char *str);
+
+void	make_up_or_down_key(char *str, char **line, int *cursor, t_history *history);
+
+// void	pressed_key_up(char **line, int *cursor, t_history *history, char **old_history_line);
+
+// void	pressed_key_down(char **line, int *cursor, t_history *history, char **old_history_line);
+
+void	performing(char *line, int *cursor_pos, t_vars *vars, t_history *history);
+
+void	insert_inside(char *str, char **line, int *cursor_pos, t_history *history);
+
+void	write_characters(char *str, char **line, int *cursor, t_history *history);
 
 		/** history **/
 
@@ -168,7 +201,7 @@ void	set_history(t_history *history, t_vars *vars);
 
 		/** keys **/
 
-void	key_left_or_right(int *cursor_pos, char *str, char *line);
+void	key_left_or_right(char *str, char *line, int *cursor_pos);
 
 void	key_backspace_or_delete(char *str, char **line, int *cursor_pos, char **history_line);
 
@@ -184,10 +217,6 @@ void	move_word_right(char *line, int *cursor_pos);
 
 		/** parser **/
 
-int		is_special_character(char ch);
-
-int		redir_error(t_vars *vars, t_command *command, char *file_name);
-
 int		parser(char *line, t_vars *vars);
 
 char	*parse_if_quote_one(char *line, size_t *k);
@@ -200,7 +229,10 @@ int		parse_if_redir(char *line, size_t *k, t_vars *vars, t_command *command);
 
 int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k);
 
-char	*get_env_parser(t_list *list_env, char *key);
+int		is_special_character(char ch);
+
+int		redir_error(t_vars *vars, t_command *command, char *file_name);
+// char	*get_env_parser(t_list *list_env, char *key);
 
 		/** lexer **/
 

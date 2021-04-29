@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 21:00:05 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/27 18:06:35 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 02:21:12 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	repeat_command(char *command, int quantity)
 	}
 }
 
-void	key_left_or_right(int *cursor_pos, char *str, char *line)
+void	key_left_or_right(char *str, char *line, int *cursor_pos)
 {
 	int	width_term;
 

@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 19:44:14 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 01:19:59 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 02:09:30 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*check_second_character(char *line, size_t *k)
 	return (NULL);
 }
 
-char	*get_env_parser(t_list *lst, char *key)
+static char	*get_env_parser(t_list *lst, char *key)
 {
 	int	tmp;
 

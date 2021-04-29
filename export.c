@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 21:17:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 18:15:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 01:34:16 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	add_varible(t_command *cmd, t_vars *vars, int i, int equal)
 	char	*value;
 
 	key = ft_substr(cmd->args[i], 0, equal);
-	if (!key)
-		mem_err();
 	if (!check_key(cmd, key, i, vars->tmp_fd_1))
 	{
 		free(key);
@@ -28,8 +26,6 @@ void	add_varible(t_command *cmd, t_vars *vars, int i, int equal)
 	if (vars->export)
 		check_exp(vars, key);
 	value = ft_substr(cmd->args[i], ++equal, BUFSIZE);
-	if (!value)
-		mem_err();
 	adding_variable(cmd->args[i], vars, key, value);
 	free(key);
 	free(value);
@@ -42,8 +38,6 @@ void	search_variable(t_command *cmd, t_vars *vars, int i)
 	if (!searching_variable(cmd, vars, i))
 	{
 		new_exp_list = ft_lstnew(ft_strdup(cmd->args[i]));
-		if (!new_exp_list)
-			mem_err();
 		ft_lstadd_back(&vars->export, new_exp_list);
 	}
 }

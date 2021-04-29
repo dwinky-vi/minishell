@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 18:55:00 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/27 19:22:15 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 01:33:28 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,12 @@ char	*make_env_arr(t_list *list, int flag)
 	if (flag)
 	{
 		env = ft_strjoin("declare -x ", ((t_envp *)list->content)->name);
-		if (!env)
-			mem_err();
 		env = ft_strjoin_free(env, "=\"", 1);
-		if (!env)
-			mem_err();
 		env = ft_strjoin_free(env, ((t_envp *)list->content)->value, 1);
-		if (!env)
-			mem_err();
 		env = ft_strjoin_free(env, "\"", 1);
-		if (!env)
-			mem_err();
 	}
 	else
-	{
 		env = ft_strjoin("declare -x ", list->content);
-		if (!env)
-			mem_err();
-	}
 	return (env);
 }
 
@@ -68,8 +56,6 @@ char	**sort_env(t_list *list, int flag)
 
 	tmp_list = list;
 	env = (char **)ft_calloc(ft_lstsize(tmp_list) + 1, sizeof(char *));
-	if (!env)
-		mem_err();
 	i = 0;
 	while (tmp_list)
 	{

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/23 18:51:39 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 21:55:23 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 03:57:08 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@ void	dot_err(int fd_1)
 	ft_putendl_fd("minishell: .: filename argument required", 1);
 	ft_putendl_fd(".: usage: . filename [arguments]", 1);
 	exit(2);
-}
-
-void	mem_err(void)
-{
-	ft_putendl_fd("Memory error!", 1);
-	exit(1);
 }
 
 void	shell_err(char **args, int fd_1, int code, char *str)

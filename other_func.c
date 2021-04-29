@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 12:58:56 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 01:34:42 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ char	*find_path(t_command *cmd, char *paths)
 	while (path_arr[++i])
 	{
 		path_arr[i] = ft_strjoin_free(path_arr[i], "/", 1);
-		if (!path_arr[i])
-			mem_err();
 		path = ft_strjoin_free(path_arr[i], cmd->args[0], 1);
-		if (!path)
-			mem_err();
 		if (!lstat(path, &buf))
 			return (path);
 	}

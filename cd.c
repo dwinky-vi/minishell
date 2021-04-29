@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 05:20:25 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 21:22:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 02:43:03 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	change_pwd_or_oldpwd(t_list *list_env, char *buf, char *str)
 	pwd = change_env(list_env, str);
 	free(*pwd);
 	*pwd = ft_strdup(buf);
-	if (!(*pwd))
-		mem_err();
 }
 
 void	check_oldpwd(t_list *list_env, char *buf)
@@ -31,15 +29,9 @@ void	check_oldpwd(t_list *list_env, char *buf)
 	if (!get_env_value(list_env, "OLDPWD"))
 	{
 		new_env = (t_envp *)ft_calloc(1, sizeof(t_envp));
-		if (!new_env)
-			mem_err();
-		new_env->name = "OLDPWD";
+		new_env->name = ft_strdup("OLDPWD");
 		new_env->value = ft_strdup(buf);
-		if (!new_env->value)
-			mem_err();
 		new_list = ft_lstnew(new_env);
-		if (!new_list)
-			mem_err();
 		ft_lstadd_back(&list_env, new_list);
 	}
 	else
@@ -55,11 +47,7 @@ void	change_dir(t_command *cmd, t_vars *vars)
 	if (chdir(cmd->args[1]) == -1)
 	{
 		str = ft_strjoin(cmd->args[1], ": ");
-		if (!str)
-			mem_err();
 		str = ft_strjoin_free(str, strerror(errno), 1);
-		if (!str)
-			mem_err();
 		shell_err(cmd->args, vars->tmp_fd_1, 1, str);
 		free(str);
 	}

@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 20:53:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 02:50:32 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ void	preprocessing(t_command *cmd, t_vars *vars)
 	tmp = change_env(vars->list_env, "_");
 	free(*tmp);
 	if (cmd->args[0] && cmd->args[args_count][0] != '-')
+	{
 		*tmp = ft_strdup(cmd->args[args_count]);
+		new_envp(vars);
+	}
 	else
 		*tmp = ft_strdup("");
 	if (vars->f_pipe == TRUE)

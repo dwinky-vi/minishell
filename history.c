@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:33:56 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/28 16:49:20 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/28 22:11:06 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	get_history(t_history *history, t_vars *vars)
 		r = get_next_line(fd, &line);
 	}
 	history->arr = history_buf;
-	close(fd);
 	history->start_local_history = history->current;
+	history->size = history->current;
+	close(fd);
 }
 
 void	set_history(t_history *history, t_vars *vars)

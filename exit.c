@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 21:34:58 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 17:06:39 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 01:32:03 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ void	numeric_err(t_command *cmd, t_vars *vars)
 	char	*str;
 
 	str = ft_strdup(": numeric argument required");
-	if (!str)
-		mem_err();
 	str = ft_strjoin(cmd->args[1], str);
-	if (!str)
-		mem_err();
 	shell_err(cmd->args, vars->tmp_fd_1, 0, str);
 	making_exit(vars, 255);
 }

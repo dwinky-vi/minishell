@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 18:43:39 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/28 21:08:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 01:32:48 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	add_list_env(char *str, t_list *list_env)
 	t_list	*new_list;
 
 	new_env = (t_envp *)malloc(sizeof(t_envp));
-	if (!new_env)
-		mem_err();
 	i = -1;
 	while (str[++i])
 	{
@@ -65,14 +63,8 @@ void	add_list_env(char *str, t_list *list_env)
 			break ;
 	}
 	new_env->name = ft_substr(str, 0, i);
-	if (!new_env->name)
-		mem_err();
 	new_env->value = ft_substr(str, ++i, BUFSIZE);
-	if (!new_env->value)
-		mem_err();
 	new_list = ft_lstnew(new_env);
-	if (!new_list)
-		mem_err();
 	ft_lstadd_back(&list_env, new_list);
 }
 
@@ -87,8 +79,6 @@ void	adding_variable(char *str, t_vars *vars, char *key, char *val)
 		env_value = change_env(vars->list_env, key);
 		free(*env_value);
 		*env_value = ft_strdup(val);
-		if (!env_value)
-			mem_err();
 	}
 }
 

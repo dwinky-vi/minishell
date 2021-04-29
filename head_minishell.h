@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 05:19:54 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 19:56:39 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_command
 {
 	struct termios	term;
 	char			**args;
+	size_t			argc;
 	int				fd[2];
 }				t_command;
 
@@ -143,25 +144,16 @@ void	child_signal(int param);
 void	free_command(t_command *cmd);
 void	preparing(int argc, char **argv, char **envp, t_vars *vars);
 int		return_func(t_vars *vars, t_history *history);
-// t_list	*get_env(char **envp);
-
-char	*get_term_name(t_list *lst);
 
 void	get_env_to_lst(t_vars *vars);
 
 int		ft_find_in(char *str, char find);
 
-void	ft_putline(char *s1, char *s2, char *s3);
-
-void	ft_putline_nbr(char *s1, int nbr);
-
-int		is_bonus_key(char *str);
-
-void	make_bonus(char *str, char *line, int *cursor_pos);
-
 		/** terminal **/
 
 void	ft_termcap(t_history *history, t_vars *vars);
+
+char	*get_term_name(t_list *lst);
 
 void	init_term(struct termios *term, char *term_name);
 
@@ -171,11 +163,11 @@ int		ft_putchar(int ch);
 
 void	print_prompt(void);
 
-void	clear_command_line(int cursor_pos, char *previous_history);
-
 int		is_hotkey(char *str);
 
 int		is_signal(char *str);
+
+void	clear_command_line(int cursor_pos, char *previous_history);
 
 int		make_signal(char *str, char **line, int *cursor, t_history *history);
 
@@ -199,6 +191,10 @@ void	set_history(t_history *history, t_vars *vars);
 
 		/** keys **/
 
+int		is_bonus_key(char *str);
+
+void	make_bonus(char *str, char *line, int *cursor_pos);
+
 void	key_left_or_right(char *str, char *line, int *cursor);
 
 void	key_backspace_or_delete(char *str, char **line, int *cursor, \
@@ -210,13 +206,25 @@ void	key_home_or_end(char *str, char *line, int *cursor);
 
 void	move_word(char *str, char *line, int *cursor);
 
-// void	move_word_left(char *line, int *cursor);
-
-// void	move_word_right(char *line, int *cursor);
-
 		/** parser **/
 
 int		parser(char *line, t_vars *vars);
+
+int		preparing_parser(char **line, size_t *k, t_command *command);
+
+int		parsing_0(char *line, size_t *k, t_vars *vars, t_command *command);
+
+int		parsing_1(char *line, size_t *k, t_vars *vars, t_command *command);
+
+void	parsing_2(char *line, size_t *k, t_vars *vars, t_command *command);
+
+void	parsing_3(char *line, size_t *k, t_vars *vars, t_command *cmd);
+
+void	go_to_parse_next_command(t_vars *vars, char *line, size_t *k);
+
+void	preparing_new_command(char *line, size_t *k, t_command *command);
+
+int		checking_end(char *line, size_t *k, size_t *argc);
 
 char	*parse_if_quote_one(char *line, size_t *k);
 
@@ -226,13 +234,13 @@ char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
 
 int		parse_if_redir(char *line, size_t *k, t_vars *vars, t_command *command);
 
-int		parse_if_back_redir(t_vars *vars, t_command *command, char *line, \
-																size_t *k);
+int		parse_if_back_redir(char *l, size_t *k, t_vars *vars, t_command *cmd);
 
 int		is_special_character(char ch);
 
+void	free_command(t_command *cmd);
+
 int		redir_error(t_vars *vars, t_command *command, char *file_name);
-// char	*get_env_parser(t_list *list_env, char *key);
 
 		/** lexer **/
 

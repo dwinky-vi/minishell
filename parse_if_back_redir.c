@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_if_back_redir.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 21:18:02 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:08:20 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 19:23:45 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	redir_error(t_vars *vars, t_command *command, char *file_name)
 	return (FAILURE_CODE);
 }
 
-int	parse_if_back_redir(t_vars *vars, t_command *command, char *line, size_t *k)
+int	parse_if_back_redir(char *line, size_t *k, t_vars *vars, t_command *command)
 {
 	char	*file_name;
 	size_t	start;

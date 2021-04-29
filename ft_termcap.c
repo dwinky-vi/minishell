@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_termcap.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 05:18:12 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 05:19:36 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 19:31:27 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int	is_something(char *str)
 	return (FALSE);
 }
 
-static int	do_something(char *str, char **line, int *cursor_pos, t_history *history)
+static int	do_something(char *str, char **line, int *cursor_pos, \
+													t_history *history)
 {
 	if (is_signal(str) == TRUE)
 	{
@@ -37,7 +38,8 @@ static int	do_something(char *str, char **line, int *cursor_pos, t_history *hist
 	else if (is_bonus_key(str) == TRUE)
 		make_bonus(str, *line, cursor_pos);
 	else if (!strcmp(str, KEY_BACKSPACE_FT) || !strcmp(str, KEY_DELETE_FT))
-		key_backspace_or_delete(str, line, cursor_pos, &history->arr[history->current]);
+		key_backspace_or_delete(str, line, cursor_pos, \
+											&history->arr[history->current]);
 	return (SUCCESS_CODE);
 }
 
@@ -55,17 +57,6 @@ static int	read_line(char *str, char **line, t_history *history, t_vars *vars)
 			if (do_something(str, line, &cursor_pos, history) == 1)
 				return (FAILURE_CODE);
 		}
-		// if (is_signal(str) == TRUE)
-		// {
-		// 	if (make_signal(str, line, &cursor_pos, history) == 1)
-		// 		return (FAILURE_CODE);
-		// }
-		// else if (is_up_or_down_key(str) == TRUE)
-		// 	make_up_or_down(str, line, &cursor_pos, history);
-		// else if (is_bonus_key(str) == TRUE)
-		// 	make_bonus(str, *line, &cursor_pos);
-		// else if (!strcmp(str, KEY_BACKSPACE_FT) || !strcmp(str, KEY_DELETE_FT))
-		// 	key_backspace_or_delete(str, line, &cursor_pos, &history->arr[history->current]);
 		else
 		{
 			if (!strcmp(str, "\n"))

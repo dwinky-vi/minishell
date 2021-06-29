@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 19:32:26 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 19:49:46 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/06/29 18:53:55 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	parsing_2(char *line, size_t *k, t_vars *vars, t_command *cmd)
 {
 	if (cmd->args[cmd->argc] == NULL)
 		cmd->args[cmd->argc] = ft_strdup("");
-	if (line[*k] == '\"' || line[*k] == '\"')
+	if (line[*k] == '\'' || line[*k] == '\"')
 	{
 		parsing_2_if_quote(line, k, vars, cmd);
 	}

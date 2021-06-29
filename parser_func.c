@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 17:18:45 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 19:57:06 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/06/29 19:00:01 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,5 @@ int	parsing_0(char *line, size_t *k, t_vars *vars, t_command *command)
 		parsing_3(line, k, vars, command);
 	if (checking_end(line, k, &command->argc) == FAILURE_CODE)
 		return (SUCCESS_CODE);
+	return (SUCCESS_CODE);
 }

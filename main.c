@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:42:48 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 19:25:00 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/30 01:18:45 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,3 @@ int	main(int argc, char **argv, char **envp)
 	ft_termcap(&history, &vars);
 	return (return_func(&vars, &history));
 }
-
-// << >
-
-// echo $"PATH"											!!!!!!!!!!!!!!!!!!!!!
-
-// echo hello >| file
-
-// echo ||  ;											!!!!!!!!!!!!!!!!!!!!!
-
-// echo!2

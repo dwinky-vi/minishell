@@ -4,9 +4,9 @@ libft/libft.a
 a.out
 minishell
 .vscode/
+.idea/
 .bash_history
 .minishell_history
 testing
 .DS_STORE
 testing
-.idea/

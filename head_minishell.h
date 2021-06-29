@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head_minishell.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 17:55:01 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 19:56:39 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 21:59:12 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 # define HEAD_MINISHELL_H
 
 # include "./libft/libft.h"
-# include <errno.h> // strerror, errno
+# include <errno.h> // errno
+# include <string.h> // strerror
 # include <term.h> // termcap function
 # include <unistd.h> // fork, execve, getcwd, chdir, dup, dup2, pipe, pid_t
-# include <stdlib.h> // malloc, free, exit
-# include <string.h> // !!!!!!! strcmp !!!!!!!!!!
-# include <signal.h> // signal, kill
 # include <sys/stat.h> // stat, lstat, fstat
+# include <stdlib.h> // malloc, free, exit
 # include <sys/types.h> // fork, wait
-# include <fcntl.h> // open
+# include <signal.h> // signal, kill
 # include <sys/wait.h> // waitpid
+# include <fcntl.h> // open
 
 # ifndef TRUE
 #  define TRUE 1
@@ -49,6 +49,10 @@
 #  define WIDTH_PROMT 12
 # endif
 
+# ifndef BREAK_CODE
+#  define BREAK_CODE 13
+# endif
+
 # define KEY_UP_FT "\e[A"
 # define KEY_DOWN_FT "\e[B"
 # define KEY_LEFT_FT "\e[D"
@@ -64,12 +68,12 @@
 # define KEY_CTRL_C_FT "\3"
 # define KEY_CTRL_D_FT "\4"
 
-int			g_code;
+int					g_code;
 
 typedef struct s_envp
 {
-	char	*name;
-	char	*value;
+	char			*name;
+	char			*value;
 }				t_envp;
 
 typedef struct s_command
@@ -97,11 +101,11 @@ typedef struct s_vars
 
 typedef struct s_history
 {
-	char	**arr;
-	char	**old_arr;
-	size_t	size;
-	size_t	current;
-	size_t	start_local_history;
+	char			**arr;
+	char			**old_arr;
+	size_t			size;
+	size_t			current;
+	size_t			start_local_history;
 }				t_history;
 
 void	preprocessing(t_command *cmd, t_vars *vars);
@@ -218,7 +222,7 @@ int		parsing_1(char *line, size_t *k, t_vars *vars, t_command *command);
 
 void	parsing_2(char *line, size_t *k, t_vars *vars, t_command *command);
 
-void	parsing_3(char *line, size_t *k, t_vars *vars, t_command *cmd);
+void	parsing_3(char *line, size_t *k, t_command *cmd);
 
 void	go_to_parse_next_command(t_vars *vars, char *line, size_t *k);
 
@@ -231,6 +235,8 @@ char	*parse_if_quote_one(char *line, size_t *k);
 char	*parse_if_quote_two(char *line, size_t *k, t_list *list_env);
 
 char	*parse_if_dollar(char *line, size_t *k, t_list **head_lst);
+
+void	get_file_name(char *line, size_t *k, t_vars *vars, char **file);
 
 int		parse_if_redir(char *line, size_t *k, t_vars *vars, t_command *command);
 

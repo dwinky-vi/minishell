@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 22:49:15 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:30:26 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 20:15:47 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static void	move_word_right(char *line, int *cursor)
 
 void	move_word(char *str, char *line, int *cursor_pos)
 {
-	if (!strcmp(str, KEY_LEFT_WORD_FT))
+	if (!ft_strncmp(str, KEY_LEFT_WORD_FT, ft_strlen(KEY_LEFT_WORD_FT)))
 		move_word_left(line, cursor_pos);
-	else if (!strcmp(str, KEY_RIGHT_WORD_FT))
+	else if (!ft_strncmp(str, KEY_RIGHT_WORD_FT, ft_strlen(KEY_RIGHT_WORD_FT)))
 		move_word_right(line, cursor_pos);
 }

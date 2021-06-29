@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 19:32:26 by dwinky            #+#    #+#             */
-/*   Updated: 2021/06/29 18:53:55 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/06/29 19:09:14 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	parsing_1(char *line, size_t *k, t_vars *vars, t_command *command)
 	{
 		vars->f_pipe = TRUE;
 		(*k)++;
-		return (SUCCESS_CODE);
+		return (BREAK_CODE);
 	}
 	else if (line[*k] == '>')
 	{
@@ -87,10 +87,10 @@ void	parsing_2(char *line, size_t *k, t_vars *vars, t_command *cmd)
 	}
 }
 
-void	parsing_3(char *line, size_t *k, t_vars *vars, t_command *cmd)
+void	parsing_3(char *line, size_t *k, t_command *cmd)
 {
 	if (cmd->args[cmd->argc] == NULL)
 		cmd->args[cmd->argc] = ft_strdup("");
 	cmd->args[cmd->argc] = ft_strjoin_free(cmd->args[cmd->argc], \
-											just_an_argument(line, &k), 3);
+											just_an_argument(line, k), 3);
 }

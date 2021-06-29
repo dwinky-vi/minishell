@@ -6,7 +6,7 @@
 /*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 17:18:45 by dwinky            #+#    #+#             */
-/*   Updated: 2021/06/29 19:00:01 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/06/29 19:09:22 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,31 @@ int	checking_end(char *line, size_t *k, size_t *argc)
 		if (line[*k] == ';' || line[*k] == '\0')
 		{
 			(*argc)--;
-			return (FAILURE_CODE);
+			return (BREAK_CODE);
 		}
 	}
 	if (line[*k] == ';' || line[*k] == '\0')
-		return (FAILURE_CODE);
+		return (BREAK_CODE);
 	return (SUCCESS_CODE);
 }
 
 int	parsing_0(char *line, size_t *k, t_vars *vars, t_command *command)
 {
+	int	r;
+
 	if (ft_find_in("><|", line[*k]) == TRUE)
 	{
-		if (parsing_1(line, k, vars, command) == FAILURE_CODE)
+		r = parsing_1(line, k, vars, command);
+		if (r == FAILURE_CODE)
 			return (FAILURE_CODE);
-		else
-			return (SUCCESS_CODE);
+		else if (r == BREAK_CODE)
+			return (BREAK_CODE);
 	}
 	else if (ft_find_in("\'\"\\$", line[*k]) == TRUE)
 		parsing_2(line, k, vars, command);
 	else
-		parsing_3(line, k, vars, command);
-	if (checking_end(line, k, &command->argc) == FAILURE_CODE)
-		return (SUCCESS_CODE);
+		parsing_3(line, k, command);
+	if (checking_end(line, k, &command->argc) == BREAK_CODE)
+		return (BREAK_CODE);
 	return (SUCCESS_CODE);
 }

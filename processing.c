@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 03:26:37 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 19:56:18 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 20:07:02 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	what_command(t_command *cmd, t_vars *vars)
 {
-	int			name_len;
+	int		name_len;
 
 	if (ft_array_len(cmd->args) == 1 && cmd->args[0][0] == '\0')
 	{

@@ -60,6 +60,9 @@ fclean: 	clean
 
 re: 		fclean all
 
+bonus:
+			all
+
 norm:
 			@$(NORM) $(SRCS) $(HEADER)
 			@cd $(LIBFT_PATH) && make norm

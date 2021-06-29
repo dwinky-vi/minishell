@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_termcap.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 03:03:24 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 03:28:16 by dwinky           ###   ########.fr       */
+/*   Updated: 2021/04/29 20:17:32 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ static void	signal_ctrl_c(char **line, int *cursor, t_history *history)
 
 int	is_signal(char *str)
 {
-	if (!strcmp(str, KEY_CTRL_D_FT))
+	if (!ft_strncmp(str, KEY_CTRL_D_FT, ft_strlen(KEY_CTRL_D_FT)))
 		return (TRUE);
-	else if (!strcmp(str, KEY_CTRL_C_FT))
+	else if (!ft_strncmp(str, KEY_CTRL_C_FT, ft_strlen(KEY_CTRL_C_FT)))
 		return (TRUE);
-	else if (!strcmp(str, KEY_CTRL_FS_FT))
+	else if (!ft_strncmp(str, KEY_CTRL_FS_FT, ft_strlen(KEY_CTRL_FS_FT)))
 		return (TRUE);
 	return (FALSE);
 }
 
 int	make_signal(char *str, char **line, int *cursor, t_history *history)
 {
-	if (!strcmp(str, KEY_CTRL_D_FT))
+	if (!ft_strncmp(str, KEY_CTRL_D_FT, ft_strlen(KEY_CTRL_D_FT)))
 	{
 		if (signal_ctrl_d(line, cursor, history) == FAILURE_CODE)
 			return (FAILURE_CODE);
 	}
-	else if (!strcmp(str, KEY_CTRL_C_FT))
+	else if (!ft_strncmp(str, KEY_CTRL_C_FT, ft_strlen(KEY_CTRL_C_FT)))
 		signal_ctrl_c(line, cursor, history);
 	return (SUCCESS_CODE);
 }

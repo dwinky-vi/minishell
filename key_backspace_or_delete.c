@@ -6,7 +6,7 @@
 /*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 19:14:34 by dwinky            #+#    #+#             */
-/*   Updated: 2021/04/29 04:19:47 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/04/29 20:18:10 by aquinoa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	pressed_key_delete(char **line, int *cursor, char **history_line)
 void	key_backspace_or_delete(char *str, char **line, int *cursor, \
 														char **history_line)
 {
-	if (!strcmp(str, "\177"))
+	if (!ft_strncmp(str, "\177", 1))
 		pressed_key_backspace(line, cursor, history_line);
-	else if (!strcmp(str, "\e[3~"))
+	else if (!ft_strncmp(str, "\e[3~", 4))
 		pressed_key_delete(line, cursor, history_line);
 }

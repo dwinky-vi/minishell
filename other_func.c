@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aquinoa <aquinoa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dwinky <dwinky@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 06:19:46 by aquinoa           #+#    #+#             */
-/*   Updated: 2021/04/29 01:34:42 by aquinoa          ###   ########.fr       */
+/*   Updated: 2021/06/29 19:43:18 by dwinky           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	parent_process(t_command *cmd, t_vars *vars)
 	init_term(&vars->term, get_term_name(vars->list_env));
 	if (ft_strnstr(cmd->args[0], "minishell", BUFSIZE))
 		g_code = status / 256;
-	else if (g_code != 130 && g_code !=131)
+	else if (g_code != 130 && g_code != 131)
 		g_code = status / 256;
 }
 
